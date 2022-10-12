@@ -131,7 +131,7 @@ namespace iTut.Controllers
                 var subject = _context.Subjects.FirstOrDefault();
                 var topic = _context.Topics.Where(t => t.Status == Topic.TopicStatus.Active).FirstOrDefault();
                 var extension = Path.GetExtension(file.FileName);
-
+                var educator = _context.Educator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
 
                 var fileModel = new FileOnDatabase
                 {
@@ -143,6 +143,7 @@ namespace iTut.Controllers
                     SubjectID =subject.Id,
                     TopicID = topic.TopicId,
                     Grade= grade,
+                    UploadedBy=educator.Id,
                     
                 };
                 using (var dataStream = new MemoryStream())

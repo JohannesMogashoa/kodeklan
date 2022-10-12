@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using iTut.Models.Edu;
+using iTut.Models.Quiz;
 using iTut.Models.UploadFiles;
 using static iTut.Models.ViewModels.HOD.HODIndexViewModel;
 using iTut.Models.Shared;
@@ -48,6 +49,11 @@ namespace iTut.Data
         // Educator Tables
         public DbSet<Topic> Topics { get; set; }
         public DbSet<FileOnDatabase> FilesOnDatabase { get; set; }
+        public DbSet<Quiz> Quizzes { get;set; }
+        public DbSet<Option> Options { get; set; }
+        public DbSet<Question> Questions{ get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<Result> Results { get; set; }
 
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
