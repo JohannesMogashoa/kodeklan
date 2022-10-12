@@ -146,9 +146,10 @@ namespace iTut.Controllers
         public ActionResult MeetingRequest()
         {
             var parent = _context.Parents.Where(p => p.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+            DateTime currentDate = DateTime.Now;
             ViewBag.Parent = parent.Id;
             ViewBag.Teachers = _context.Educator.Where(e => e.Archived == false).ToList();
-            ViewBag.Requests = _context.MeetingRequest.Where(mR => mR.ParentId.Equals(parent.Id)).ToList();
+            ViewBag.Requests = _context.MeetingRequest.Where(mR => mR.ParentId.Equals(parent.Id) && currentDate < mR.MeetingDate).ToList();
             return View();
         }
 
@@ -174,6 +175,33 @@ namespace iTut.Controllers
                 return RedirectToAction(nameof(MeetingRequest));
             }
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditMeetingRequest(EditMeetingRequestViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (await _userManager.IsInRoleAsync(user, RoleConstants.Parent.ToString()) || await _userManager.IsInRoleAsync(user, RoleConstants.Educator.ToString()))
+            {
+                if (ModelState.IsValid)
+                {
+                    var _meeting = _context.MeetingRequest.Where(m => m.Id == model.Id).FirstOrDefault();
+                    if (_meeting != null)
+                    {
+                        _meeting.MeetingDate = model.MeetingDate;
+                        _meeting.Reason = model.Reason;
+                        _meeting.ModifiedAt = DateTime.Now;
+                        _meeting.Archived = model.Archived;
+                        _context.Update(_meeting);
+                        await _context.SaveChangesAsync();
+                        _logger.LogInformation($"Meeting Request, id: {_meeting.Id}, updated");
+                        return RedirectToAction(nameof(MeetingRequest));
+                    }
+                }
+                return View("Error");
+            }
+            return View("Access Denied");
         }
         #endregion
 
@@ -268,27 +296,6 @@ namespace iTut.Controllers
         }
 
         #region Timeline Posts
-        [Route("/Parent/LikePost/{id}")]
-        [HttpPost("{id}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LikePost([FromRoute] string id)
-        {
-            if (ModelState.IsValid)
-            {
-                var _post = _context.Posts.Where(p => p.Id == id).FirstOrDefault();
-                if (_post != null)
-                {
-                    _post.Likes = _post.Likes++;
-                    _post.UpdatedAt = DateTime.Now;
-                    _context.Update(_post);
-                    await _context.SaveChangesAsync();
-                    _logger.LogInformation($"Post, id: {_post.Id}, updated");
-                    return RedirectToAction(nameof(Index));
-                }
-            }
-            return View("Error");
-        }
-
         // GET: Timeline Post
         [HttpGet("/Parent/Post/{id}")]
         public IActionResult Post([FromRoute] string id)

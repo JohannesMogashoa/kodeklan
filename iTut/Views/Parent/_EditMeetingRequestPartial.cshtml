@@ -1,10 +1,10 @@
-﻿@model MeetingRequest
+﻿@model EditMeetingRequestViewModel
 
-<div class="modal fade" id="createMeetingRequestModal" tabindex="-1" aria-labelledby="createMeetingRequestModalLabel" aria-hidden="true">
+<div class="modal fade" id="editMeetingRequestModal-@Model.Id" tabindex="-1" aria-labelledby="editMeetingRequestModalLabel" aria-hidden="true">
     <div class="modal-dialog mr-0 mt-0 mb-0 modal-md h-100 fadeInRight animated">
-        <form asp-controller="Parent" asp-action="MeetingRequest" method="post" class="modal-content h-100 rounded-0">
-            <div class="modal-header py-4 bg-body shadow-none">
-                <h1 class="fs-2" id="createMeetingRequestModalLabel">Create Meeting Request</h1>
+        <form asp-controller="Parent" asp-action="EditMeetingRequest" method="post" class="modal-content h-100 rounded-0">
+            <div class="modal-header py-3 bg-body shadow-none">
+                <h1 class="fs-2" id="editMeetingRequestModalLabel">Edit Meeting Request</h1>
                 <button class="btn btn-auto d-inline-flex flex-shrink-0 align-items-center justify-content-center p-0 rounded-circle" data-dismiss="modal" style="width: 2.5rem; height: 2.5rem;" type="button" aria-label="Close">
                     <svg class="gi gi-x fs-3" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path d="M7.613 6.2l.094.083L12 10.585l4.293-4.292.094-.083a1 1 0 0 1 1.403 1.403l-.083.094L13.415 12l4.292 4.293a1 1 0 0 1-1.32 1.497l-.094-.083L12 13.415l-4.293 4.292-.094.083a1 1 0 0 1-1.403-1.403l.083-.094L10.585 12 6.293 7.707a1 1 0 0 1 1.32-1.497z" />
@@ -14,18 +14,8 @@
             <div class="modal-body py-0">
                 <div class="row">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input asp-for="ParentId" hidden value="@ViewBag.Parent" />
-                    <div>
-                        <div class="form-group mb-3">
-                            <label asp-for="EducatorId" class="control-label"></label>
-                            <select asp-for="EducatorId" class="form-control">
-                                @foreach (var teacher in ViewBag.Teachers)
-                                {
-                                    <option value="@teacher.Id">@teacher.FirstName @teacher.LastName</option>
-                                }
-                            </select>
-                            <span asp-validation-for="EducatorId" class="text-danger"></span>
-                        </div>
+                    <input value="@Model.Id" asp-for="Id" hidden />
+                    <div class="col-12">
                         <div class="form-group mb-3">
                             <label asp-for="Reason" class="control-label"></label>
                             <textarea cols="4" asp-for="Reason" class="form-control"></textarea>
@@ -33,7 +23,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="MeetingDate" class="control-label"></label>
-                            <input asp-for="MeetingDate" class="form-control" type="datetime-local" value="@DateTime.Now" />
+                            <input asp-for="MeetingDate" class="form-control" type="datetime-local" />
                             <span asp-validation-for="MeetingDate" class="text-danger"></span>
                         </div>
                     </div>

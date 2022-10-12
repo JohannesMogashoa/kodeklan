@@ -1,5 +1,9 @@
 ﻿using iTut.Models.Parent;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace iTut.Models.ViewModels.Parent
 {
@@ -7,15 +11,15 @@ namespace iTut.Models.ViewModels.Parent
     {
         
     }
-    public class ComplaintsViewModel
+    public class EditMeetingRequestViewModel
     {
-        public string ParentID;
-        public List<Complaint> Complaints;
-    }
-
-    public class CreateComplaintViewModel
-    {
-        public Complaint Complaint;
-        public string ParentID;
+        [Required]
+        public string Id { get; set; }
+        public string Reason { get; set; }
+        [Display(Name = "Meeting Date")]
+        public DateTime MeetingDate { get; set; }
+        public MeetingStatus Status { get; set; }
+        public DateTime ModifiedAt { get; set; }
+        public bool Archived { get; set; }
     }
 }
