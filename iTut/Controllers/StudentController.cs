@@ -41,6 +41,39 @@ namespace iTut.Controllers
 
             return View(viewModel);
         }
+        public IActionResult Subjects()
+        {
+            var student = _context.Students.Where(s => s.UserId.Equals(_userManager.GetUserId(User))).FirstOrDefault();
+            var subjects = _context.Subjects.Where(s => s.Grade.Equals(student.Grade.ToString())).ToList();
+            ViewBag.Subjects = subjects;
+            return View();
+        }
+        public IActionResult Search()
+        {
+            var displaydata = _context.Subjects.ToList();
+
+            return View(displaydata);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Search(string searchSubject)
+        {
+            ViewData["CreateSubject"] = searchSubject;
+
+            var subjects = from s in _context.Subjects
+                           select s;
+
+            if (!String.IsNullOrEmpty(searchSubject))
+            {
+                subjects = subjects.Where(s => s.SubjectName.Contains(searchSubject));
+            }
+
+            return View(await subjects.ToListAsync());
+        }
+        public IActionResult Calendar()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -49,3 +82,5 @@ namespace iTut.Controllers
         }
     }
 }
+    
+
