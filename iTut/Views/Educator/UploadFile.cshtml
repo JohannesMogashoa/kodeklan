@@ -1,8 +1,13 @@
-﻿@model iTut.Models.UploadFiles.SingleFileModel
+﻿
+@model iTut.Models.UploadFiles.FileUploadViewModel
 
 @{
     ViewData["Title"] = "Upload File";
+
+    //List<iTut.Models.Edu.Topic> topics = ViewBag.topics;
 }
+    
+
 <div class="Container py-3 m-2 w-100">
     
    <div class="Category-container d-flex py-2 mx-2">
@@ -18,46 +23,99 @@
      
     </div>
     </div>
-
-
-<form asp-action="Upload" asp-controller="Educator" method="post" enctype = "multipart/form-data">
-    @if (Model.IsResponse)
-    {
-        if (Model.IsSuccess)
+     <hr />
+    <div class="py-2 px-1">
+        
+        @if (ViewBag.Message != null)
         {
-            <div class="alert alert-success">
-                @Model.Message
+            <div class="alert alert-success alert-dismissible" style="margin-top:20px">
+                @ViewBag.Message
             </div>
         }
-        else
-        {
-            <div class="alert alert-danger">
-                @Model.Message
+        <form method="post" enctype="multipart/form-data" class="form-group">
+            <div class="form-group">
+            <label for="file-title" class="pb-2" >Choose File</label>
+            <input type="file" name="files" multiple required class="form-control"/>
             </div>
-        }
-    }
-    <div class="row mt-2">
-        <div class="col-12">
-            <label class="col-form-label">Enter File Name For Save</label>
-            <input asp-for="FileName" class="form-control" />
-            <span asp-validation-for="FileName" class="text-danger"></span>
-        </div>
-    </div>
+          <div class="form-group">
+              <label for="file=-description" class="pb-2" >Enter File description</label>
+            <input type="text" autocomplete="off" class="form-control"placeholder="Enter File Description" name="description" required />
+           </div>
 
-    <div class="row mt-2">
-        <div class="col-12">
-            <label class="col-form-label">Select File</label>
-            <input asp-for="File" class="form-control" />
-            <span asp-validation-for="File" class="text-danger"></span>
-        </div>
-    </div>
+          <div class="form-group">
+              <div class="form-group mb-5 droptown">
+                  <label for="subject" class="pb-2"> Choose Subject:</label>
+                    <select asp-for="subjects" class="form-control">
+                                @foreach (var subject in Model.subjects)
+                                {
+                                    <option value="@subject.Id"> @subject.SubjectName </option>
+                                }
+                    </select>
+              </div>
+                 
+          </div>
+           <div class="form-group">
+                  <label for="Grades" class="pb-2"> Choose Grade:</label>
+                   <div class="form-group">
+                    <select asp-for="FilesOnDatabase" asp-items="Html.GetEnumSelectList<Grade>()" class="form-control"></select>
+                </div>
+                  
+            </div>
 
+            <div class="form-group">
+                 <label for="topics" class="pb-2"> Choose a Topic:</label>
+                <select asp-for="topics" class="form-control">
+                     @foreach (var topic in Model.topics)
+                        {
+                          <option value="@topic.TopicId"> @topic.TopicName </option>
+                        }
+                    </select>
 
-    <div class="row mt-2">
-        <div class="col-12">
-            <button type="submit" class="btn btn-success">Upload File</button>
-        </div>
+           </div>
+           <div class="form-group py-2">
+
+            <button class="btn btn-success" type="submit" asp-controller="Educator" asp-action="UploadFile">Upload File</button>
+            </div>
+        </form>
     </div>
-</form>
+        <hr />
+        <h4>Files on File System</h4>
+
+            @if (Model.FilesOnDatabase.Count == 0)
+            {
+                <caption>No Records Found</caption>
+            }
+            else
+            {
+                <caption>List of Files on File System</caption>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                          <!--  <th>#</th> -->
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>File Type</th>
+                            <th>Created On</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var file in Model.FilesOnDatabase)
+                        {
+                            <tr>
+                              @*  <th>@file.ID</th>*@
+                                <td>@file.Name</td>
+                                <td>@file.Description</td>
+                                <td>@file.FileType</td>
+                                <td>@file.CreatedOn</td>
+                                <td>
+                                    <a type="button" class="btn btn-primary" asp-controller="Educator" asp-action="DownloadFileFromDatabase" asp-route-id="@file.ID">Download</a>
+                                    <a type="button" class="btn btn-danger" asp-controller="Educator" asp-action="DeleteFileFromDatabase" asp-route-id="@file.ID">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            } 
 
 </div>

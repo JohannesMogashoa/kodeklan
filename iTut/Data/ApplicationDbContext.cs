@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using iTut.Models.Edu;
+using iTut.Models.UploadFiles;
 using static iTut.Models.ViewModels.HOD.HODIndexViewModel;
 using iTut.Models.Shared;
 
@@ -44,7 +45,10 @@ namespace iTut.Data
         public DbSet<TimelinePost> Posts { get; set; }
         public DbSet<PostComment> PostComments { get; set; }
 
+        // Educator Tables
         public DbSet<Topic> Topics { get; set; }
+        public DbSet<FileOnDatabase> FilesOnDatabase { get; set; }
+
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Report> Reports { get; set; }
