@@ -41,6 +41,7 @@ namespace iTut.Controllers
 
             return View(viewModel);
         }
+
         public IActionResult Subjects()
         {
             var student = _context.Students.Where(s => s.UserId.Equals(_userManager.GetUserId(User))).FirstOrDefault();
@@ -73,6 +74,19 @@ namespace iTut.Controllers
         public IActionResult Calendar()
         {
             return View();
+        }
+
+        public IActionResult UserReport()
+        {
+            var students = _context.Students.Where(r => r.UserId == _userManager.GetUserId(User)).Include(r => r.Parents).FirstOrDefault();
+
+
+            var model = new StudentUserReportViewModel
+            {
+                Student = students,
+
+            };
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
