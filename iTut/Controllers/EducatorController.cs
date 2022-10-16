@@ -1,8 +1,10 @@
-﻿using iTut.Constants;
+﻿
+using iTut.Constants;
 using iTut.Data;
 using iTut.Models.Coordinator;
 using iTut.Models.Users;
 using iTut.Models.UploadFiles;
+using iTut.Models.Quiz; 
 using iTut.Models.ViewModels.Educator;
 using iTut.Models.Edu;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +18,8 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace iTut.Controllers
 {
@@ -26,6 +30,7 @@ namespace iTut.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<EducatorController> _logger;
+       
 
         public EducatorController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ILogger<EducatorController> logger)
         {
@@ -90,36 +95,115 @@ namespace iTut.Controllers
 #endregion
         public IActionResult CreateQuiz()
         {
+            ViewBag.topics = _context.Topics.ToList();
+            ViewBag.subjects= _context.Subjects.ToList();
             return View();
         }
-
-        #region UploadedFiles
-        private async Task<FileUploadViewModel> LoadAllFiles()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateQuiz(Quiz model)
         {
+            if (ModelState.IsValid)
+            {
+                var educator = _context.Educator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+
+                var quiz = new Quiz
+                {
+                    EducatorID = educator.Id,
+                    TopicId = model.TopicId,
+                    SubjectID = model.SubjectID,
+                    QuizTittle= model.QuizTittle,
+                    QuizDescription = model.QuizDescription,
+                    Status = Quiz.quizStatus.Active,
+                    CreatedAt = DateTime.Now,
+                    StartDate = model.StartDate,
+                    EndDate = model.EndDate,
+                    Grade=model.Grade,
+                };
+                _context.Add(quiz);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"Quiz id= {quiz.QuizId}, has beeen created!");
+                return RedirectToAction(nameof(Questions));
+
+            }
+
+            return View(model);
+
+        }
+        public IActionResult Questions()
+        {
+            QuizViewModel quizViewModel = new QuizViewModel();
+
+            quizViewModel.ListOfQuizzes=( from quiz in _context.Quizzes 
+                               select new SelectListItem()
+                               {
+                                   Value= quiz.QuizId.ToString(),
+                                   Text=quiz.QuizTittle
+                               }
+                               
+                               ).ToList();
+
+            return View(quizViewModel);
+
+        }
+
+        [HttpPost]
+        public JsonResult Questions(QuestionOptionViewModel questionOption)
+        {
+
+            Question question = new Question(); 
+            question.QuestionName= questionOption.QuestionName;
+            question.QuizID = questionOption.QuizId;
+
+            _context.Questions.Add(question);
+            _context.SaveChanges();
+
+            string questionID= question.QuestionID;
+
+            foreach(var item in questionOption.ListOfOptions)
+            {
+                Option option= new Option();
+
+                option.OptionName= item;
+                option.QuestionID= questionID;
+                
+                _context.Options.Add(option);
+                _context.SaveChanges();
+                    
+            }
+
+            Answer answer = new Answer();
+            answer.AnswerText= questionOption.AnswerText;
+            answer.QuestionID = questionID;
+            _context.Answers.Add(answer);
+            _context.SaveChanges();
+
+            return Json(data: new { mesage = "Data is Successfully Loaded", success=true}, new Newtonsoft.Json.JsonSerializerSettings());
+        }
+
+    #region UploadedFiles
+           private async Task<FileUploadViewModel> LoadAllFiles()
+           {
             
           
-            var viewModel = new FileUploadViewModel();
-            viewModel.FilesOnDatabase = await _context.FilesOnDatabase.ToListAsync();
-            viewModel.subjects=  _context.Subjects.ToList();
-            viewModel.topics= await _context.Topics.ToListAsync();
+                var viewModel = new FileUploadViewModel();
+                viewModel.FilesOnDatabase = await _context.FilesOnDatabase.ToListAsync();
+                viewModel.subjects=  _context.Subjects.ToList();
+                viewModel.topics= await _context.Topics.ToListAsync();
             
             
-            //  string grades = new List<Grade>;
-
-            // model.Jobs.Add(new SelectListItem() { Text = "Email", Value = "1", Selected = false });
-            //viewModel.subjects= new List<Subject>();
-            //viewModel.subjects.Add(new Subject());
+        
 
             return viewModel;
-        }
-        public async Task<IActionResult> UploadFile()
-        {
+           }
+            public async Task<IActionResult> UploadFile()
+           {
            
-            var fileuploadViewModel = await LoadAllFiles();
-            ViewBag.topics = _context.Topics.ToList();
-            ViewBag.Message = TempData["Message"];
-            return View(fileuploadViewModel);
-        }
+               var fileuploadViewModel = await LoadAllFiles();
+               ViewBag.topics = _context.Topics.ToList();
+               ViewBag.Message = TempData["Message"];
+              return View(fileuploadViewModel);
+           }
 
         [HttpPost]
         public async Task<IActionResult> UploadFile(List<IFormFile> files, string description,Grade grade)
@@ -174,3 +258,4 @@ namespace iTut.Controllers
         #endregion
     }
 }
+

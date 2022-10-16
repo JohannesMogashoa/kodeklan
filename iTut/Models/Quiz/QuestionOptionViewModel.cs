@@ -5,19 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
 namespace iTut.Models.Quiz
 {
-    public class QuizViewModel
+    public class QuestionOptionViewModel
     {
-
-        [Required]
         public string QuizId { get; set; }
-        [Required]
         public string QuestionName { get; set; }
-        [Required]
-        public string OptionName { get; set; }
-        //public string QuizTittle { get; set; }
-        public IEnumerable<SelectListItem> ListOfQuizzes { get; set; }
+        public string AnswerText { get; set; }
+        
+        public List<string> ListOfOptions { get; set; }
     }
-}
+} 
