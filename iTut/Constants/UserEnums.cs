@@ -8,6 +8,12 @@ namespace iTut.Constants
         Male,
         Other
     }
+   
+    public enum SubjectStatus
+    {
+        Active,
+        Inactive,
+    }
 
     public enum Race
     {

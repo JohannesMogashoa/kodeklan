@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<iTut.Models.Coordinator.Subject>
 
 @{
-    ViewData["Title"] = "Feedbacks";
+    ViewData["Title"] = "AssignSubjects";
 }
 <head>
     <div id="collapseOffCanvas" class="bg-body offcanvas-collapse open w-100">
@@ -10,7 +10,7 @@
                 <div class="d-flex py-5 border-bottom">
                     @*  <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem">@Model.Coordinator.FirstName.ToCharArray()[0]</span>
                     *@
-                    <h2>Feedbacks</h2>
+                    <h2 class=" align-content-center">Assign Subjects</h2>
                     <ul class="list-unstyled d-flex align-items-center">
                         <li class="d-lg-none mr-sm-5">
                             <button class="btn link-body p-0 offcanvas-button" type="button">
@@ -21,33 +21,24 @@
                         </li>
                     </ul>
                 </div>
-
 </head>
 <section>
-    <br />
-    <form asp-controller="Feedback" asp-action="Feedback" method="post">
-        <div class="text-right">
-            <a href="/Coordinator/Feedback" class="btn btn-sm btn-primary">Add more</a>
-          
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="AssignSubjects">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <br />
+                <br/>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+            </form>
         </div>
-    </form>
-    <br />
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-              
-            </tr>
-        </thead>
-        <br />
-        <tbody>
-            @foreach (var subject in Model)
-            {
-                <tr>
-                  
-                </tr>
-            }
-        </tbody>
-    </table>
+    </div>
+
 </section>
-</main>
-</div>

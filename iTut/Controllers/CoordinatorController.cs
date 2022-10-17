@@ -43,8 +43,40 @@ namespace iTut.Controllers
             };
             return View(viewModel);
         }
-        //adding search functionality
-        
+
+        [HttpGet]
+        public IActionResult Feedback()
+        {
+            return View(_context.Feedbacks.ToList());
+            // return View();
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateFeedback(Feedback model)
+        {
+            if (ModelState.IsValid)
+            {
+                var SubjectCoordinator = _context.SubjectCoordinator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+                var feedback = new Feedback
+                {
+                    Id = model.Id,
+                    EducatorName = model.EducatorName,
+                    FeedbackContent = model.FeedbackContent,
+                    CreateAt = model.CreateAt,
+                };
+                _context.Add(feedback);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("Feedback was created!");
+                return RedirectToAction("Feedback");
+            }
+            return View(model);
+        }
+
         public IActionResult Subject(string Id)
         {
 
@@ -90,102 +122,123 @@ namespace iTut.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult Edit(string Id)
+
+
+        //GET-Update
+
+        public IActionResult Edit(string Id)
         {
-            //if(Id == null || Id == 0)
-            //{
-            //    return NotFound();
-            //}
-            //var subjecct = _context.Subjects.Find(Id);
-            //if(subjecct == null)
-            //{
-            //    return NotFound();
-            //}
-            Subject subject = _context.Subjects.FirstOrDefault(s => s.Id == Id);
-            if (ModelState.IsValid)
+            if (Id == null/* || Id == 0*/)
             {
-                _context.Subjects.Update(subject);
-                _context.SaveChanges();
-                return RedirectToAction("Subject");
+                return NotFound();
             }
-            return View();
-            //Subject subject = _context.Subjects.FirstOrDefault(s => s.Id == Id);
-            //if (subject != null)
-            //{
-            //    _context.Update(subject);
-            //    _context.SaveChanges();
-            //    return RedirectToAction("Edit");
-            //}
-          
-            return View();
+
+            var obj = _context.Subjects.Find(Id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
         }
-        //edit
+
+        //POST-Update updating the current data we have 
         [HttpPost]
-        public async Task<IActionResult>Edit(Subject subject)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Subject subject)
         {
             _context.Subjects.Update(subject);
             _context.SaveChanges();
-            return RedirectToAction("Subject");
-            //try
-            //{
-            //    Subject studentToUpdate = new Subject() { Id = Id };
-            //    _context.Entry(studentToUpdate).State = EntityState.Modified;
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Edit));
-            //}
-            //catch (DbUpdateException /* ex */)
-            //{
-            //    //Log the error (uncomment ex variable name and write a log.)
-            //    return RedirectToAction(nameof(Edit), new { Id = Id, saveChangesError = true });
-            //}
-
-            //var subject = _context.Subjects.Where(s => s.Id == Id).FirstOrDefault();
-
-            //if (Id == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var subject = _context.Subjects.AsNoTracking().FirstOrDefault(s => s.Id == Id);
-
-            //if (subject == null)
-            //{
-            //    return NotFound();
-            //}
-            //return View(subject);
-
+            return RedirectToAction("Index");
         }
 
+        //[HttpGet]
+        //public ActionResult Edit(string Id)
+        //{
+
+        //    Subject subject = _context.Subjects.FirstOrDefault(s => s.Id == Id);
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Subjects.Update(subject);
+        //        _context.SaveChanges();
+        //        return RedirectToAction("Subject");
+        //    }
+        //    return View();
+        //}
+        ////edit
+        //[HttpPost]
+        //public IActionResult Edit(Subject subject)
+        //{
+        //   _context.Subjects.Update(subject);
+        //    _context.SaveChanges();
+        //    return RedirectToAction("Subject");
+
+
+        //}
+        //public IActionResult Edit ( string Id)
+        //{
+
+        //}
+        //[HttpPost]
 
         //DELETE 
+        //public IActionResult Delete(string Id)
+        //{
+
+        //    Subject subject = _context.Subjects.FirstOrDefault(s => s.Id == Id);
+        //    if (subject != null)
+        //    {
+        //        _context.Remove(subject);
+        //        _context.SaveChanges();
+        //        return RedirectToAction("Subject");
+        //    }
+        //    return View();
+        //}
+        ////post delete
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(string Id)
+        //{
+        //    try
+        //    {
+        //        Subject subjectToDelete = new Subject() { Id = Id };
+        //        _context.Entry(subjectToDelete).State = EntityState.Deleted;
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch (DbUpdateException /* ex */)
+        //    {
+        //        //Log the error (uncomment ex variable name and write a log.)
+        //        return RedirectToAction(nameof(Delete), new { Id = Id, saveChangesError = true });
+        //    }
+        //}
         public IActionResult Delete(string Id)
         {
-            Subject subject = _context.Subjects.FirstOrDefault(s => s.Id == Id);
-            if (subject != null)
+            if (Id == null)
             {
-                _context.Remove(subject);
-                _context.SaveChanges();
-                return RedirectToAction("Subject");
+                return NotFound();
             }
-            return View();
+
+            var subject = _context.Subjects.Find(Id);
+            if(subject == null)
+            {
+                return NotFound();
+            }
+            return View(subject);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string Id)
+        public IActionResult DeleteConfirmed(string Id)
         {
-            try
+            var subject = _context.Subjects.Find(Id);
+            if(subject == null)
             {
-                Subject studentToDelete = new Subject() { Id = Id };
-                _context.Entry(studentToDelete).State = EntityState.Deleted;
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch (DbUpdateException /* ex */)
-            {
-                //Log the error (uncomment ex variable name and write a log.)
-                return RedirectToAction(nameof(Delete), new { Id = Id, saveChangesError = true });
-            }
+            _context.Subjects.Remove(subject);
+            _context.SaveChanges();
+            // return RedirectToAction("Subject");
+            return View(subject);
         }
 
         //details
@@ -269,38 +322,13 @@ namespace iTut.Controllers
         }*/
 
 
-        //GET FEEDBACK
-        public IActionResult ViewFeedback()
-        {
-           return View(_context.Feedbacks.ToList());            
-        }
+        ////GET FEEDBACK
+        //public IActionResult ViewFeedback()
+        //{
+        //   return View(_context.Feedbacks.ToList());            
+        //}
 
-        [HttpGet]
-        public IActionResult Feedback()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Feedback(Feedback model)
-        {
-            if (ModelState.IsValid)
-            {
-                var SubjectCoordinator = _context.SubjectCoordinator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
-                var feedback = new Feedback
-                {
-                    Id = model.Id,
-                    //UserId=model.UserId,
-                    FeedbackContent = model.FeedbackContent
-                };
-                _context.Add(feedback);
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Feedback was created!");
-                return RedirectToAction("Feedback");
-            }
-            return View(model);
-        }
+     
         public IActionResult Educator()
         {
             return View();

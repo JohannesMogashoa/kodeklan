@@ -2,6 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 using System;
+using iTut.Models.Parent;
+using static iTut.Models.Coordinator.Subject;
 
 namespace iTut.Models.ViewModels.Coordinator
 {
@@ -23,5 +25,7 @@ namespace iTut.Models.ViewModels.Coordinator
         public string Grade { get; set; }
         public DateTime Created_at { get; set; }
         public DateTime Updated_at { get; set; }
+        public SubjectStatus Status { get; set; }
+
     }
 }
