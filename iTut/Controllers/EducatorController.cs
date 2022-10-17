@@ -4,7 +4,8 @@ using iTut.Data;
 using iTut.Models.Coordinator;
 using iTut.Models.Users;
 using iTut.Models.UploadFiles;
-using iTut.Models.Quiz; 
+using iTut.Models.Quiz;
+using iTut.Models.Marks;
 using iTut.Models.ViewModels.Educator;
 using iTut.Models.Edu;
 using Microsoft.AspNetCore.Authorization;
@@ -92,7 +93,10 @@ namespace iTut.Controllers
             }
             return View(model);
         }
-#endregion
+        #endregion
+
+
+        #region CreatQuiz
         public IActionResult CreateQuiz()
         {
             ViewBag.topics = _context.Topics.ToList();
@@ -181,8 +185,10 @@ namespace iTut.Controllers
             return Json(data: new { mesage = "Data is Successfully Loaded", success=true}, new Newtonsoft.Json.JsonSerializerSettings());
         }
 
-    #region UploadedFiles
-           private async Task<FileUploadViewModel> LoadAllFiles()
+#endregion
+
+        #region UploadedFiles
+        private async Task<FileUploadViewModel> LoadAllFiles()
            {
             
           
@@ -256,6 +262,23 @@ namespace iTut.Controllers
             return RedirectToAction("UploadFile");
         }
         #endregion
+
+
+        public async Task<IActionResult> Students()
+        {
+            
+            return View(_context.Students.Where(s => s.UserId == _userManager.GetUserId(User)).ToListAsync());
+        }
+        public IActionResult StudentMarks()
+        {
+            
+            ViewBag.Teachers = _context.Educator.Where(e => e.Archived == false).ToList();
+            return View();
+        }
+        public async Task<ActionResult> AddMarks(Mark model)
+        {
+            return View(model);
+        }
     }
 }
 

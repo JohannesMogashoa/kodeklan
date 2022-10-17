@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewData["Title"] = "Students";
+}
+@model List<iTut.Models.Users.StudentUser>
+
+<style>  
+    table {  
+        width: 100%;  
+    }  
+    table tr td{  
+        border-top: 1px solid black;  
+        text-align: center;  
+        word-wrap: break-word;  
+        padding:2px 2px;
+    }  
+  
+    table tr:hover {  
+        background-color:rgba(0,0,0,0.7);  
+        color:#fff;  
+    }  
+    table tr th {  
+        
+        border-bottom: 2px solid black;
+        text-align: center;  
+        background-color: #344e41;  
+        color: #ffff;  
+        padding: 15px 2px;
+
+    }  
+    table tr:nth-of-type(even) {
+    background-color: #6a994e;
+    color:#ffff;
+    }
+    table tr:nth-of-type(even):hover{
+    background-color: #31572c;
+    color:#ffff;
+    }
+    
+</style> 
+<div class="Container py-3 m-2 w-100 px-2">
+
+
+        <h1>Students</h1>
+
+        @if (Model.Count> 0 && Model != null)
+            {
+                   <table class="table">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                @foreach (var student in Model) {
+                        <tr>
+                            <td>@student.FirstName</td>
+                            <td>@student.LastName</td>
+                            <td>@student.EmailAddress</td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+               
+            }
+         else
+         {
+              <div class="alert alert-info" role="alert">
+                        There are no students found
+                </div>
+             
+          }
+</div>

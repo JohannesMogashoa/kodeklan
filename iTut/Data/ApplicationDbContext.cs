@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using iTut.Models.Edu;
 using iTut.Models.Quiz;
+using iTut.Models.Marks;
 using iTut.Models.UploadFiles;
 using static iTut.Models.ViewModels.HOD.HODIndexViewModel;
 using iTut.Models.Shared;
@@ -55,6 +56,8 @@ namespace iTut.Data
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Result> Results { get; set; }
 
+
+        public DbSet<Mark> Marks { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Report> Reports { get; set; }
