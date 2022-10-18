@@ -3,6 +3,7 @@ using iTut.Data;
 using iTut.Models.Users;
 using iTut.Models.Coordinator;
 using iTut.Models.Parent;
+using iTut.Models.Edu;
 using iTut.Models.ViewModels.Coordinator;
 using iTut.Models.ViewModels.Educator;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+//using AspNetCore;
 
 namespace iTut.Controllers
 {
@@ -51,7 +54,7 @@ namespace iTut.Controllers
             // return View();
         }
 
-        public IActionResult Create()
+        public IActionResult CreateFeedback()
         {
             return View();
         }
@@ -231,14 +234,15 @@ namespace iTut.Controllers
         public IActionResult DeleteConfirmed(string Id)
         {
             var subject = _context.Subjects.Find(Id);
-            if(subject == null)
-            {
-                return NotFound();
-            }
+            //if(subject == null)
+            //{
+            //    return NotFound();
+            //}
+          
             _context.Subjects.Remove(subject);
             _context.SaveChanges();
-            // return RedirectToAction("Subject");
-            return View(subject);
+            return RedirectToAction(nameof(subject));
+           // return View(subject);
         }
 
         //details
@@ -335,9 +339,36 @@ namespace iTut.Controllers
         }
        
         //Assign Subjects
+        //getting the subjects 
         public IActionResult AssignSubjects()
         {
+            ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "SubjectName");
+          //  ViewBag.Grade = new SelectList(_context.Grades, "Id", "Grade");
+            ViewBag.Educator = new SelectList(_context.Educator, "Id", "EmailAddress");
             return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AssignSubjects(SubjectEducator subjectEducator)
+        {
+
+            if (ModelState.IsValid)
+            {
+              
+                _context.Add(subjectEducator);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("Subject was created!");
+                return RedirectToAction("Subject");
+            }
+            ViewBag.Subjects = new SelectList(_context.Subjects, "Id", "SubjectName", "Id");
+           // ViewBag.Grade = new SelectList(_context.Grades, "Id", "Grade");
+            ViewBag.Educator = new SelectList(_context.Educator, "Id", "EmailAddress", "Id");
+            return View(subjectEducator);
+        }
+        //This is where I can view who's assigned to what
+        public IActionResult AssignedSubjects()
+        {
+            return View(_context.Subjects.ToList());
         }
     }
 }

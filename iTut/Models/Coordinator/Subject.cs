@@ -16,13 +16,16 @@ namespace iTut.Models.Coordinator
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string Id { get; set; } = $"{Guid.NewGuid()}{Guid.NewGuid()}";
-
         [Required]
         [StringLength(20, MinimumLength = 3)]
         [Display(Name = "Subject Name")]
         public string SubjectName { get; set; }
+        
         //public List<Subject> Subjects { get; set; }
         //public string SearchString { get; set; }
+
+        //[Display(Name = "Educator Name")]
+        //public string EducatorId { get; set; }
 
         [Required]
         [StringLength(60, MinimumLength = 3)]
@@ -34,6 +37,9 @@ namespace iTut.Models.Coordinator
         public DateTime Updated_at { get; set; }
 
         public SubjectStatus Status { get; set; }
+        public string EducatorID { get; internal set; }
+       //public string LastName { get; set; }
+
         public enum SubjectStatus
         {
             Active,

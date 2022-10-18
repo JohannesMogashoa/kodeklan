@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using iTut.Models.Edu;
 using static iTut.Models.ViewModels.HOD.HODIndexViewModel;
 using iTut.Models.Shared;
-
+using iTut.Constants;
 namespace iTut.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -45,8 +45,10 @@ namespace iTut.Data
         public DbSet<PostComment> PostComments { get; set; }
 
         public DbSet<Topic> Topics { get; set; }
+        //public DbSet<Grade> Grades { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<SubjectEducator> SubjectEducators { get; set; }
     }
 }
