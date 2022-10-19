@@ -129,9 +129,9 @@
                             <th>Name</th>
                             <th>Description</th>
                             <th>File Type</th>
-                           @* <th>Grade</th>
                             <th>Subject</th>
-                            <th>Topic</th>*@
+                            <th>Topic</th>
+                            <th>Grade</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -143,8 +143,9 @@
                                 <td>@file.Name</td>
                                 <td>@file.Description</td>
                                 <td>@file.FileType</td>
-                                
-                                
+                                <td>@file.Subject.SubjectName</td>
+                                <td>@file.Topic.TopicName</td>
+                                <td>@file.Grade</td>
                                 <td>
                                     <a type="button" class="btn btn-primary" asp-controller="Educator" asp-action="DownloadFileFromDatabase" asp-route-id="@file.ID">Download</a>
                                     <a type="button" class="btn btn-danger" asp-controller="Educator" asp-action="DeleteFileFromDatabase" asp-route-id="@file.ID">Delete</a>

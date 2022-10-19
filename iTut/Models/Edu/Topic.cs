@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using iTut.Models.Users;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace iTut.Models.Edu
@@ -8,6 +9,7 @@ namespace iTut.Models.Edu
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string TopicId { get; set; } = $"{Guid.NewGuid()}{Guid.NewGuid()}";
+        [ForeignKey("Educator")]
         public string EducatorID { get; set; }
         [Required]
 
@@ -24,5 +26,6 @@ namespace iTut.Models.Edu
             Active,
             NotActive,
         }
+        public virtual EducatorUser Educator { get; set; } 
     }
 }

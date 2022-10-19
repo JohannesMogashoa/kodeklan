@@ -20,7 +20,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using iTut.Models.Parent;
+using System.Runtime.Intrinsics.X86;
+using System.Net.WebSockets;
 
 namespace iTut.Controllers
 {
@@ -190,9 +192,10 @@ namespace iTut.Controllers
         #region UploadedFiles
         private async Task<FileUploadViewModel> LoadAllFiles()
            {
-            
-          
-                var viewModel = new FileUploadViewModel();
+
+           
+
+            var viewModel = new FileUploadViewModel();
                 viewModel.FilesOnDatabase = await _context.FilesOnDatabase.ToListAsync();
                 viewModel.subjects=  _context.Subjects.ToList();
                 viewModel.topics= await _context.Topics.ToListAsync();
@@ -264,19 +267,159 @@ namespace iTut.Controllers
         #endregion
 
 
-        public async Task<IActionResult> Students()
+        public async Task<ActionResult> Students(string grade, string searchStudent)
         {
             
-            return View(_context.Students.Where(s => s.UserId == _userManager.GetUserId(User)).ToListAsync());
+                                          
+
+            var students= _context.Students.ToList();
+            return View(students);
         }
-        public IActionResult StudentMarks()
+
+        public async Task<ActionResult> LoadMarks()
         {
+
+            var student = await _context.Students.FirstOrDefaultAsync();
+            var subject = await _context.Subjects.FirstOrDefaultAsync();
+            var getmark = await _context.Marks.FirstOrDefaultAsync();
+
+            var marks = await _context.Marks.Include(m=>m.subject).Include(ms=>ms.students).ToListAsync();
+
+           // var subjMarks = await  _context.Subjects.Where(st =>st.Id == getmark.SubjID ).ToListAsync();
+           // var students = await _context.Students.Where(s => s.Id == getmark.StudentID).ToListAsync();
+    
+         
+
+            return View(marks);
+
+       
+         }
+
+        public ActionResult EditMarks(string Id)
+        {   
+            var mark= _context.Marks.Where(m=>m.Id == Id).Include(m=>m.students).Include(s=>s.subject).FirstOrDefault();
+           
+            return View(mark);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult>UpdateMarks(Mark model)
+        {
+             model.Total = model.Term1 + model.Term2 + model.Term3 + model.Term4;
+
+            model.avg = model.Total / 4;
+
+            if (model.avg >= 50 && model.avg < 80)
+            {
+
+                model.outcome = "pass";
+            }
+            else if (model.avg >= 80)
+            {
+                model.outcome = "Pass with Distinction";
+            }
+            else if (model.avg < 50)
+            {
+                model.outcome = "Fail";
+            }
+
+            var marks = _context.Marks.Where(m => m.Id == model.Id).FirstOrDefault();
+
+                if (marks != null)
+                {
+                    marks.Term1 = model.Term1;
+                    marks.Term2 = model.Term2;
+                    marks.Term3 = model.Term3;
+                    marks.Term4 = model.Term4;
+                    marks.avg = model.avg;
+                    marks.Total = model.Total;
+                    marks.outcome = model.outcome;
+                   
+                    _context.Marks.Update(marks);
+                    await _context.SaveChangesAsync();
+                }
+            return RedirectToAction(nameof(LoadMarks));
+
             
-            ViewBag.Teachers = _context.Educator.Where(e => e.Archived == false).ToList();
+        }
+
+        public async Task<IActionResult> DeleteMark(string? Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var marks = _context.Marks.Where(m => m.Id == Id).Include(m => m.students).Include(s => s.subject).FirstOrDefault();
+
+            if (marks==null)
+            {
+                return NotFound();
+            }
+            return View(marks);
+        }
+        // POST: /Movies/Delete/5
+        [HttpPost, ActionName("DeleteMark")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(string Id)
+        {
+            Mark mark = _context.Marks.Find(Id);
+            _context.Marks.Remove(mark);
+            _context.SaveChanges();
+            return RedirectToAction("LoadMark");
+        }
+
+        public async Task <IActionResult> StudentMarks()
+        {
+
+            ViewBag.Students= _context.Students.ToList();
+            
+            ViewBag.subjects = _context.Subjects.ToList();
             return View();
         }
+
+        [HttpPost]
         public async Task<ActionResult> AddMarks(Mark model)
         {
+            
+            model.Total= model.Term1 + model.Term2 + model.Term3 + model.Term4;
+
+            model.avg = model.Total / 4;
+
+            if (model.avg >= 50 && model.avg <80)
+            {
+
+                model.outcome = "pass";
+            }
+           else if (model.avg >= 80)
+            {
+                model.outcome = "Pass with Distinction";
+            }
+            else if (model.avg < 50)
+            {
+                model.outcome = "Fail";
+            }
+
+            if (ModelState.IsValid)
+            {
+                var mark = new Mark
+                {
+                    StudentID = model.StudentID,
+                    SubjID=model.SubjID,
+                    Term1=model.Term1,
+                    Term2=model.Term2,
+                    Term3=model.Term3,
+                    Term4=model.Term4,
+                    avg=model.avg,
+                    Total=model.Total,
+                    outcome=model.outcome,
+                };
+                _context.Add(mark);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(StudentMarks));
+            }
             return View(model);
         }
     }
