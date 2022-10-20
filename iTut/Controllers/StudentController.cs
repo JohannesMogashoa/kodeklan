@@ -79,7 +79,7 @@ namespace iTut.Controllers
         public IActionResult UserReport()
         {
             var students = _context.Students.Where(r => r.UserId == _userManager.GetUserId(User)).Include(r => r.Parents).FirstOrDefault();
-
+            var parent = _context.Parents.Where(p => p.UserId == _userManager.GetUserId(User)).Include(p => p.Children).FirstOrDefault();
 
             var model = new StudentUserReportViewModel
             {
