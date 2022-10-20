@@ -25,7 +25,7 @@ namespace iTut.Models.ViewModels.Coordinator
         public string Grade { get; set; }
         public DateTime Created_at { get; set; }
         public DateTime Updated_at { get; set; }
-        public SubjectStatus Status { get; set; }
+        public string Status { get; set; }
 
     }
 }

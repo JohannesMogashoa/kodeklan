@@ -50,5 +50,7 @@ namespace iTut.Data
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<SubjectEducator> SubjectEducators { get; set; }
+        public DbSet<FeedbackEducator> FeedbackEducator { get; set; }
+       // public DbSet<ArchivedSubject> ArchivedSubjects { get; set; }
     }
 }

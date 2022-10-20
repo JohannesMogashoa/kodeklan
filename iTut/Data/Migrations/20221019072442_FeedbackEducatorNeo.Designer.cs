@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iTut.Data;
 
 namespace iTut.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221019072442_FeedbackEducatorNeo")]
+    partial class FeedbackEducatorNeo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,7 +179,7 @@ namespace iTut.Data.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EducatorId")
+                    b.Property<string>("EducatorName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -240,8 +242,8 @@ namespace iTut.Data.Migrations
                     b.Property<string>("EducatorID")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Grade")
-                        .HasColumnType("int");
+                    b.Property<string>("Grade")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -270,22 +272,15 @@ namespace iTut.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EducatorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GradeId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SubjectId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SubjectEducatorId");
-
-                    b.HasIndex("EducatorId");
-
-                    b.HasIndex("SubjectId");
 
                     b.ToTable("SubjectEducators");
                 });
@@ -834,21 +829,6 @@ namespace iTut.Data.Migrations
                         .HasForeignKey("ParentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("iTut.Models.Coordinator.SubjectEducator", b =>
-                {
-                    b.HasOne("iTut.Models.Users.EducatorUser", "Educator")
-                        .WithMany()
-                        .HasForeignKey("EducatorId");
-
-                    b.HasOne("iTut.Models.Coordinator.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId");
-
-                    b.Navigation("Educator");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("iTut.Models.Shared.PostComment", b =>

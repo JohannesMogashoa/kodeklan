@@ -34,69 +34,40 @@
                     <br />
                     <form method="post" asp-action="AssignSubjects" class="col-12 flex-grow-1">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                       @* <div class="form-group mb-3">
-                            <label asp-for="EducatorLastName" class="control-label"></label>
-                            <input asp-for="EducatorLastName" class="form-control" />
-                            <span asp-validation-for="EducatorLastName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="" class="form-label mb-1"></label>
-                            <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grade>()" class="form-control"></select>
-                        </div*@
+                     @* 
                          <div class="form-group mb-3">
-                            <label asp-for="EducatorId" class="control-label"></label>
+                            <label asp-for="EducatorId" class="control-label">Educator Name</label>
                             <select asp-for="EducatorId" class="form-control" asp-items="ViewBag.Educator">
-                                <option value="">--SELECT Educator--</option>
+                                <option value="">--select educator--</option>
                             </select>
                             <span asp-validation-for="EducatorId" class="text-danger"></span>
-                        </div>
+                        </div>*@
                         <div class="col-md-6">
-                            <label asp-for="SubjectId" class="form-control">Choose</label>
-                            <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.Subjects">
-                                <option value="">--SELECT SUBJECT--</option>
+                            <label asp-for="EducatorId">Educator Name</label>
+                            <select asp-for="EducatorId" class="form-control" asp-items="ViewBag.Educator">
+                                <option value="">--select subject--</option>
                             </select>
                             <span asp-validation-for="SubjectId" class="text-danger"></span>
                         </div>
-                        <div class="form-group mb-3">
-                            <label asp-for="GradeId" class="control-label"></label>
-                            <select asp-for="GradeId" class="form-control" asp-items="ViewBag.Grade">
-                                <option value="">--SELECT Grade--</option>
+                        <div class="col-md-6">
+                            <label asp-for="SubjectId">Subject Name</label>
+                            <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.Subject">
+                                <option value="">--select subject--</option>
                             </select>
-                            <span asp-validation-for="GradeId" class="text-danger"></span>
+                            <span asp-validation-for="SubjectId" class="text-danger"></span>
                         </div>
-
-                        @*<div class="form-group mb-3">
-                            <label asp-for="SubjectName" class="control-label"></label>
-                            <input asp-for="SubjectName" class="form-control" />
-                            <span asp-validation-for="SubjectName" class="text-danger"></span>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-
-                                <input type="text" class="form-control" placeholder="Enter email" name="email">
-                            </div>
-                            <div class="col">
-                                <input type="text" class="form-control" placeholder="" name="pswd">
-                            </div>
-                        </div>
-                       <div class="form-group">
-                            <label asp-for="SubjectName" class="form-label mb-1"></label>
-                            <select asp-for="SubjectName" asp-items="Html.GetEnumSelectList<SubjectName>()" class="form-control"></select>
-                        </div>
-                       
+                     
                         <div class="form-group">
-                            <label asp-for="Grade" class="form-label mb-1"></label>
-                            <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grade>()" class="form-control"></select>
+                            <div class="col-md-6">
+                            <label asp-for="GradeId" class="form-label mb-1"></label>
+                            <select asp-for="GradeId" asp-items="Html.GetEnumSelectList<Grade>()" class="form-control"></select>
                         </div>
-                        @*  <div class="form-group mb-3">
-                        <label asp-for="Grade" class="control-label"></label>
-                        <input asp-for="Grade" class="form-control" />
-                        <span asp-validation-for="Grade" class="text-danger"></span>
-                        </div>*@
+                        </div>
+                        
                         <br />
                         <div class="form-group">
                             <input type="submit" value="Save" class="btn btn-primary" />
-                            <a asp-action="Subject" class="btn btn-primary">Back</a>
+                            <a asp-action="AssignedSubjects" class="btn btn-primary">Back</a>
                         </div>
 
                     </form>

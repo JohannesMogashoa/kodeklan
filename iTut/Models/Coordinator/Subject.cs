@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using iTut.Constants;
 
 namespace iTut.Models.Coordinator
 {
@@ -20,7 +21,8 @@ namespace iTut.Models.Coordinator
         [StringLength(20, MinimumLength = 3)]
         [Display(Name = "Subject Name")]
         public string SubjectName { get; set; }
-        
+       
+
         //public List<Subject> Subjects { get; set; }
         //public string SearchString { get; set; }
 
@@ -32,19 +34,20 @@ namespace iTut.Models.Coordinator
         
         [Display(Name = "Subject description")]
         public string SubjectDescr { get; set; }
-        public string Grade { get; set; }
+        public Grade Grade { get; set; }
         public DateTime Created_at { get; set; }
         public DateTime Updated_at { get; set; }
 
-        public SubjectStatus Status { get; set; }
+        public Statuses Status { get; set; }
         public string EducatorID { get; internal set; }
-       //public string LastName { get; set; }
+        
 
-        public enum SubjectStatus
+        //public string LastName { get; set; }
+
+        public enum Statuses
         {
             Active,
-            Inactive,
+            Inactive
         }
-
     }
 }

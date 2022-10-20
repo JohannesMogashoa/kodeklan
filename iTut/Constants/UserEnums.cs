@@ -9,9 +9,11 @@ namespace iTut.Constants
         Other
     }
    
-    public enum SubjectStatus
+    public enum Status
     {
+        [Display(Name = "Active")]
         Active,
+        [Display(Name = "Inactive")]
         Inactive,
     }
 
@@ -31,11 +33,11 @@ namespace iTut.Constants
 
     public enum Grade
     {
-        Eight,
-        Nine,
-        Ten,
-        Eleven,
-        Twelve
+        Eight=8,
+        Nine=9,
+        Ten=10,
+        Eleven=11,
+        Twelve=12
     }
     public enum MaritalStatus
     {
