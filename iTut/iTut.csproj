@@ -28,10 +28,6 @@
     <None Remove="Areas\NewFolder\**" />
     <None Remove="Controllers\HOD\**" />
     <None Remove="Models\Educator\**" />
-    <Compile Remove="Models\Student\**" />
-    <Content Remove="Models\Student\**" />
-    <EmbeddedResource Remove="Models\Student\**" />
-    <None Remove="Models\Student\**" />
     <None Remove="wwwroot\UploadedFiles\**" />
   </ItemGroup>
 
