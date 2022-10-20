@@ -1,8 +1,4 @@
-﻿@model IEnumerable<iTut.Models.Coordinator.Feedback>
-
-@{
-    ViewData["Title"] = "Feedback";
-}
+﻿@model IEnumerable<iTut.Models.Coordinator.SubjectEducator>
 
 
 <head>
@@ -12,8 +8,15 @@
                 <div class="d-flex py-5 border-bottom">
                     @*  <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem">@Model.Coordinator.FirstName.ToCharArray()[0]</span>
                     *@
-                    <h2>Subjects</h2>
+
+                    <br />
+                    <br />
+
+                    <br />
+                    <br />
+                    <h2 class=" align-content-center">Manage Subjects</h2>
                     <ul class="list-unstyled d-flex align-items-center">
+
                         <li class="d-lg-none mr-sm-5">
                             <button class="btn link-body p-0 offcanvas-button" type="button">
                                 <svg class="gi gi-arrow-circle-left fs-4" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -23,43 +26,48 @@
                         </li>
                     </ul>
                 </div>
-
 </head>
 <section>
-    <br/>
-    <h1>Feedbacks</h1>
+
     <p>
-        <a href="/Coordinator/Feedback" class="btn btn-primary align-content-center">Add Feedback</a>
+        <a asp-action="Create">Create New</a>
     </p>
-    <br/>
     <table class="table">
-    <thead>
+        <thead>
             <tr>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.Id)
+                <th scope="auto">
+                    @Html.DisplayNameFor(model => model.SubjectId)
                 </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.FeedbackContent)
+                <th scope="auto">
+                    @Html.DisplayNameFor(model => model.EducatorId)
                 </th>
-             <th></th>
+                <th scope="auto">
+                    @Html.DisplayNameFor(model => model.GradeId)
+                </th>
+                <th scope="auto"></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var feedback in Model)
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td width="30%">@Html.DisplayFor(Model => feedback.Id) </td>
-                    <td width="30%">@Html.DisplayFor(Model => feedback.FeedbackContent)</td>
-                    <td width="30%">@Html.DisplayFor(Model => feedback.CreateAt)</td>
-                    <td>
-                        <a asp-action="Delete" asp-route-id=@feedback.Id></a>|
-                        <a asp-action="Edit" asp-route-id="@feedback.Id">Edit</a>|
+                    <td width="15%">
+                        @Html.DisplayFor(modelItem => item.Subject.SubjectName)
                     </td>
-                    <td>
-                        <a asp-action="Feedback">Back to List</a>
+                    <td width="15%">
+                        @Html.DisplayFor(modelItem => item.Educator.EmailAddress)
+                    </td>
+                    <td width="15%">
+                        @Html.DisplayFor(modelItem => item.Grade)
+                    </td>
+                    <td width="15%">
+                        <a asp-action="Edit" asp-route-id="@item.SubjectEducatorId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.SubjectEducatorId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.SubjectEducatorId">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
 </section>

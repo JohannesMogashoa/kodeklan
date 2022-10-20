@@ -11,7 +11,7 @@ namespace iTut.Models.Coordinator
 
         [Required]
         [Display(Name = "Educator Name")]
-        public string EducatorName { get; set; }
+        public string EducatorId { get; set; }
 
         [Required]
         [StringLength(250)]
