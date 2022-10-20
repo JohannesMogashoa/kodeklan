@@ -22,7 +22,10 @@ namespace iTut.Models.Student
 
         public string Grade { get; set; }
 
-        
+        [Required]
+        [Display(Name = "Email Address")]
+        [DataType(DataType.EmailAddress)]
+        public string StudentEmail { get; set; }
 
     }
 }

@@ -2,7 +2,9 @@
 
 @{
       ViewData["Title"] = "Search";
+      
 }
+
   <div id="collapseOffCanvas" class="bg-body offcanvas-collapse open w-100">
     <main class="main-expanded vh-100 w-100">
         <div class="container-fluid px-lg-5">
@@ -34,28 +36,30 @@
             <br/>
           <br />
             
-                <table class="table">
-                   
+                  
                     @foreach (var subject in Model )
-                    {
-                        string selectedRow = ""; 
-                    
-                        if (subject.SubjectName == ViewBag.SubjectName)
-                        {
-                            selectedRow = "success";
-
-                        }
-                        <tr>
-                            <th>
-                            @Html.DisplayFor(modelSubject => subject.SubjectName)
-                            </th>
-                            </tr>
-                        <tr class="@selectedRow">
-                            <td>
-                                @Html.DisplayFor(modelSubject => subject.SubjectDescr)  
-                            </td>
-                        </tr>
-
-                    }
-
-                </table>
+                     {
+                            <div class="col-lg-6 mb-4">
+                                <div class="w-100 h-100 bg-body-light rounded d-flex p-3">
+                                    <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem">@subject.SubjectName.ToCharArray()[0]</span>
+                                    <div class="d-flex align-items-start flex-column w-100">
+                                        <div class="mb-auto w-100">
+                                            <div>
+                                                <h2 class="mb-2 fs-1 lh-tight">@subject.SubjectName</h2>
+                                            </div>
+                                            <div>
+                                                <p class="mb-2 fs-1 lh-tight">@subject.SubjectDescr</p>
+                                        </div>
+                                        <div class="d-flex w-100">
+                                            <div class="mr-auto"></div>
+                                            <form asp-controller="Student" asp-action="SubjectEnroll" class="nav-link">
+                                            <button type="submit" class="btn btn-secondary btn btn-auto d-inline-flex flex-shrink-4 align-items-center bg-body justify-content-center p-2">
+                                                Enroll
+                                            </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                    
+                          </div>   
+                          }

@@ -10,7 +10,7 @@
         <div class="container-fluid px-lg-5">
             <div class="d-flex py-4 border-bottom">
                 <div class="mr-auto w-100">
-                    <form class="w-100" style="max-width: 600px">
+                    <form   asp-action = "Search"  method = "get"  class="w-100" style="max-width: 600px">
                         <div class="input-group">
                             <div class="input-group-item mb-0">
                                 <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="gi gi-search fs-3">
@@ -56,7 +56,7 @@
                                         </div>
                                         <div class="d-flex w-100">
                                             <div class="mr-auto"></div>
-                                            <form asp-controller="Student" asp-action="StudentEnroll" class="nav-link">
+                                            <form asp-controller="Student" asp-action="SubjectEnroll" class="nav-link">
                                             <button type="button" class="btn btn-auto d-inline-flex flex-shrink-0 align-items-center bg-body justify-content-center p-0">
                                                 Enroll
                                             </button>

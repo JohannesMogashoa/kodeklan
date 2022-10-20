@@ -89,6 +89,17 @@ namespace iTut.Controllers
             return View(model);
         }
 
+       
+        public IActionResult SubjectEnroll()
+        {
+            var student = _context.Students.Where(r => r.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+
+            ViewBag.Student = student;
+
+            return View();
+        }
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
