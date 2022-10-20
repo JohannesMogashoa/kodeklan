@@ -1,4 +1,5 @@
 ﻿using iTut.Constants;
+using iTut.Models.HOD;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -44,5 +45,15 @@ namespace iTut.Models.Users
         public DateTime CreatedOn { get; set; }
 
         public bool Archived { get; set; }
+
+        //HOD REQUEST 
+        public string FullName
+        {
+            get
+            {
+                return LastName + ", " + FirstName;
+            }
+        }
+        public ICollection<Enrollment> Enrollments { get; set; }
     }
 }

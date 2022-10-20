@@ -1,0 +1,146 @@
+﻿@model  IEnumerable<iTut.Models.Marks.Mark>
+
+@{
+    ViewData["Title"] = "LoadMarks";
+}
+<style>  
+    table {  
+        width: 100%;  
+    }  
+    table tr td{  
+        border-top: 1px solid black;  
+        text-align: center;  
+        word-wrap: break-word;  
+        padding:2px 2px;
+    }  
+  
+    table tr:hover {  
+        background-color:rgba(0,0,0,0.7);  
+        color:#fff;  
+    }  
+    table tr th {  
+        
+        border-bottom: 2px solid black;
+        text-align: center;  
+        background-color: #344e41;  
+        color: #ffff;  
+        padding: 5px 2px;
+
+    }  
+    table tr:nth-of-type(even) {
+    background-color: #6a994e;
+    color:#ffff;
+    }
+    table tr:nth-of-type(even):hover{
+    background-color: #31572c;
+    color:#ffff;
+    }
+    
+</style> 
+
+<div class="Container-fluid py-2 px-lg-2 w-100" > 
+
+           <div class="Head_Container px-2 py-2 d-flex">
+           <h1> Student Marks </h1>
+
+          <div class="back_button ml-auto pr-3 py-0">
+                <a asp-controller="Educator" asp-action="CreateTask" class="btn btn-outline-danger"> Back </a> 
+
+     
+            </div>
+        </div>
+
+<div class="Container-fluid py-2 px-1">
+    <div class="container-fluid py-1 px-2">
+   <table class="table w-100">     
+          <thead>
+        <tr>
+                    
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+            <th>
+                 Subject
+            </th>
+         
+            <th>
+                Grade
+            </th>
+             <th>
+                Term 1
+            </th>
+            <th>
+                Term 2
+            </th>
+            <th>
+                Term 3
+            </th>
+            <th>
+                Term 4
+            </th>
+            <th>
+                Average
+            </th>
+              <th>
+                Result
+            </th>
+            <td>
+
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+       
+            <td>
+                @Html.DisplayFor(modelItem => item.students.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.students.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.subject.SubjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.students.Grade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Term1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Term2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Term3)
+            </td>
+                  <td>
+                @Html.DisplayFor(modelItem => item.Term4)
+            </td>
+             <td>
+               
+                @Html.DisplayFor(modelItem => item.avg)%
+            </td>
+              <td>
+               
+                @Html.DisplayFor(modelItem => item.outcome)
+            </td>
+            
+            <td>
+                <a asp-controller="Educator" asp-action="EditMarks" asp-route-id="@item.Id"><i class="bi bi-pen"></i> Edit | </a>
+                                <a asp-controller="Educator" asp-action="MarksDetails" asp-route-id="@item.Id"><i class="bi bi-eye"> </i>Details |</a>
+                <a asp-controller="Educator" asp-action="DeleteMarks" asp-route-id="@item.Id"> Delete </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table> 
+      </div>
+
+      </div>
+ 
+   </div>
+</div>

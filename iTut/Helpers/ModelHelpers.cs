@@ -21,5 +21,19 @@ namespace iTut.Helpers
 
             return editComplaintViewModel;
         }
+
+        public static EditMeetingRequestViewModel GetEditMeetingRequestViewModel(MeetingRequest meeting)
+        {
+            var editMeetingRequestModel = new EditMeetingRequestViewModel
+            {
+                Id = meeting.Id,
+                Reason = meeting.Reason,
+                MeetingDate = meeting.MeetingDate,
+                ModifiedAt = meeting.ModifiedAt,
+                Status = meeting.Status,
+                Archived = meeting.Archived
+            };
+            return editMeetingRequestModel;
+        }
     }
 }

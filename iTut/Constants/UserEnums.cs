@@ -31,6 +31,7 @@ namespace iTut.Constants
         Eleven,
         Twelve
     }
+
     public enum MaritalStatus
     {
         [Display(Name = "Single")]

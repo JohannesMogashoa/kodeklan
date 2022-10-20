@@ -1,0 +1,138 @@
+﻿@model iTut.Models.Marks.studentMarksViewModel
+@{
+    ViewData["Title"] = "MarksDetials";
+}
+
+
+<div class="Container-fluid py-3 px-lg-2 w-100 text-black">
+
+    <div class="Head_Container px-2 py-3 d-flex">
+        <h1> Student Marks </h1>
+
+        <div class="back_button ml-auto pr-3 py-0">
+            <a asp-controller="Educator" asp-action="LoadMarks" class="btn btn-outline-danger"> Back </a>
+
+
+        </div>
+    </div>
+
+
+
+ <div class="pt-3 mb-4 bg-white text-dark container " id="print">
+ @foreach(var student in Model.marks)
+ {
+        <div class="grid w-100 text-black pt-2">
+
+            <div class="g-col-6 pt-1">
+
+                    <h5 class="text-black">Names:  <span class="fs-2 text-muted  text-black px-2">  @student.students.FirstName  @student.students.LastName </span></h5>
+                
+            </div>
+             <div class="g-col-6 pt-3">
+                    <h5 class="text-black"> Grade: <span class="fs-2 text-muted  text-black px-3"> @student.students.Grade </span></h5>
+
+             </div>
+             <div class="g-col-6 pt-3">
+                    <h5 class="text-black"> Physical Address: <span class="fs-2 text-muted  text-black px-3"> @student.students.PhysicalAddress </span></h5>
+
+             </div>
+             <div class="g-col-6 pt-3">
+                    <h5 class="text-black"> E-mail Address: <span class="fs-2 text-muted  text-black px-3"> @student.students.EmailAddress </span></h5>
+
+             </div>
+        </div>
+
+
+
+        <hr/>
+        <div class="container-fluid">
+                <table class="table w-100 table-striped">
+                    <thead >
+                        <tr>
+                            <th>Subject</th>
+
+                            <th>
+                                Grade
+                            </th>
+                            <th>
+                                Term 1
+                            </th>
+                            <th>
+                                Term 2
+                            </th>
+                            <th>
+                                Term 3
+                            </th>
+                            <th>
+                                Term 4
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                            <th>
+                                Average
+                            </th>
+                            <th>
+                                Result
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="text-center">
+
+                        <tr class="pt-2">
+
+                            <td>
+                                 @student.subject.SubjectName
+                            </td>
+                            <td>
+                                 @student.students.Grade
+                            </td>
+                            <td>
+                                 @student.Term1
+                            </td>
+                            <td>
+                                 @student.Term2
+                            </td>
+                            <td>
+                                 @student.Term3
+                            </td>
+                            <td>
+                                 @student.Term4
+                            </td>
+                            <td>
+
+                                 @student.Total
+                            </td>
+                            <td>
+
+                                @student.avg
+                            </td>
+                            <td class="text-uppercase">
+
+                                @student.outcome
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+            </table>
+
+
+ 
+        </div>
+        }
+
+        <hr />
+        <div class="d-flex justify-content-between">
+            <div class="flex-column">
+                <a href="#" class="text-black"> view student</a>
+            </div>
+             <div class="flex-column">
+                <a onclick="window.print()" class=" text-black"> <i class="fas fa-print"></i>print</a>
+            </div>
+        </div>
+
+     </div>
+ 
+</div>

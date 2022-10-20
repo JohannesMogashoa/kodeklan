@@ -33,7 +33,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="MeetingDate" class="control-label"></label>
-                            <input asp-for="MeetingDate" class="form-control" type="datetime-local" />
+                            <input asp-for="MeetingDate" class="form-control" type="datetime-local" value="@DateTime.Now" />
                             <span asp-validation-for="MeetingDate" class="text-danger"></span>
                         </div>
                     </div>

@@ -1,0 +1,95 @@
+﻿@model iTut.Models.Marks.Mark
+
+@{
+    ViewData["Title"] = "StudentMarks";
+}
+
+<div class="Container-fluid py-2 px-lg-2 w-100" > 
+
+           <div class="Head_Container py-2 d-flex">
+           <h1> Student Marks</h1>
+
+          <div class="back_button ml-auto pr-3 py-0">
+                <a asp-controller="Educator" asp-action="CreateTask" class="btn btn-outline-danger"> Back </a> 
+
+     
+            </div>
+        </div>
+
+ <div class="container w-100">
+
+     <div class="row w-100">
+       <div class="col-5 pt-3">
+            
+         <form asp-controller="Educator" asp-action="AddMarks" method="post" class="container vh-100">
+       
+           <div class="form-group"
+             <label> Select Student</label>
+            <select asp-for="StudentID" class="form-control">
+                    @foreach(var student in ViewBag.Students)
+                        {
+
+                           <option value="@student.Id"> @student.FirstName  @student.LastName</option>
+                        }  
+               </select>
+             </div>
+                 <div class="form-group"
+             <label> Select Subject: </label>
+            <select asp-for="SubjID" class="form-control">
+                                 @foreach(var subject in ViewBag.subjects)
+                                 {
+                                     <option value="@subject.Id"> @subject.SubjectName</option>
+                                 }
+                </select>
+
+             </div>
+
+           <div class="form-group">
+                <label for="Term1">Term 1:</label>
+               <input asp-for="Term1" class="form-control" />
+           </div>
+           <div class="form-group">
+                <label for="Term2">Term 2 :</label>
+               <input asp-for="Term2" class="form-control" />
+           </div>
+           <div class="form-group">
+                <label for="Term3"> Term 3:</label>
+               <input asp-for="Term3" class="form-control" />
+           </div>
+           <div class="form-group">
+                <label for="Term4">Term 4:</label>
+               <input asp-for="Term4" class="form-control" />
+           </div>
+           
+    
+        <div class="form-group pt-3 d-flex justify-content-between">
+            <div class="flex-column"> 
+                 <a asp-controller="Educator" asp-action="LoadMarks" class="btn btn-danger"><i class="bi bi-eye"></i>Student Marks</a>
+            </div>
+
+            <div class="flex-column">
+                 <button type="submit" class="btn btn-primary">Add Marks</button>
+           
+            </div>
+          </div>
+
+         </form>
+
+         </div>
+
+         <div class="col-6 px-0">
+          
+              <img class="img-fluid w-100 h-90" src="~/img/marks2.svg">
+         <div>
+
+      </div>
+   </div>
+
+     
+
+
+   </div>
+     
+    </div>
+
+</div>

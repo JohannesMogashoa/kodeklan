@@ -4,13 +4,15 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-
+using iTut.Models.HOD;
 
 namespace iTut.Models.ViewModels.HOD
 {
     public class HODIndexViewModel
     {
         public HODUser HodUser { get; set; }
+
+        public List<Course> courseList { get; set; }
         public class CalendarEvent
         {
             [Key]

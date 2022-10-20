@@ -1,6 +1,6 @@
 ﻿@{
-    ViewData["Title"] = "Children";
     StudentUser child = ViewBag.Child;
+    ViewData["Title"] = child.FirstName.ToString();
 }
 
 <div id="collapseOffCanvas" class="bg-body offcanvas-collapse open w-100">
@@ -24,7 +24,6 @@
             </div>
             <div class="invisible-scrollbar position-relative wh-main">
                 <div class="row mt-3">
-                    
                 </div>
             </div>
         </div>

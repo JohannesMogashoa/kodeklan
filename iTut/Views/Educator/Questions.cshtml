@@ -1,0 +1,204 @@
+﻿ @model iTut.Models.Quiz.QuizViewModel   
+@{
+     ViewData["Title"] = "Quiz-Questions";
+} 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+<script type="text/javascript"> 
+    //tblOption
+    //txtOptionName
+    
+$(document).ready(function() {
+    $("#btnAddOption").click(function() {
+        AddOptionIntoList();
+    });
+
+    $("#btnSave").click(function() {
+        SaveQuestionAndOption();
+    });
+});
+
+ function SaveQuestionAndOption() {
+
+       if($("#tblOption tr").length !== 4){
+
+         alert("Options Should Not Be more and Less than 4 ");
+         return false;
+       }
+     var answerText = "";
+     var answerValid = undefined;
+     $.each($("#tblOption tr"),
+         function() {
+
+             answerText = $(this).find("td:eq(0) input[type=radio]:checked").val();
+             if (answerText !== undefined) {
+                 answerValid = answerText;
+             }
+         });
+
+     if (answerValid === undefined) {
+         alert("Select the answer.");
+         return false;
+     }
+
+     var ListOfOptions=[];
+     var answerTextData="";
+     var QuestionOption = {};
+    
+     var OptionText = "";
+
+      $.each($("#tblOption tr"),
+         function() {
+
+             answerText = $(this).find("td:eq(0) input[type=radio]:checked").val();
+             OptionText= $(this).find("td:eq(0) input[type=radio]").val();
+
+             if (answerText !== undefined) {
+                 answerTextData = answerText;
+             }
+             ListOfOptions.push(answerText);
+         });
+
+     QuestionOption.ListOfOptions = ListOfOptions;
+     QuestionOption.AnswerText = answerTextData;
+     QuestionOption.QuestionName = $("#txtQuestionName");
+     QuestionOption.QuizId = $("#ddQuizID");
+
+     $.ajax({
+
+         async: true,
+         type: 'POST',
+         dataType: 'JSON',
+         data: JSON.stringify(QuestionOption),
+         url: '/Educator/Questions',
+         contentType:'Application/json; charset=utf-8',
+         success: function(data){
+             if (data.success === true) {
+                 alert(data.message);
+                 //$("#txtQuestionName").val("");
+                 //$("#txtQuestionName").focus();
+                 //$("#txtQuestionName").val();
+                 //$("#tblOption tr").remove();
+                 //$("#ddQuizID").val(1);
+
+             }
+             else {
+                 alert(data.message);
+             }
+         },
+         error function() {
+             alert('There is a problem to process your request.Please Try again after some time.');
+         }
+
+     });
+ }
+
+
+function AddOptionIntoList() {
+    if ($("#txtQuestionName").val() === "") {
+        alert("Question Name Should Not Be Empty");
+        $("#txtQuestionName").focus();
+        return false;
+    }
+    if ($("#txtOptionName").val() === "") {
+        alert("Option Name Should Not Be Empty");
+        $("#txtOptionName").focus();
+        return false;
+    }
+    if($("#tblOption tr").length === 4){
+          $("#txtOptionName").focus();
+           $("#txtOptionName").val("");
+         alert("Options Should Not Be more than 4 ");
+        return false;
+    } 
+    var isSuccess = false;
+    $.each($("#tblOption tr"),
+        function() {
+            var listedValue = $(this).find("td:eq(0) input[type=radio]").val();
+            if (listedValue === $("#txtOptionName").val()) {
+                 $("#txtOptionName").focus();
+                 $("#txtOptionName").val("");
+                alert("Its Already Listed");
+                isSuccess = true;
+            }
+        }); 
+    
+    if (isSuccess === true) {
+        return false;
+    }
+     
+    var OptionName = $("#txtOptionName").val();
+
+    var rowAdded = "<tr><td> <input type='radio' value= " 
+    + OptionName +
+    "name='OptionName'/>" 
+    + OptionName +
+    "</td></tr>" ;
+
+    $("#tblOption").append(rowAdded);
+    $("#txtOptionName").focus();
+    $("#txtOptionName").val(" ");
+
+  }
+        
+</script>
+
+<div class="Container  w-100 py-3">
+
+ <div class="Question_header_wrapper d-flex py-2 mx-2 px-2"> 
+     
+    <div class="Question_Header"> 
+       <h1> Add Your Questions</h1>
+       </div>
+   <div class="back_button ml-auto pr-3 py-2">
+        <a href="/Educator/CreateTask" class="btn btn-outline-danger"> Back </a> 
+
+    </div>
+  </div>
+  
+   <div class="quiz py-2 mx-2 px-3">
+        <h4 class="py-2"> Add Question:</h4>
+        <hr class="p-0 m-0"/>
+   </div>
+
+   @using(Html.BeginForm( actionName:"Questions",controllerName:"Educator",FormMethod.Post))
+   {
+       <div class="container">
+
+           <div class="form-group">
+             <label class="pt-1" for="textarea">Quiz Tittle: </label>
+             @Html.DropDownListFor(expression: model =>model.QuizId, Model.ListOfQuizzes, htmlAttributes: new{@class="form-control",@id="ddQuizID"})
+
+            </div>
+            <div class="form-group">
+              <label class="pt-1" for="textarea"> Questions: </label>
+              @Html.TextAreaFor(expression: model=> model.QuestionName, htmlAttributes: new{@class="form-control",@id="txtQuestionName"})
+            </div>
+            <div class="form-group">
+                 <label class="pt-1" for="textarea"> Options: </label>
+                 @Html.TextBoxFor(expression:model=> model.OptionName, htmlAttributes:new{@class="form-control",@id="txtOptionName"})
+
+            </div>
+
+            
+           <div class="form-group py-2">
+               <input type="button" id="btnAddOption" class="btn-primary" value="add option" name="Option" />
+           </div>
+
+        </div>
+
+   }
+   
+   <div class="container px--1">
+     <table id="tblOption" class="table table-secondary" style="width:100%">
+
+        @* <input type='radio' value= name='OptionName'/>*@
+    </table>
+    </div>
+    <div class="container py-1">
+        <div class="form-group">
+            <input type="button" id="btnSave" value="Save" name="Save" class="btn btn-primary" />
+        </div>
+    </div>
+    
+ </div>

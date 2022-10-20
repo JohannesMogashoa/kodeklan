@@ -2,7 +2,7 @@
     ViewData["Title"] = "Create Task";
 }
 
-<div class="container py-3 px-2" > 
+<div class="container py-3 px-2 w-100" > 
     <div class="WorkBoard py-4 d-flex"> 
          <div class="taskTitle">
         <h2> Your Work Board</h2>
@@ -14,7 +14,7 @@
        </div>
     </div>
 
-<div class="overflow-scroll">
+ <div class="container-fluid overflow-scroll">
 <div class="row m-1 justify-content-around" >
     <div class="card col-md-4">
         <img class="card-img-top w-100" src="~/img/undraw_calculator_re_alsc.svg" alt="Card image cap">
@@ -27,17 +27,17 @@
     <div class="card col-md-4">
         <img class="card-img-top w-100" src="~/img/undraw_online_stats_0g94.svg" alt="Card image cap">
         <div class="card-body">
-            <h5 class="card-title py-5">View Quiz Stats</h5>
-            <p class="card-text pt-0 pb-2"> View latest quzi status and statistics .</p>
-            <a href="#" class="btn btn-primary">Go To Stats</a>
+            <h5 class="card-title py-5">View Students Mark</h5>
+            <p class="card-text pt-0 pb-2"> View students marks </p>
+            <a asp-controller="Educator" asp-action="LoadMarks" class="btn btn-primary">Go To Marks</a>
         </div>
     </div>
     <div class="card col-md-4">
         <img class="card-img-top w-100" src="~/img/undraw_world_re_768g.svg" alt="Card image cap">
         <div class="card-body">
-            <h5 class="card-title py-2">View Marks</h5>
-            <p class="card-text py-3"> view student marks, average marks from a task .</p>
-            <a href="#" class="btn btn-primary">View Marks</a>
+            <h5 class="card-title py-2">Add Marks</h5>
+            <p class="card-text py-3"> Add Students Marks .</p>
+            <a asp-controller="Educator"  asp-action="StudentMarks" class="btn btn-primary">Add Marks</a>
         </div>
     </div>
 </div> 
