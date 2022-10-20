@@ -16,10 +16,12 @@ namespace iTut.Models.Parent
         public string Title { get; set; }
         
         [Required]
-        [StringLength(250)]
         [Display(Name = "Complaint Body")]
         public string ComplaintBody { get; set; }
-        
+
+        [Display(Name = "Complaint Feedback")]
+        public string Feedback { get; set; } = String.Empty;
+
         public ComplaintStatus Status { get; set; }
         
         public DateTime CreateAt { get; set; }
@@ -32,6 +34,7 @@ namespace iTut.Models.Parent
     public enum ComplaintStatus
     {
         Pending,
+        Investigating,
         Resolved,
     }
 }

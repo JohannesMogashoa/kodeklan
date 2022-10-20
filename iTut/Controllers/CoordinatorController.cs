@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using iTut.Models.ViewModels.Parent;
+using iTut.Models;
 
 namespace iTut.Controllers
 {
@@ -45,22 +47,50 @@ namespace iTut.Controllers
         //adding search functionality
         public IActionResult Subject(/*string sortOrder,*/ string searchString)
         {
-           
+
             var subjects = from s in _context.Subjects select s;
             if (!String.IsNullOrEmpty(searchString))
             {
-                subjects = subjects.Where( e => e.SubjectName.Contains(searchString));
+                subjects = subjects.Where(e => e.SubjectName.Contains(searchString));
             }
             return View(_context.Subjects.ToList());
         }
-       
+
 
 
         //complaint
-        public IActionResult Complaint()
+        public async Task<IActionResult> Complaints()
         {
-            return View(_context.Complaints.ToList());
-            //return View (_context.Complaints.)
+            var complaints = await _context.Complaints.Where(c => c.Archived == false).ToListAsync();
+            return View(complaints);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateComplaint(EditComplaintViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (await _userManager.IsInRoleAsync(user, RoleConstants.SubjectCoordinator.ToString()))
+            {
+                if (ModelState.IsValid)
+                {
+                    var dbComplaint = _context.Complaints.Where(c => c.Id == model.Id).FirstOrDefault();
+                    if (dbComplaint != null)
+                    {
+                        dbComplaint.Title = model.Title;
+                        dbComplaint.ComplaintBody = model.ComplaintBody;
+                        dbComplaint.Status = model.Status;
+                        dbComplaint.Feedback = model.Feedback;
+                        dbComplaint.UpdateAt = DateTime.Now;
+                        _context.Update(dbComplaint);
+                        await _context.SaveChangesAsync();
+                        _logger.LogInformation($"Complaint, id: {dbComplaint.Id}, updated");
+                        return RedirectToAction(nameof(Complaints));
+                    }
+                }
+                return RedirectToAction(nameof(Error));
+            }
+            return View("Access Denied");
         }
 
         public IActionResult CreateASubject()
@@ -112,7 +142,7 @@ namespace iTut.Controllers
             var SubjectName = model.SubjectName;
             var SubjectDescr = model.SubjectDescr;
 
-           return RedirectToAction("Subject");
+            return RedirectToAction("Subject");
         }
 
 
@@ -155,30 +185,30 @@ namespace iTut.Controllers
                 return NotFound();
             }
             var subject = _context.Subjects.AsNoTracking().FirstOrDefault(s => s.Id == Id);
-            if(subject == null)
+            if (subject == null)
             {
                 return NotFound();
             }
             return View(subject);
-           // return RedirectToAction("Details");
-          // return View(Details);
+            // return RedirectToAction("Details");
+            // return View(Details);
         }
-       
+
 
         //complaint details
         public IActionResult ComplaintDetails(string Id)
         {
-            if(Id == null)
+            if (Id == null)
             {
                 return NotFound();
             }
             var complaint = _context.Complaints.AsNoTracking().FirstOrDefault(c => c.Id == Id);
-            if(complaint == null)
+            if (complaint == null)
             {
                 return NotFound();
             }
             return View(complaint);
-         
+
         }
         //return here after 
         public IActionResult Reports()
@@ -229,7 +259,7 @@ namespace iTut.Controllers
         //GET FEEDBACK
         public IActionResult ViewFeedback()
         {
-           return View(_context.Feedbacks.ToList());
+            return View(_context.Feedbacks.ToList());
             //     return View();
         }
 
@@ -262,6 +292,12 @@ namespace iTut.Controllers
         {
             return View();
         }
-       
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
     }
 }
