@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using iTut.Models.Parent;
 using System.Runtime.Intrinsics.X86;
 using System.Net.WebSockets;
+using iTut.Models.Shared;
 
 namespace iTut.Controllers
 {
@@ -276,6 +277,7 @@ namespace iTut.Controllers
             return View(students);
         }
 
+        #region Marks
         public async Task<ActionResult> LoadMarks()
         {
 
@@ -422,6 +424,72 @@ namespace iTut.Controllers
             }
             return View(model);
         }
+        #endregion
+
+        #region Post
+
+
+        [Route("/Educator/LikePost/{id}")]
+        [HttpPost("{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LikePost([FromRoute] string id)
+        {
+            if (ModelState.IsValid)
+            {
+                var _post = _context.Posts.Where(p => p.Id == id).FirstOrDefault();
+                if (_post != null)
+                {
+                    _post.Likes = _post.Likes++;
+                    _post.UpdatedAt = DateTime.Now;
+                    _context.Update(_post);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation($"Post, id: {_post.Id}, updated");
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            return View("Error");
+        }
+
+        // GET: Timeline Post
+        [HttpGet("/Educator/Post/{id}")]
+        public IActionResult Post([FromRoute] string id)
+        {
+            var post = _context.Posts.Where(p => p.Id.Equals(id)).Include(p => p.Comments).FirstOrDefault();
+
+            ViewBag.Post = post;
+
+            return View();
+        }
+
+        // POST: Comment on Timeline Post
+        [HttpPost("/Educator/Post/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CommentOnPost([FromRoute] string id, PostComment model)
+        {
+            var post = _context.Posts.Where(p => p.Id.Equals(id)).Include(p => p.Comments).FirstOrDefault();
+            var userId = _context.Users.Where(u => u.Id == _userManager.GetUserId(User)).FirstOrDefault().Id;
+            if (post != null && !post.Archived)
+            {
+                if (ModelState.IsValid)
+                {
+                    var comment = new PostComment
+                    {
+                        UserId = userId,
+                        CommentContent = model.CommentContent,
+                        Post = post,
+                        CreatedAt = DateTime.Now,
+                    };
+                    _context.Add(comment);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation($"Comment, id: {comment.Id}, created on post: {post.Id}");
+                    return Redirect($"/Educator/Post/{id}");
+                }
+                return View("Error");
+            }
+            return NotFound();
+        }
+        #endregion
     }
+
 }
 
