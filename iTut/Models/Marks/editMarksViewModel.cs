@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using iTut.Constants;
 using System;
 
 namespace iTut.Models.Marks
@@ -31,5 +32,9 @@ namespace iTut.Models.Marks
         public int avg { get; set; }
 
         public string outcome { get; set; }
+        public string StudentFirstName { get; set; }
+        public string StudentLastName { get; set; }
+        public Grade grade { get; set; }
+
     }
 }

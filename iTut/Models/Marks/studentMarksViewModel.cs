@@ -8,9 +8,9 @@ namespace iTut.Models.Marks
     public class studentMarksViewModel
     {
        
-        public List<Subject> subjects { get; set; }
+      
         public  List<Mark> marks { get; set; }
-        public List<StudentUser> students { get; set; }
+       
         
     }
 }

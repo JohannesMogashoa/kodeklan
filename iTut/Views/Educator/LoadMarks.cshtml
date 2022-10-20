@@ -130,9 +130,9 @@
             </td>
             
             <td>
-                <a asp-controller="Educator" asp-action="EditMarks" asp-route-id="@item.Id"><i class="bi bi-pen"></i> Edit </a>
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
-                                <a asp-controller="Educator" asp-action="DeleteMarks" asp-route-id="@item.Id"> Delete </a>
+                <a asp-controller="Educator" asp-action="EditMarks" asp-route-id="@item.Id"><i class="bi bi-pen"></i> Edit | </a>
+                                <a asp-controller="Educator" asp-action="MarksDetails" asp-route-id="@item.Id"><i class="bi bi-eye"> </i>Details |</a>
+                <a asp-controller="Educator" asp-action="DeleteMarks" asp-route-id="@item.Id"> Delete </a>
             </td>
         </tr>
 }

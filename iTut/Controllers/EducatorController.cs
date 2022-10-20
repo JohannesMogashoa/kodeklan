@@ -24,6 +24,9 @@ using iTut.Models.Parent;
 using System.Runtime.Intrinsics.X86;
 using System.Net.WebSockets;
 using iTut.Models.Shared;
+using PagedList;
+
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace iTut.Controllers
 {
@@ -209,7 +212,7 @@ namespace iTut.Controllers
             public async Task<IActionResult> UploadFile()
            {
            
-               var fileuploadViewModel = await LoadAllFiles();
+              var fileuploadViewModel = await LoadAllFiles();
                ViewBag.topics = _context.Topics.ToList();
                ViewBag.Message = TempData["Message"];
               return View(fileuploadViewModel);
@@ -268,12 +271,40 @@ namespace iTut.Controllers
         #endregion
 
 
-        public async Task<ActionResult> Students(string grade, string searchStudent)
+        public ActionResult Students(string sortOrder, string currentSort,int? page)
         {
-            
-                                          
+            int pageSize = 10;
+            int pageIndex = 1;
+            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            ViewBag.currentSort = sortOrder;
+            sortOrder = String.IsNullOrEmpty(sortOrder) ? "FirstName" : sortOrder;
 
-            var students= _context.Students.ToList();
+            IPagedList<StudentUser> students = null;
+
+            switch (sortOrder)
+            {
+                case "FirstName":
+                    if (sortOrder.Equals(currentSort))
+                        students = _context.Students.OrderByDescending(s => s.FirstName).ToPagedList(pageIndex, pageSize);
+                    else
+                        students = _context.Students.OrderBy(s => s.FirstName).ToPagedList(pageIndex, pageSize);
+                    break;
+                case "LastName":
+                    if (sortOrder.Equals(currentSort))
+                        students = _context.Students.OrderByDescending(s => s.LastName).ToPagedList(pageIndex, pageSize);
+                    else
+                        students=_context.Students.OrderBy(s=>s.LastName).ToPagedList(pageIndex,pageSize);
+                    break;
+                case "Grade":
+                    if (sortOrder.Equals(currentSort))
+                        students = _context.Students.OrderByDescending(s => s.Grade).ToPagedList(pageIndex, pageSize);
+                    else
+                        students = _context.Students.OrderBy(s => s.Grade).ToPagedList(pageIndex, pageSize);
+                    break ;
+            }
+
+
+          
             return View(students);
         }
 
@@ -424,6 +455,27 @@ namespace iTut.Controllers
             }
             return View(model);
         }
+
+
+        public IActionResult MarksDetails(string Id)
+        {
+            var mark = _context.Marks.Where(m => m.Id == Id).Include(m => m.students).Include(s => s.subject).FirstOrDefault();
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var markList = _context.Marks.Where(m => m.Id == Id).ToList();
+
+             studentMarksViewModel model =new studentMarksViewModel()
+            {
+               marks=markList
+
+
+            };
+
+            return View(model);
+        }
         #endregion
 
         #region Post
@@ -489,7 +541,7 @@ namespace iTut.Controllers
             return NotFound();
         }
         #endregion
-    }
+    }    
 
 }
 
