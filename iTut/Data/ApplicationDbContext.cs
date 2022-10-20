@@ -45,12 +45,10 @@ namespace iTut.Data
         public DbSet<PostComment> PostComments { get; set; }
 
         public DbSet<Topic> Topics { get; set; }
-        //public DbSet<Grade> Grades { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<SubjectEducator> SubjectEducators { get; set; }
         public DbSet<FeedbackEducator> FeedbackEducator { get; set; }
-       // public DbSet<ArchivedSubject> ArchivedSubjects { get; set; }
     }
 }
