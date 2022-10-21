@@ -12,7 +12,7 @@
                 <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem"></span>
                 <div class="mr-auto">
                     <h2 class="mb-2 fs-1 lh-tight"> </h2>
-                    <p class="lh-tight">Class Name Management</p>
+                    <p class="lh-tight">Subjects Management</p>
                 </div>
                 <ul class="list-unstyled d-flex align-items-center">
                     <li class="d-lg-none mr-sm-5">
@@ -30,17 +30,30 @@
                         <div class="d-flex align-items-center mb-3">
                             <hr />
                             <div class="mr-auto">
-                                <h2 class="mb-2 fs-2 lh-tight">List Of </h2>
-                                <p>Class Name</p>
+                                <h2 class="mb-2 fs-2 lh-tight">List Of Subject assign To Subject Coordinator</h2>
+                              
                             </div>
                             <hr />
                         </div>
-
-                        <h2>Courses</h2>
-
+                        <hr />
                         <p>
-                            <a asp-action="Create">Create New</a>
+                            <a asp-controller="HOD" asp-action="AssignSubjectIndex">Assign Subject</a>
                         </p>
+                        
+                        <p>
+                            <a asp-controller="HOD" asp-action="SubjectsCreate">Create New</a>
+                        </p>
+                        <hr/>
+                        <form asp-action="SubjectsIndex" method="get">
+                            <div class="form-actions no-color">
+                                <p>
+                                    Find by title: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                                    <input type="submit" value="Search" class="btn btn-default" /> |
+                                    <a asp-action="SubjectIndex">Back to Full List</a>
+                                </p>
+                            </div>
+                        </form>
+                        <hr/>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -48,7 +61,7 @@
                                         @Html.DisplayNameFor(model => model.CourseID)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.Title)
+                                        <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Title)</a>
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(model => model.Credits)
@@ -76,9 +89,9 @@
                                             @Html.DisplayFor(modelItem => item.Department.Name)
                                         </td>
                                         <td>
-                                            <a asp-action="Edit" asp-route-id="@item.CourseID">Edit</a> |
-                                            <a asp-action="Details" asp-route-id="@item.CourseID">Details</a> |
-                                            <a asp-action="Delete" asp-route-id="@item.CourseID">Delete</a>
+                                            <a asp-controller="HOD" asp-action="SubjectsEdit" asp-route-id="@item.CourseID">Edit</a> |
+                                            <a asp-controller="HOD" asp-action="SubjectsDetails" asp-route-id="@item.CourseID">Details</a> |
+                                            <a asp-controller="HOD" asp-action="SubjectsDelete" asp-route-id="@item.CourseID">Delete</a>
                                         </td>
                                     </tr>
                                 }
@@ -93,7 +106,7 @@
                     <div class="mr-auto">
 
                         <img src="~/img/HOD/Back.png" alt="Sample Photo" hight="120px" width="100" />
-                        <p><a asp-controller="HOD" asp-action="ClassFeesIndex">Back To Class Fees</a></p>
+                        <p><a asp-controller="HOD" asp-action="Index">Back To DashBoard</a></p>
                     </div>
                     <hr />
                 </div>

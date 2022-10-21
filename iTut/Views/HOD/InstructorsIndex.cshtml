@@ -13,7 +13,7 @@
                 <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem"></span>
                 <div class="mr-auto">
                     <h2 class="mb-2 fs-1 lh-tight"> </h2>
-                    <p class="lh-tight">Class Name Management</p>
+                    <p class="lh-tight">Instructors(Subject Co-Ordinators) Management</p>
                 </div>
                 <ul class="list-unstyled d-flex align-items-center">
                     <li class="d-lg-none mr-sm-5">
@@ -32,16 +32,18 @@
                             <hr />
                             <div class="mr-auto">
                                 <h2 class="mb-2 fs-2 lh-tight">List Of </h2>
-                                <p>Class Name</p>
+                                <p>Instractors</p>
                             </div>
                             <hr />
                         </div>
 
                         <h2>Instructors</h2>
-
+                        <hr />
                         <p>
-                            <a asp-action="Create">Create New</a>
+                            <a asp-controller="HOD" asp-action="InstructorsCreate">Create New</a>
                         </p>
+                        <hr />
+                        <div>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -84,15 +86,18 @@
                                             }
                                         </td>
                                         <td>
-                                            <a asp-action="Index" asp-route-id="@item.ID">Select</a> |
-                                            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                                            <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                                            <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                                            <a asp-controller="HOD" asp-action="InstructorsIndex" asp-route-id="@item.ID">Select</a> |
+                                            <a asp-controller="HOD" asp-action="InstructorsEdit" asp-route-id="@item.ID">Edit</a> |
+                                            <a asp-controller="HOD" asp-action="InstructorsDetails" asp-route-id="@item.ID">Details</a> |
+                                            <a asp-controller="HOD" asp-action="InstructorsDelete" asp-route-id="@item.ID">Delete</a>
                                         </td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
+                        <hr/>
+                            <button onclick="window.print()"> Print To PDF current Record</button>
+                        <hr/>
                         @if (Model.Courses != null)
                         {
                             <h3>Courses Taught by Selected Instructor</h3>
@@ -129,6 +134,7 @@
 
                             </table>
                         }
+                        <hr/>
                         @if (Model.Enrollments != null)
                         {
                             <h3>
@@ -152,15 +158,21 @@
                                 }
                             </table>
                         }
-
-
-
+                            
+                        </div>
+                        <div class="mr-auto">
+                            <br />
+                            <br />
+                            <form method="post" asp-controller="HOD" asp-action="ExportIntructors">
+                                <input type="submit" value="Export Intructors To Excel" />
+                            </form>
+                        </div>
                     </div>
                     <hr />
                     <div class="mr-auto">
 
-                        <img src="~/img/HOD/Back.png" alt="Sample Photo" hight="120px" width="100" />
-                        <p><a asp-controller="HOD" asp-action="ClassFeesIndex">Back To Class Fees</a></p>
+                        <img src="~/img/HOD/Back.png" alt="BACK BUTTON" hight="120px" width="100" />
+                        <p><a asp-controller="HOD" asp-action="Index">Back To DashBoard</a></p>
                     </div>
                     <hr />
                 </div>

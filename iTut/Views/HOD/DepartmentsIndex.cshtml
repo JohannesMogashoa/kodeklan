@@ -11,7 +11,7 @@
                 <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem"></span>
                 <div class="mr-auto">
                     <h2 class="mb-2 fs-1 lh-tight"> </h2>
-                    <p class="lh-tight">Class Name Management</p>
+                    <p class="lh-tight">Department  Management</p>
                 </div>
                 <ul class="list-unstyled d-flex align-items-center">
                     <li class="d-lg-none mr-sm-5">
@@ -29,17 +29,28 @@
                         <div class="d-flex align-items-center mb-3">
                             <hr />
                             <div class="mr-auto">
-                                <h2 class="mb-2 fs-2 lh-tight">List Of </h2>
-                                <p>Class Name</p>
+                                <h2 class="mb-2 fs-2 lh-tight">List Of Departments</h2>
+                                
                             </div>
                             <hr />
                         </div>
                         
                         <h1>Departments</h1>
-
+                        <hr />
                         <p>
-                            <a asp-action="Create">Create New</a>
+                            <a asp-controller="HOD" asp-action="DepartmentsCreate">Create New</a>
                         </p>
+                        <hr/>
+                        <form asp-action="DepartmentIndex" method="get">
+                            <div class="form-actions no-color">
+                                <p>
+                                    Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                                    <input type="submit" value="Search" class="btn btn-default" /> |
+                                    <a asp-action="DepartmentsIndex">Back to Full List</a>
+                                </p>
+                            </div>
+                        </form>
+                        <hr />
                         <table class="table">
                             <thead>
                                 <tr>
@@ -65,7 +76,8 @@
                         @foreach (var item in Model) {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
+                                       <a asp-action="DepartmentsIndex" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
+                                        
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Budget)
@@ -80,9 +92,9 @@
                                         @Html.DisplayFor(modelItem => item.Administrator.FullName)
                                     </td>
                                     <td>
-                                        <a asp-action="Edit" asp-route-id="@item.DepartmentID">Edit</a> |
-                                        <a asp-action="Details" asp-route-id="@item.DepartmentID">Details</a> |
-                                        <a asp-action="Delete" asp-route-id="@item.DepartmentID">Delete</a>
+                                        <a asp-controller="HOD" asp-action="DepartmentsEdit" asp-route-id="@item.DepartmentID">Edit</a> |
+                                        <a asp-controller="HOD" asp-action="DepartmentsDetails" asp-route-id="@item.DepartmentID">Details</a> |
+                                        <a asp-controller="HOD" asp-action="DepartmentsDelete" asp-route-id="@item.DepartmentID">Delete</a>
                                     </td>
                                 </tr>
                         }
@@ -91,13 +103,19 @@
 
 
 
-
+                        <button onclick="window.print()"> Print To PDF current Record</button>
                     </div>
+                    <hr/>
+                    <br />
+                            <br />
+                            <form method="post" asp-controller="HOD" asp-action="ExportDepartments">
+                                <input type="submit" value="Export Departments To Excel" />
+                            </form>
                     <hr />
                     <div class="mr-auto">
 
                         <img src="~/img/HOD/Back.png" alt="Sample Photo" hight="120px" width="100" />
-                        <p><a asp-controller="HOD" asp-action="ClassFeesIndex">Back To Class Fees</a></p>
+                        <p><a asp-controller="HOD" asp-action="Index">Back To DashBoard</a></p>
                     </div>
                     <hr />
                 </div>
@@ -105,4 +123,3 @@
         </div>
     </main>
 </div>
-v>

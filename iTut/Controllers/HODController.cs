@@ -4,6 +4,7 @@ using iTut.Data;
 using iTut.Models.HOD;
 using iTut.Models.Users;
 using iTut.Models.ViewModels.HOD;
+using iTut.Models.ViewModels.Parent;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -39,18 +40,67 @@ namespace iTut.Controllers
 
             var model = new HODIndexViewModel
             {
-                HodUser = hod
+                HodUser = hod,
+                CountStudent = _context.Students.Count(),
+                CountCoordinator = _context.SubjectCoordinator.Count(),
+                CountEducator = _context.Educator.Count(),
+                CountSubject = _context.Subjects.Count()
             };
 
             return View(model);
         }
 
 
-        // GET: Departments
-        public async Task<IActionResult> DepartmentsIndex()
+        [HttpPost]
+        public IActionResult ExportDepartments()
         {
-            var schoolContext = _context.Departments.Include(d => d.Administrator);
-            return View(await schoolContext.ToListAsync());
+            DataTable dt = new DataTable("List Of Departments");
+            dt.Columns.AddRange(new DataColumn[6] { new DataColumn("DepartmentID"),
+                                        new DataColumn("Name"),
+                                        new DataColumn("StartDate"),
+                                        new DataColumn("Budget"),
+                                        new DataColumn("Administrator"),
+                                        new DataColumn("Subjects"), });
+
+            var departments = from s in this._context.Departments.Take(100000)
+                           select s;
+
+            foreach (var s in departments)
+            {
+                dt.Rows.Add(s.DepartmentID, s.Name, s.StartDate, s.Budget, s.Administrator, s.Courses);
+            }
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                wb.Worksheets.Add(dt);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "listOfDepartments.xlsx");
+                }
+            }
+        }
+        // GET: Departments
+        public async Task<IActionResult> DepartmentsIndex(string sortOrder, string searchString)
+        {
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CurrentFilter"] = searchString;
+            var schoolContext = from s in _context.Departments.Include(d => d.Administrator)
+                                                             select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                schoolContext = schoolContext.Where(s => s.Name.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    schoolContext = schoolContext.OrderByDescending(s => s.Name);
+                    break;
+                default:
+                    schoolContext = schoolContext.OrderBy(s => s.Name);
+                    break;
+            }
+            return View(await schoolContext.AsNoTracking().ToListAsync());
         }
 
         // GET: Departments/Details/5
@@ -79,7 +129,7 @@ namespace iTut.Controllers
         // GET: Departments/Create
         public IActionResult DepartmentsCreate()
         {
-            ViewData["InstructorID"] = new SelectList(_context.SubjectCoordinator, "UserId", "FullName");
+            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName");
             return View();
         }
 
@@ -96,7 +146,7 @@ namespace iTut.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(DepartmentsIndex));
             }
-            ViewData["InstructorID"] = new SelectList(_context.SubjectCoordinator, "UserId", "FullName", department.InstructorID);
+            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", department.InstructorID);
             return View(department);
         }
 
@@ -117,7 +167,7 @@ namespace iTut.Controllers
             {
                 return NotFound();
             }
-            ViewData["InstructorID"] = new SelectList(_context.SubjectCoordinator, "ID", "FullName", department.InstructorID);
+            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", department.InstructorID);
             return View(department);
         }
 
@@ -141,7 +191,7 @@ namespace iTut.Controllers
                 await TryUpdateModelAsync(deletedDepartment);
                 ModelState.AddModelError(string.Empty,
                     "Unable to save changes. The department was deleted by another user.");
-                ViewData["InstructorID"] = new SelectList(_context.SubjectCoordinator, "ID", "FullName", deletedDepartment.InstructorID);
+                ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FullName", deletedDepartment.InstructorID);
                 return View(deletedDepartment);
             }
 
@@ -261,9 +311,183 @@ namespace iTut.Controllers
         {
             return _context.Departments.Any(e => e.DepartmentID == id);
         }
+        public IActionResult UserReport(List<StudentUser> students)
+        {
+            var hoduser = _context.HOD.FirstOrDefault();
+            var Course = _context.Courses
+                .Include(c => c.Department)
+                .ToList(); 
+            var departments = _context.Departments
+                .Include(d => d.Administrator)
+                .ToList();
+            var subjectcoo = _context.SubjectCoordinator
+                .ToList();
+            var intruc = _context.Instructors
+                .Include(i => i.OfficeAssignment)
+                  .Include(i => i.CourseAssignments)
+                    .ThenInclude(i => i.Course)
+                        .ThenInclude(i => i.Department)
+                  .OrderBy(i => i.LastName)
+                  .ToList();
+            var studen = _context.Students
+                .ToList();
+            var model = new HODUserReports
+            {
+                Departments = departments,
+                StudentsUser = studen,
+                Instructors = intruc,
+                Courses = Course,
+                HODUser = hoduser,
+                CoordinatorUsers = subjectcoo
+            };
+            return View(model);
+        }
+        // GET: CourseAssignments
+        public async Task<IActionResult> AssignSubjectIndex(string sortOrder, string searchString)
+        {
 
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CurrentFilter"] = searchString;
+            var applicationDbContext = _context.CourseAssignments.Include(c => c.Course).Include(c => c.Instructor);
 
+            return View(await applicationDbContext.ToListAsync());
+        }
+        // GET: CourseAssignments/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var courseAssignment = await _context.CourseAssignments
+                .Include(c => c.Course)
+                .Include(c => c.Instructor)
+                .FirstOrDefaultAsync(m => m.CourseID == id);
+            if (courseAssignment == null)
+            {
+                return NotFound();
+            }
+
+            return View(courseAssignment);
+        }
+
+        // POST: CourseAssignments/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var courseAssignment = await _context.CourseAssignments.FindAsync(id);
+            _context.CourseAssignments.Remove(courseAssignment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(AssignSubjectIndex));
+        }
+
+        // GET: CourseAssignments/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var courseAssignment = await _context.CourseAssignments
+                .Include(c => c.Course)
+                .Include(c => c.Instructor)
+                .FirstOrDefaultAsync(m => m.CourseID == id);
+            if (courseAssignment == null)
+            {
+                return NotFound();
+            }
+
+            return View(courseAssignment);
+        }
+
+        // GET: CourseAssignments/Create
+        public IActionResult Create()
+        {
+            ViewData["CourseID"] = new SelectList(_context.Courses, "CourseID", "CourseID");
+            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FirstMidName");
+            return View();
+        }
+
+        // POST: CourseAssignments/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("InstructorID,CourseID")] CourseAssignment courseAssignment)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(courseAssignment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(AssignSubjectIndex));
+            }
+            ViewData["CourseID"] = new SelectList(_context.Courses, "CourseID", "CourseID", courseAssignment.CourseID);
+            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FirstMidName", courseAssignment.InstructorID);
+            return View(courseAssignment);
+        }
+
+        // GET: CourseAssignments/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var courseAssignment = await _context.CourseAssignments.FindAsync(id);
+            if (courseAssignment == null)
+            {
+                return NotFound();
+            }
+            ViewData["CourseID"] = new SelectList(_context.Courses, "CourseID", "CourseID", courseAssignment.CourseID);
+            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FirstMidName", courseAssignment.InstructorID);
+            return View(courseAssignment);
+        }
+
+        // POST: CourseAssignments/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("InstructorID,CourseID")] CourseAssignment courseAssignment)
+        {
+            if (id != courseAssignment.CourseID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(courseAssignment);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CourseAssignmentExists(courseAssignment.CourseID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(AssignSubjectIndex));
+            }
+            ViewData["CourseID"] = new SelectList(_context.Courses, "CourseID", "CourseID", courseAssignment.CourseID);
+            ViewData["InstructorID"] = new SelectList(_context.Instructors, "ID", "FirstMidName", courseAssignment.InstructorID);
+            return View(courseAssignment);
+        }
+
+        private bool CourseAssignmentExists(int id)
+        {
+            return _context.CourseAssignments.Any(e => e.CourseID == id);
+        }
         // Create an About Enrollment page
 
         public async Task<ActionResult> AboutEnrollment()
@@ -276,10 +500,11 @@ namespace iTut.Controllers
                     EnrollmentDate = dateGroup.Key,
                     StudentCount = dateGroup.Count()
                 };
+           
             return View(await data.AsNoTracking().ToListAsync());
         }
-
-
+        
+        
         [HttpPost]
         public IActionResult ExportStudents()
         {
@@ -357,63 +582,45 @@ namespace iTut.Controllers
             int pageSize = 3;
             return View(await PaginatedList<StudentUser>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-        /*public async Task<IActionResult> DepartmentsSubject()
-       {
-           var departments = _context.Departments;
-           foreach(Department d in departments)
-           {
-               foreach(Course c in d.Courses)
-               {
-                   courseList.Add(d.Name + d.Name);
-               }
-           }
-           return View(await courseList.AsNoTracking().ToListAsync());
-       }*/
 
-        public async Task<IActionResult> Index(int? id, int? courseID)
+
+
+
+        [HttpPost]
+        public IActionResult ExportInstructors()
         {
-            var viewModel = new InstructorIndexData();
-            viewModel.Instructors = await _context.Instructors
-                  .Include(i => i.OfficeAssignment)
-                  .Include(i => i.CourseAssignments)
-                    .ThenInclude(i => i.Course)
-                        .ThenInclude(i => i.Department)
-                  .OrderBy(i => i.LastName)
-                  .ToListAsync();
+            DataTable dt = new DataTable("List Of Intructors");
+            dt.Columns.AddRange(new DataColumn[6] { new DataColumn("ID"),
+                                        new DataColumn("FullName"),
+                                        new DataColumn("OfficeAssignment Location"),
+                                        new DataColumn("CoordinatorUser"),
+                                        new DataColumn("HireDate"),
+                                        new DataColumn("Subjects Assignments"), });
 
-            if (id != null)
+            var instructors = from s in this._context.Instructors.Take(100000)
+                              select s;
+
+            foreach (var s in instructors)
             {
-                ViewData["InstructorID"] = id.Value;
-                Instructor instructor = viewModel.Instructors.Where(
-                    i => i.ID == id.Value).Single();
-                viewModel.Courses = instructor.CourseAssignments.Select(s => s.Course);
+                dt.Rows.Add(s.ID,s.FullName, s.OfficeAssignment.Location, s.CoordinatorUser, s.HireDate, s.CourseAssignments);
             }
 
-            if (courseID != null)
+            using (XLWorkbook wb = new XLWorkbook())
             {
-                ViewData["CourseID"] = courseID.Value;
-                var selectedCourse = viewModel.Courses.Where(x => x.CourseID == courseID).Single();
-                await _context.Entry(selectedCourse).Collection(x => x.Enrollments).LoadAsync();
-                foreach (Enrollment enrollment in selectedCourse.Enrollments)
+                wb.Worksheets.Add(dt);
+                using (MemoryStream stream = new MemoryStream())
                 {
-                    await _context.Entry(enrollment).Reference(x => x.StudentUser).LoadAsync();
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "listOfInstructors.xlsx");
                 }
-                viewModel.Enrollments = selectedCourse.Enrollments;
             }
-
-            return View(viewModel);
         }
-
-
-
-
-
         // GET: Instructors
-        
+
         public async Task<IActionResult> InstructorsIndex(int? id, int? courseID)
         {
             var viewModel = new InstructorIndexData();
-            viewModel.Instructors = await _context.Instructors
+            viewModel.Instructors = await _context.Instructors.Include(i => i.CoordinatorUser)
                   .Include(i => i.OfficeAssignment)
                   .Include(i => i.CourseAssignments)
                     .ThenInclude(i => i.Course)
@@ -656,13 +863,58 @@ namespace iTut.Controllers
         }
 
 
-        // GET: Courses
-        public async Task<IActionResult> SubjectsIndex()
+        [HttpPost]
+        public IActionResult ExportSubjects()
         {
-            var courses = _context.Courses
+            DataTable dt = new DataTable("List Of Subjects");
+            dt.Columns.AddRange(new DataColumn[4] { new DataColumn("CourseID"),
+                                        new DataColumn("Name"),
+                                        new DataColumn("Department Name"),
+                                        new DataColumn("Subject Assignments"), });
+
+            var subjects = from s in this._context.Courses.Take(100000)
+                              select s;
+
+            foreach (var s in subjects)
+            {
+                dt.Rows.Add(s.CourseID, s.Title, s.Department.Name, s.CourseAssignments);
+            }
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                wb.Worksheets.Add(dt);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "listOfSubjects.xlsx");
+                }
+            }
+        }
+        // GET: Courses
+        public async Task<IActionResult> SubjectsIndex(string sortOrder, string searchString)
+        {
+            var courses = from s in _context.Courses
                 .Include(c => c.Department)
-                .AsNoTracking();
-            return View(await courses.ToListAsync());
+                select s;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CurrentFilter"] = searchString;
+
+            
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                courses = courses.Where(s => s.Title.Contains(searchString)
+                                       || s.Department.Name.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    courses = courses.OrderByDescending(s => s.Title);
+                    break;
+                default:
+                    courses = courses.OrderBy(s => s.Title);
+                    break;
+            }
+            return View(await courses.AsNoTracking().ToListAsync());
         }
 
         // GET: Courses/Details/5

@@ -14,7 +14,7 @@
                 <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem"></span>
                 <div class="mr-auto">
                     <h2 class="mb-2 fs-1 lh-tight"> </h2>
-                    <p class="lh-tight">Class Name Management</p>
+                    <p class="lh-tight">Subjects Management</p>
                 </div>
                 <ul class="list-unstyled d-flex align-items-center">
                     <li class="d-lg-none mr-sm-5">
@@ -32,8 +32,8 @@
                         <div class="d-flex align-items-center mb-3">
                             <hr />
                             <div class="mr-auto">
-                                <h2 class="mb-2 fs-2 lh-tight">List Of </h2>
-                                <p>Class Name</p>
+                                <h2 class="mb-2 fs-2 lh-tight">Create Subject To assign To Coordinator </h2>
+                                
                             </div>
                             <hr />
                         </div>
@@ -44,7 +44,7 @@
                         <hr />
                         <div class="row">
                             <div class="col-md-4">
-                                <form asp-action="Create">
+                                <form asp-controller="HOD" asp-action="SubjectsCreate">
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="form-group">
                                         <label asp-for="CourseID" class="control-label"></label>
@@ -76,7 +76,7 @@
                         </div>
 
                         <div>
-                            <a asp-action="Index">Back to List</a>
+                            <a asp-controller="HOD" asp-action="SubjectsIndex">Back to List</a>
                         </div>
 
                         @section Scripts {
@@ -89,12 +89,7 @@
 
 
                     </div>
-                    <hr />
-                    <div class="mr-auto">
-
-                        <img src="~/img/HOD/Back.png" alt="Sample Photo" hight="120px" width="100" />
-                        <p><a asp-controller="HOD" asp-action="ClassFeesIndex">Back To Class Fees</a></p>
-                    </div>
+                    
                     <hr />
                 </div>
             </div>

@@ -31,7 +31,7 @@
                     <div class="col-12">
                         <div class="mr-auto">
 
-                            <img src="~/img/HOD/welcome.png" alt="Sample Photo" hight="300px" width="800px" />
+                            <img src="~/img/HOD/welcome.png" alt="Sample Photo" hight="300px" width="1200px" />
                             </div>
                         <hr />
                         <div class="d-flex align-items-center mb-3">
@@ -39,7 +39,7 @@
                             <div class="col-md-3" align="Center">
                                 <div class="card grow-sm mb-4 animated fadeInDown">
                                     <div class="card-body" align="Center">
-                                        <img src="~/img/HOD/employee34.png" alt="Sample Photo" hight="120px" width="100px" />
+                                        <img src="~/img/HOD/school.png" alt="Sample Photo" hight="120px" width="100px" />
                                         <p><a asp-controller="HOD" asp-action="AboutEnrollment">About Enrollment</a></p>
                                     </div>
                                 </div>
@@ -50,8 +50,8 @@
                             <div class="col-md-3" align="Center">
                                 <div class="card grow-sm mb-4 animated fadeInDown">
                                     <div class="card-body" align="Center">
-                                        <img src="~/img/HOD/jobinfors.png" alt="Sample Photo" hight="100px" width="100px" />
-                                        <p><a asp-controller="HOD" asp-action="CoordinatorsIndex">Coordinators</a></p>
+                                        <img src="~/img/HOD/employees.png" alt="Sample Photo" hight="100px" width="100px" />
+                                        <p><a asp-controller="HOD" asp-action="InstructorsIndex">Coordinators</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -61,7 +61,7 @@
                             <div class="col-md-3" align="Center">
                                 <div class="card grow-sm mb-4 animated fadeInDown">
                                     <div class="card-body" align="Center">
-                                        <img src="~/img/HOD/Session.png" alt="Sample Photo" hight="110px" width="100px" />
+                                        <img src="~/img/HOD/Admission.png" alt="Sample Photo" hight="110px" width="100px" />
                                         <p><a asp-controller="HOD" asp-action="DepartmentsIndex">Departments</a></p>
                                     </div>
                                 </div>
@@ -72,16 +72,45 @@
                             <div class="col-md-3" align="Center">
                                 <div class="card grow-sm mb-4 animated fadeInDown">
                                     <div class="card-body" align="Center">
-                                        <img src="~/img/HOD/Session.png" alt="Sample Photo" hight="110px" width="100" />
-                                        <p><a asp-controller="HOD" asp-action="SubjectIndex">SubjectS</a></p>
+                                        <img src="~/img/HOD/jobinfors.png" alt="Sample Photo" hight="110px" width="100" />
+                                        <p><a asp-controller="HOD" asp-action="SubjectsIndex">SubjectS</a></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="mr-auto">
-                        </div>
-                        <hr />
+                        <div class="row text-center">
+                                    <div class="col-md-3" align="Center">
+                                        <div class="card grow-sm mb-4 animated fadeInDown">
+                                            <div class="card-body" align="Center">
+                                                TOTAL Coordinator: @Model.CountCoordinator
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" align="Center">
+                                        <div class="card grow-sm mb-4 mt-5 animated fadeInUp">
+                                            <div class="card-body" align="Center">
+                                                TOTAL SUBJECT: @Model.CountSubject
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" align="Center">
+                                        <div class="card grow-sm mb-4 animated fadeInDown">
+                                            <div class="card-body" align="Center">
+                                                TOTAL EDUCATOR: @Model.CountEducator
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" align="Center">
+                                        <div class="card grow-sm mb-4 mt-5 animated fadeInUp" align="Center">
+                                            <div class="card-body">
+                                                TOTAL STUDENTS: @Model.CountStudent
+                                            </div>
 
+                                        </div>
+                                    </div>
+                                </div>
+                        <hr />
+                        
                            
                         <hr />
                     </div>

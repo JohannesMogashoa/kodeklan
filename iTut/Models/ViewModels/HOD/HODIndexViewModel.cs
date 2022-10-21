@@ -12,7 +12,10 @@ namespace iTut.Models.ViewModels.HOD
     {
         public HODUser HodUser { get; set; }
 
-        public List<Course> courseList { get; set; }
+        public int CountStudent { get; set; }
+        public int CountEducator { get; set; }
+        public int CountCoordinator { get; set; }
+        public int CountSubject { get; set; }
         public class CalendarEvent
         {
             [Key]
