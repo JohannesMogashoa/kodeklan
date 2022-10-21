@@ -128,7 +128,7 @@ namespace iTut.Controllers
 
             _context.Topics.Remove(category);
             _context.SaveChanges();
-            return RedirectToAction(nameof(LoadMarks));
+            return RedirectToAction(nameof(Categories));
         }
         #endregion
 
