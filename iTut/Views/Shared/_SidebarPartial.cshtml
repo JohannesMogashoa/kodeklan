@@ -24,48 +24,7 @@
                 <hr class="mt-1" role="presentation">
             </div>
         }
-
-        <div class="w-100 cusror-pointer">
-            <div class="d-flex">
-                <a asp-area="Identity" asp-page="/Account/Manage/PersonalData">
-                    <div class="flex-grow-1">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <h2 class="fs-1">Personal Data</h2>
-                        </div>
-                        <p class="text-body fs-1">Manage your profile</p>
-                    </div>
-                </a>
-            </div>
-            <hr class="mt-1" role="presentation">
-        </div>
-        <div class="w-100 cusror-pointer">
-            <div class="d-flex">
-                <a asp-area="Identity" asp-page="/Account/Manage/ChangePassword">
-                    <div class="flex-grow-1">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <h2 class="fs-1">Change Password</h2>
-                        </div>
-                        <p class="text-body fs-1">Keep your account secure</p>
-                    </div>
-                </a>
-            </div>
-            <hr class="mt-1" role="presentation">
-        </div>
-        <div class="w-100 cusror-pointer">
-            <div class="d-flex">
-                <a asp-area="Identity" asp-page="/Account/Manage/TwoFactorAuthentication">
-                    <div class="flex-grow-1">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <h2 class="fs-1">Two-factor Authentication</h2>
-                        </div>
-                        <p class="text-body fs-1">Add additional layer of security</p>
-                    </div>
-                </a>
-            </div>
-            <hr class="mt-1" role="presentation">
-            </div>
-            <hr class="mt-0" role="presentation">
-        @if (User.IsInRole(RoleConstants.Student))
+        else if (User.IsInRole(RoleConstants.Student))
         {
             <div class="w-100 cusror-pointer">
                 <div class="d-flex">
@@ -81,6 +40,7 @@
                 <hr class="mt-1" role="presentation">
             </div>
         }
+
         <div class="w-100 cusror-pointer">
             <div class="d-flex">
                 <a asp-area="Identity" asp-page="/Account/Manage/PersonalData">

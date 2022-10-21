@@ -33,13 +33,26 @@ namespace iTut.Controllers
         public ActionResult Index()
         {
             var student = _context.Students.Where(p => p.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+            var posts = _context.Posts.Where(p => p.Archived == false).Include(p => p.Comments).ToList();
 
             var viewModel = new StudentIndexViewModel
             {
                 Student = student,
+                Posts = posts
             };
 
             return View(viewModel);
+        }
+
+        // GET: Timeline Post
+        [HttpGet("/Student/Post/{id}")]
+        public IActionResult Post([FromRoute] string id)
+        {
+            var post = _context.Posts.Where(p => p.Id.Equals(id)).Include(p => p.Comments).FirstOrDefault();
+
+            ViewBag.Post = post;
+
+            return View();
         }
 
         public IActionResult Subjects()
