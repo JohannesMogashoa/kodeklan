@@ -1,0 +1,79 @@
+﻿@model IEnumerable<iTut.Models.Parent.Complaint>
+@{
+    ViewData["Title"] = "Complaint";
+}
+<div id="collapseOffCanvas" class="bg-body offcanvas-collapse open w-100">
+    <main class="main-expanded vh-100 w-100">
+        <div class="container-fluid px-lg-5">
+            <div class="d-flex py-4 border-bottom">
+                <div class="mr-auto w-100">
+                   
+                </div>
+                <ul class="list-unstyled d-flex align-items-center">
+                    <li class="d-lg-none mr-sm-5">
+                        <button class="btn link-body p-0 offcanvas-button" type="button">
+                            <svg class="gi gi-arrow-circle-left fs-4" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm-.293 6.293a1 1 0 0 0-1.414 0h0l-3 3-.083.094a1 1 0 0 0 .083 1.32h0l3 3 .094.083a1 1 0 0 0 1.32-.083h0l.083-.094a1 1 0 0 0-.083-1.32h0L10.416 13H16l.117-.007A1 1 0 0 0 16 11h0-5.586l1.293-1.293.083-.094a1 1 0 0 0-.083-1.32z"></path>
+                            </svg>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="invisible-scrollbar position-relative wh-main">
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="mr-auto">
+                                <h2 class="mb-2 fs-2 lh-tight">Complaints</h2>
+                            </div>
+                        </div>
+                    </div>
+                <div class="text-right">
+                    
+        </div>
+                  @*  @if (Model.Count > 0 && Model != null)
+                    {
+                    *@    @foreach (var complaint in Model)
+                        {
+                         @*   <div class="col-lg-6 mb-4">*@
+                                <div class="card" style="width:25rem;">
+                                <div class="w-100 h-100 bg-body-light rounded d-flex p-3">
+                                    <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem">@complaint.Title.ToCharArray()[0]</span>
+                                    <div class="d-flex align-items-start flex-column w-100">
+                                        <div class="mb-auto w-100">
+                                            <div>
+                                            <h2 class="mb-2 fs-1 lh-tight justify-content-center mr-3">@complaint.Title</h2>
+                                           
+                                          <a asp-action="ComplaintDetails" asp-route-id="@complaint.Id" class="align-content-around">Details</a>
+                                            <br />
+                                                <h6 class="mb-2 fs-1 lh-tight">@complaint.UpdateAt</h6>
+                                                
+                                                @if (complaint.Status.Equals(ComplaintStatus.Pending))
+                                            {
+                                                <br />
+                                                    <p class="badge bg-warning text-white">
+                                                
+                                                        @ComplaintStatus.Pending
+                                                    </p>
+                                                <br />
+                                                }
+                                                else if (complaint.Status.Equals(ComplaintStatus.Resolved))
+                                                {
+                                                    <p class="badge bg-success text-white">
+                                                        @ComplaintStatus.Resolved
+                                                    </p>
+                                            } 
+                                          
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <!---->
+                  </div>
+
+            </div>
+        </div>
+
+<br/>

@@ -4,8 +4,7 @@
     List<EducatorUser> educators = ViewBag.Teachers;
 
 
-    string PrintEducatorName(MeetingRequest meeting)
-    {
+    string PrintEducatorName (MeetingRequest meeting) {
         return $"{educators.Find(e => e.Id.Equals(meeting.EducatorId)).FirstName} {educators.Find(e => e.Id.Equals(meeting.EducatorId)).LastName}";
     }
 }
@@ -14,16 +13,16 @@
         <div class="container-fluid px-lg-5">
             <div class="d-flex py-4 border-bottom">
                 <div class="mr-auto w-100">
-                    <div class="d-flex align-items-center">
-                        <div class="mr-auto">
-                            <h2 class="mb-2 fs-2 lh-tight">Meetings</h2>
+                    <form class="w-100" style="max-width: 600px">
+                        <div class="input-group">
+                            <div class="input-group-item mb-0">
+                                <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="gi gi-search fs-3">
+                                    <path d="M11 3a8 8 0 0 1 8 8c0 1.848-.627 3.55-1.68 4.905l3.386 3.388a1 1 0 0 1-1.32 1.497l-.094-.083-3.388-3.386C14.55 18.373 12.848 19 11 19a8 8 0 1 1 0-16zm0 2a6 6 0 1 0 0 12 6 6 0 1 0 0-12z"></path>
+                                </svg>
+                            </div>
+                            <input type="search" placeholder="Search Meetings" aria-label="Search Complaints" class="form-control form-control-lg">
                         </div>
-                        <button type="button" data-toggle="modal" data-target="#createMeetingRequestModal" class="btn btn-auto d-inline-flex flex-shrink-0 align-items-center justify-content-center p-0 rounded-circle wh-2-5rem">
-                            <svg class="gi gi-plus-circle-outline fs-3" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 1 0 0-16zm0 4a1 1 0 0 1 1 1v2h2a1 1 0 1 1 0 2h-2v2a1 1 0 1 1-2 0v-2H9a1 1 0 1 1 0-2h2V9a1 1 0 0 1 1-1z" />
-                            </svg>
-                        </button>
-                    </div>
+                    </form>
                 </div>
                 <ul class="list-unstyled d-flex align-items-center">
                     <li class="d-lg-none mr-sm-5">
@@ -37,53 +36,63 @@
             </div>
             <div class="invisible-scrollbar position-relative wh-main">
                 <div class="row mt-3">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="mr-auto">
+                                <h2 class="mb-2 fs-2 lh-tight">Meetings</h2>
+                            </div>
+                            <button type="button" data-toggle="modal" data-target="#createMeetingRequestModal" class="btn btn-auto d-inline-flex flex-shrink-0 align-items-center justify-content-center p-0 rounded-circle wh-2-5rem">
+                                <svg class="gi gi-plus-circle-outline fs-3" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 1 0 0-16zm0 4a1 1 0 0 1 1 1v2h2a1 1 0 1 1 0 2h-2v2a1 1 0 1 1-2 0v-2H9a1 1 0 1 1 0-2h2V9a1 1 0 0 1 1-1z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                     @if (meetings.Count > 0 && meetings != null)
                     {
-                        <div class="col-12 row invisible-scrollbar">
-                            @foreach (var meeting in meetings)
-                            {
-                                <div class="col-md-6 mb-4">
-                                    <div class="w-100 h-100 bg-body-light rounded p-3">
-                                        <div class="d-flex justify-content-between flex-column w-100">
-                                            <div class="mb-auto w-100">
-                                                <div>
-                                                    <div class="mb-2 lh-tight d-flex justify-content-between align-items-center">
-                                                        <h1 class="fs-1">@PrintEducatorName(meeting) - @meeting.MeetingDate.ToLongDateString()</h1>
-                                                        @if (meeting.Status.Equals(MeetingStatus.Pending))
-                                                        {
-                                                            <p class="badge bg-warning text-white">
-                                                                @MeetingStatus.Pending
-                                                            </p>
-                                                        }
-                                                        else if (meeting.Status.Equals(MeetingStatus.Accepted))
-                                                        {
-                                                            <p class="badge bg-success text-white">
-                                                                @MeetingStatus.Accepted
-                                                            </p>
-                                                        }
-                                                        else if (meeting.Status.Equals(MeetingStatus.Rejected))
-                                                        {
-                                                            <p class="badge bg-success text-white">
-                                                                @MeetingStatus.Rejected
-                                                            </p>
-                                                        }
-                                                    </div>
-                                                    <p class="mb-2">@meeting.Reason.Truncate(120)</p>
-                                                </div>
+                        @foreach (var meeting in meetings)
+                        {
+                            <div class="col-12 mb-4">
+                                <div class="w-100 h-100 bg-body-light rounded d-flex p-3">
+                                    <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem">@PrintEducatorName(meeting).ToCharArray()[0]</span>
+                                    <div class="d-flex align-items-start flex-column w-100">
+                                        <div class="mb-auto w-100">
+                                            <div>
+                                                <h2 class="mb-2 fs-1 lh-tight">
+                                                   @PrintEducatorName(meeting) - @meeting.MeetingDate.ToLongDateString()
+                                                </h2>
+                                                <p>@meeting.Reason</p>
+                                                @if (meeting.Status.Equals(MeetingStatus.Pending))
+                                                {
+                                                    <p class="badge bg-warning text-white">
+                                                        @MeetingStatus.Pending
+                                                    </p>
+                                                }
+                                                else if (meeting.Status.Equals(MeetingStatus.Accepted))
+                                                {
+                                                    <p class="badge bg-success text-white">
+                                                        @MeetingStatus.Accepted
+                                                    </p>
+                                                }
+                                                else if (meeting.Status.Equals(MeetingStatus.Rejected)) {
+                                                    <p class="badge bg-success text-white">
+                                                        @MeetingStatus.Rejected
+                                                    </p>
+                                                }
                                             </div>
-                                            <div class="d-flex w-100">
-                                                <div class="mr-auto"></div>
-                                                <button type="button" data-toggle="modal" data-target="#editMeetingRequestModal-@meeting.Id" class="btn btn-auto d-inline-flex flex-shrink-0 align-items-center bg-body justify-content-center p-0 rounded-circle wh-2-5rem">
-                                                    <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="gi gi-edit-2 fs-2">
-                                                        <path d="M16.57 2.47l.107.1 2.754 2.754a1.95 1.95 0 0 1 .099 2.647l-.1.107-8.72 8.72c-.255.255-.576.434-.925.517l-.177.034L5.112 18c-.6.086-1.12-.388-1.11-.974v-.127l.642-4.497c.05-.357.2-.692.43-.968l.12-.133 8.72-8.72a1.95 1.95 0 0 1 2.647-.099zM15.3 3.947l-2.065 2.065 2.754 2.754L18.053 6.7 15.3 3.947zM19 20a1 1 0 0 1 .117 1.993L19 22H5a1 1 0 0 1-.117-1.993L5 20h14z"></path>
-                                                    </svg>
-                                                </button>
-                                            </div>
+                                        </div>
+                                        <div class="d-flex w-100">
+                                            <div class="mr-auto"></div>
+                                            <button type="button" data-toggle="modal" data-target="#editMeetingRequestModal-@meeting.Id" class="btn btn-auto d-inline-flex flex-shrink-0 align-items-center bg-body justify-content-center p-0 rounded-circle wh-2-5rem">
+                                                <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="gi gi-edit-2 fs-2">
+                                                    <path d="M16.57 2.47l.107.1 2.754 2.754a1.95 1.95 0 0 1 .099 2.647l-.1.107-8.72 8.72c-.255.255-.576.434-.925.517l-.177.034L5.112 18c-.6.086-1.12-.388-1.11-.974v-.127l.642-4.497c.05-.357.2-.692.43-.968l.12-.133 8.72-8.72a1.95 1.95 0 0 1 2.647-.099zM15.3 3.947l-2.065 2.065 2.754 2.754L18.053 6.7 15.3 3.947zM19 20a1 1 0 0 1 .117 1.993L19 22H5a1 1 0 0 1-.117-1.993L5 20h14z"></path>
+                                                </svg>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                            }
-                        </div>
+                            </div>
+                        }
                     }
                     else
                     {
