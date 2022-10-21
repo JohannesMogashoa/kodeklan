@@ -132,6 +132,7 @@
                             <th>Subject</th>
                             <th>Topic</th>
                             <th>Grade</th>
+                            <th>Uploaded By</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -146,6 +147,7 @@
                                 <td>@file.Subject.SubjectName</td>
                                 <td>@file.Topic.TopicName</td>
                                 <td>@file.Grade</td>
+                                <td>@file.Educator.FirstName @file.Educator.LastName</td>
                                 <td>
                                     <a type="button" class="btn btn-primary" asp-controller="Educator" asp-action="DownloadFileFromDatabase" asp-route-id="@file.ID">Download</a>
                                     <a type="button" class="btn btn-danger" asp-controller="Educator" asp-action="DeleteFileFromDatabase" asp-route-id="@file.ID">Delete</a>

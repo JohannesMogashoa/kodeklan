@@ -2,10 +2,10 @@
     ViewData["Title"] = "Create Task";
 }
 
-<div class="container py-3 px-2 w-100" > 
-    <div class="WorkBoard py-4 d-flex"> 
+<div class="container-fluid py-3 px-2 w-100 overflow:auto">
+    <div class="WorkBoard py-4 d-flex px-3"> 
          <div class="taskTitle">
-        <h2> Your Work Board</h2>
+        <h1> Your Work Board</h1>
         </div>
        <div class="edu_task_icon ml-auto pr-3 py-0">
            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="dark" class="bi bi-pc-display" viewBox="0 0 16 16">
@@ -17,11 +17,11 @@
  <div class="container-fluid overflow-scroll">
 <div class="row m-1 justify-content-around" >
     <div class="card col-md-4">
-        <img class="card-img-top w-100" src="~/img/undraw_calculator_re_alsc.svg" alt="Card image cap">
+        <img class="card-img-top w-100" src="~/img/Feedback1.svg" alt="Card image cap">
         <div class="card-body">
-            <h5 class="card-title py-2">Create quiz</h5>
-            <p class="card-text py-2"> Create a new quiz,exam, test below .</p>
-            <a href="/Educator/CreateQuiz" class="btn btn-primary">Create quiz</a>
+            <h5 class="card-title py-2">Feedback</h5>
+            <p class="card-text py-2"> See The Subject Coordinator Feedbacks .</p>
+            <a asp-controller="Educator" asp-action="Feedbacks" class="btn btn-primary">See Feedback</a>
         </div>
     </div>
     <div class="card col-md-4">
