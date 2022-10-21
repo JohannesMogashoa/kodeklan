@@ -297,7 +297,7 @@ namespace iTut.Controllers
             var file = await _context.FilesOnDatabase.Where(x => x.ID == id).FirstOrDefaultAsync();
             _context.FilesOnDatabase.Remove(file);
             _context.SaveChanges();
-            TempData["Message"] = $"Removed {file.Name + file.Extension} successfully from the Files.";
+            TempData["Message"] = $"Removed {file.Description + file.Name} successfully from the Files.";
             return RedirectToAction("UploadFile");
         }
         #endregion

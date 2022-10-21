@@ -116,7 +116,11 @@
 
             @if (Model.FilesOnDatabase.Count == 0)
             {
-                <caption>No Records Found</caption>
+                 <div class="col-12 py-3">
+                   <div class="alert alert-info">
+                      <p>No Files On Database</p>
+                  </div>
+                 </div>
             }
             else
             {
