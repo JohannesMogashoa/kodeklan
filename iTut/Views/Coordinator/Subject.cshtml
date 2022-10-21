@@ -1,4 +1,4 @@
-﻿ @model IEnumerable<iTut.Models.Coordinator.Subject>
+﻿@model IEnumerable<iTut.Models.Coordinator.Subject>
 
 @{
     ViewData["Title"] = "Subject";
@@ -10,122 +10,67 @@
                 <div class="d-flex py-5 border-bottom">
                     @*  <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem">@Model.Coordinator.FirstName.ToCharArray()[0]</span>
                     *@
-
-                    <br />
-                    <br />
-
-                    <br />
-                    <br />
+                    <h2>Subjects</h2>
                     <ul class="list-unstyled d-flex align-items-center">
-                        <h2 class="text-center">Manage Subjects</h2>
                         <li class="d-lg-none mr-sm-5">
-                           
+                            <button class="btn link-body p-0 offcanvas-button" type="button">
+                                <svg class="gi gi-arrow-circle-left fs-4" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm-.293 6.293a1 1 0 0 0-1.414 0h0l-3 3-.083.094a1 1 0 0 0 .083 1.32h0l3 3 .094.083a1 1 0 0 0 1.32-.083h0l.083-.094a1 1 0 0 0-.083-1.32h0L10.416 13H16l.117-.007A1 1 0 0 0 16 11h0-5.586l1.293-1.293.083-.094a1 1 0 0 0-.083-1.32z"></path>
+                                </svg>
+                            </button>
                         </li>
-                        
                     </ul>
-                   
                 </div>
+
 </head>
-<br/>
-<section>
-    <br />
-    <br />
-</section>
 <section>
     <br />
     <form asp-controller="Subject" asp-action="Subject" method="get">
+    <p>
+           <input type="text" name="SearchString" />
+           <input type="submit" value="Search" />
+        </p>
         <div class="text-right">
-            <a href="/Coordinator/CreateASubject" class="btn btn-sm btn-primary">Add</a>
-            <a href="/Coordinator/AssignedSubjects" class="btn btn-sm btn-primary">Archived</a>
-            @*<a class="nav-link" href="/Coordinator/Reports"  data-toggle="modal" data-target="#sideBarPartialModal
-            <a class="nav-link" href="/Coordinator/CreateASubject" data-toggle="modal" data-target="#sideBarPartialModal"">*@
-                <a class="btn btn-sm btn-primary" href="javascript:window.print()" href="javascript:window.print()">
-                <span class="tf-icons bx bx-printer me-2">  </span>print
-            </a>
-          </div>
+            <a href="/Coordinator/CreateASubject" class="btn btn-sm btn-primary">Add more</a>
+@*            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Complaint Details</button>
+*@        </div>
    </form>
     <br />
-    @if(Model.Count() > 0){
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <!--It isn't necessarry for the coordinator to see the subject number on the database but its there for data storage purposes-->
-                        <th scope="auto">
-                            @Html.DisplayNameFor(model => model.SubjectName)
-                        </th>
-                        <th scope="auto">
-                            @Html.DisplayNameFor(model => model.SubjectDescr)
-                        </th>
-                        <th scope="auto">
-                            @Html.DisplayNameFor(model => model.Grade)
-                        </th>
-                        @* <th>@Html.DisplayNameFor(model => model.Status)</th>
-
-                         th scope="auto">
-                    @Html.DisplayNameFor(model => model.Status)
-                    </th>*@
-                        <th scope="auto">
-                            @Html.DisplayNameFor(model => model.Updated_at)
-                        </th>
-                        <th scope="auto"></th>
-                     
-                    </tr>
-                </thead>
-                <br />
-                <tbody>
-                    @foreach (var subject in Model)
-                    {
-                        <tr>
-                            <td width="15%">@Html.DisplayFor(modelSubject => subject.SubjectName) </td>
-                            <td width="15%">@Html.DisplayFor(model => subject.SubjectDescr) </td>
-                            <td width="15%" class="text-center">@Html.DisplayFor(model => subject.Grade) </td>
-                            @*  <td>@Html.DisplayNameFor(model => subject.Status)</td>
-                             <td width="15%">@Html.DisplayFor(model => subject.Status)</td> *@
-                            <td width="15%">@Html.DisplayFor(model => subject.Updated_at)</td>
-
-                            <td width="30%">
-                                <a asp-action="Details" asp-route-id="@subject.Id" class="btn btn-outline-secondary btn-sm mx-1">
-                                    <svg class="gi gi-plus-circle-outline fs-3" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 1 0 0-16zm0 4a1 1 0 0 1 1 1v2h2a1 1 0 1 1 0 2h-2v2a1 1 0 1 1-2 0v-2H9a1 1 0 1 1 0-2h2V9a1 1 0 0 1 1-1z" />
-                                    </svg>
-                                </a> 
-                                <a asp-action="Edit" asp-route-id="@subject.Id" class="btn btn-outline-primary btn-sm mx-1">
-                                    <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="gi gi-edit-2 fs-2">
-                                        <path d="M16.57 2.47l.107.1 2.754 2.754a1.95 1.95 0 0 1 .099 2.647l-.1.107-8.72 8.72c-.255.255-.576.434-.925.517l-.177.034L5.112 18c-.6.086-1.12-.388-1.11-.974v-.127l.642-4.497c.05-.357.2-.692.43-.968l.12-.133 8.72-8.72a1.95 1.95 0 0 1 2.647-.099zM15.3 3.947l-2.065 2.065 2.754 2.754L18.053 6.7 15.3 3.947zM19 20a1 1 0 0 1 .117 1.993L19 22H5a1 1 0 0 1-.117-1.993L5 20h14z"></path>
-                                    </svg>
-                                </a>
-                                <a asp-action="Delete" asp-route-id="@subject.Id" class="btn btn-default btn-sm mx-1">
-                                    <svg class="gi gi-archive-outline" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 3a3 3 0 0 1 3 3c0 .888-.386 1.686-1 2.235V18a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V8.236C3.386 7.687 3 6.89 3 6a3 3 0 0 1 3-3h12zm0 6H6v9a1 1 0 0 0 .883.993L7 19h10a1 1 0 0 0 .993-.883L18 18V9zm0-4H6a1 1 0 0 0-.117 1.993L6 7h12a1 1 0 0 0 .117-1.993L18 5zm-8 7h4a1 1 0 1 1 0 2h-4a1 1 0 1 1 0-2z" />
-                                    </svg>
-                                    @* <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="gi gi-edit-2 fs-2">
-                                        <path d="M14 2a2 2 0 0 1 2 2v2h5a1 1 0 1 1 0 2h-1v11a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V8H3a1 1 0 1 1 0-2h5V4a2 2 0 0 1 2-2h4zm0 2h-4v2h4V4z" />
-                                    </svg>*@
-                                </a>
-                            </td>
-                           @* <td width="15%">
-                                <div class="d-flex w-100">
-                                    <div class="mr-auto"></div>
-                                    <button type="button" data-toggle="modal" data-target="Edit-@subject.Id" class="btn btn-auto d-inline-flex flex-shrink-0 align-items-center bg-body justify-content-center p-0 rounded-circle wh-2-5rem mr-1">
-                                        <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="gi gi-edit-2 fs-2">
-                                            <path d="M14 2a2 2 0 0 1 2 2v2h5a1 1 0 1 1 0 2h-1v11a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V8H3a1 1 0 1 1 0-2h5V4a2 2 0 0 1 2-2h4zm0 2h-4v2h4V4z" />
-                                        </svg>
-                                    </button>
-                                    <button type="button" data-toggle="modal" data-target="Details-@subject.Id" class="btn btn-auto d-inline-flex flex-shrink-0 align-items-center bg-body justify-content-center p-0 rounded-circle wh-2-5rem">
-                                        <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="gi gi-edit-2 fs-2">
-                                            <path d="M16.57 2.47l.107.1 2.754 2.754a1.95 1.95 0 0 1 .099 2.647l-.1.107-8.72 8.72c-.255.255-.576.434-.925.517l-.177.034L5.112 18c-.6.086-1.12-.388-1.11-.974v-.127l.642-4.497c.05-.357.2-.692.43-.968l.12-.133 8.72-8.72a1.95 1.95 0 0 1 2.647-.099zM15.3 3.947l-2.065 2.065 2.754 2.754L18.053 6.7 15.3 3.947zM19 20a1 1 0 0 1 .117 1.993L19 22H5a1 1 0 0 1-.117-1.993L5 20h14z"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                                </td>*@
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
-   
+    <table class="table">
+        <thead>
+            <tr>
+                <!--It isn't necessarry for the coordinator to see the subject number on the database but its there for data storage purposes-->
+                <th scope="col">
+                @Html.DisplayNameFor(model => model.SubjectName)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.SubjectDescr)
+                </th>              
+                <th></th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Updated_at)
+                </th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <br/>
+        <tbody>
+            @foreach (var subject in Model)
+            {
+                <tr>                
+                    <td width="30%">@Html.DisplayFor(modelSubject => subject.SubjectName) </td>
+                    <td width="30%">@Html.DisplayFor(model => subject.SubjectDescr) </td>
+                    @*<td width="30%">@Html.DisplayFor(model => subject.Grade) </td>*@
+                    <td width="30%">@Html.DisplayFor(model => subject.Updated_at)</td>
+                    <td width="40%">
+                        <a asp-action="Edit" asp-route-id="@subject.Id">Edit</a>|
+                        <a asp-action="Details" asp-route-id="@subject.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@subject.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </section>
 </main>
 </div>

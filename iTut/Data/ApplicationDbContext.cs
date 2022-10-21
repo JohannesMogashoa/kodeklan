@@ -13,7 +13,6 @@ using iTut.Models.Shared;
 using iTut.Models.HOD;
 using System.Reflection.Emit;
 
-using iTut.Constants;
 namespace iTut.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -76,7 +75,5 @@ namespace iTut.Data
         public DbSet<Instructor> Instructors { get; set; }
         public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
         public DbSet<CourseAssignment> CourseAssignments { get; set; }
-        public DbSet<SubjectEducator> SubjectEducators { get; set; }
-        public DbSet<FeedbackEducator> FeedbackEducator { get; set; }
     }
 }

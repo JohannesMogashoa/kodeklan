@@ -2,136 +2,61 @@
 @{
     ViewData["Title"] = "Reports";
 }
-                    <h6>
-                        Show student count, educator count && subjects together with the assigned educator &Aacute; archived educators
-                    </h6>
-<head>
 
-    <div id="collapseOffCanvas" class="bg-body offcanvas-collapse open w-100">
-        <main class="main-expanded vh-100 w-100">
-            <div class="container-fluid px-lg-5">
-                <div class="d-flex py-5 border-bottom">
-                    <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem"></span>
-                    <div class="mr-auto">
-                        <h2 class="mb-2 fs-1 lh-tight">Hi</h2>
-                        <p class="lh-tight">Dashboard</p>
+<div id="collapseOffCanvas" class="bg-body offcanvas-collapse open w-100">
+
+    <main class="main-expanded vh-100 w-100">
+        <div class="container-fluid px-lg-5">
+
+            <main class="main-expanded vh-100 w-100">
+                <div class="container-fluid px-lg-5">
+                    <div class="d-flex py-5 border-bottom">
+                        <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem">@*@Model.SubjectCoordinator.FirstName.ToCharArray()[0]*@</span>
+                        <div class="mr-auto">
+                            <h2 class="mb-2 fs-1 lh-tight">Hi@*, @Model.SubjectCoordinator.FirstName*@</h2>
+                            <p class="lh-tight">Feedback</p>
+                        </div>
+                        <ul class="list-unstyled d-flex align-items-center">
+                            <li class="d-lg-none mr-sm-5">
+                                <button class="btn link-body p-0 offcanvas-button" type="button">
+                                    <svg class="gi gi-arrow-circle-left fs-4" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm-.293 6.293a1 1 0 0 0-1.414 0h0l-3 3-.083.094a1 1 0 0 0 .083 1.32h0l3 3 .094.083a1 1 0 0 0 1.32-.083h0l.083-.094a1 1 0 0 0-.083-1.32h0L10.416 13H16l.117-.007A1 1 0 0 0 16 11h0-5.586l1.293-1.293.083-.094a1 1 0 0 0-.083-1.32z"></path>
+                                    </svg>
+                                </button>
+                            </li>
                     </div>
-                    <ul class="list-unstyled d-flex align-items-center">
-                        <li class="d-lg-none mr-sm-5">
-                            <button class="btn link-body p-0 offcanvas-button" type="button">
-                                <svg class="gi gi-arrow-circle-left fs-4" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm-.293 6.293a1 1 0 0 0-1.414 0h0l-3 3-.083.094a1 1 0 0 0 .083 1.32h0l3 3 .094.083a1 1 0 0 0 1.32-.083h0l.083-.094a1 1 0 0 0-.083-1.32h0L10.416 13H16l.117-.007A1 1 0 0 0 16 11h0-5.586l1.293-1.293.083-.094a1 1 0 0 0-.083-1.32z"></path>
-                                </svg>
-                            </button>
-                        </li>
+                    <div class="text-center">
+                        <img src="~/img/undraw_teacher_re_sico.svg" style="width:20%">
+                    </div>
                     </ul>
+                    <!--Reports (graph?, Feedback & Status, Send Feedback to HOD)-->
+                    <!--Sample Report-->
+
+                    <form>
+                        <h4>Educator Eval Form</h4>
+                        <hr />
+                        <div class="row">
+                            <div class="col">
+                                <label for="email" class="form-label">Educator Name:</label>
+                                <input type="text" class="form-control" placeholder="Enter email" name="email">
+                            </div>
+                            <div class="col">
+                                <label for="email" class="form-label">Grade</label>
+                                <input type="password" class="form-control" placeholder="Enter Grade" name="pswd">
+                            </div>
+                        </div>
+                        <br />
+                        <label for="comment">Comments:</label>
+                        <textarea class="form-control" rows="5" id="comment" name="Add any comment"></textarea>
+                    </form>
 
                 </div>
-            </div>
-        </main>
+        </div>
+    </main>
+    </ul>
+    <!--Reports (graph?, Feedback & Status, Send Feedback to HOD)-->
+</div>
+
+        </div>
+    </main>
     </div>
-</head>
-<body>
-
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card card-chart">
-                <div class="card-header card-header-success">
-                    <div class="ct-chart" id="Attendance">No. Of Patients</div>
-                </div>
-                <div class="card-body">
-                    <h4 class="card-title"></h4>
-                    <p class="card-category">
-                        <span class="text-success"><i class="fa fa-long-arrow-up"></i>  </span> Every day recording.
-                    </p>
-                </div>
-                <div class="card-footer">
-                    <div class="stats">
-                        <i class="material-icons">access_time</i> updated every day
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card card-chart">
-                <div class="card-header card-header-warning">
-                    <div class="ct-chart" id="Schedule">No. Of Visitations</div>
-                </div>
-                <div class="card-body">
-                    <h4 class="card-title"></h4>
-                    <p class="card-category"> Everday Tasks</p>
-                </div>
-                <div class="card-footer">
-                    <div class="stats">
-                        <i class="material-icons">access_time</i> Updated every day
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card card-chart">
-                <div class="card-header card-header-danger">
-                    <div class="ct-chart" id="Portforlio">No. Of Available Doctors</div>
-                </div>
-                <div class="card-body">
-                    <h4 class="card-title"></h4>
-                    <p class="card-category">Individual Patients</p>
-                </div>
-                <div class="card-footer">
-                    <div class="stats">
-                        <i class="material-icons">access_time</i> Updated every day
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="row row-eq-height">
-        <div class="col-md-6">
-            <div class="card" style="height:100%">
-                <div class="card-header card-header-primary">
-                    <h4 class="card-title">Patient Stats</h4>
-                    <p class="card-category">Latest Added Patients</p>
-                </div>
-                <div class="card-body table-responsive">
-                    <table class="table table-hover">
-                        <tr class="text-warning">
-                            <th>ID</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>DoB</th>
-                        </tr>
-                        <tbody>
-                            @*  @foreach (var item in Model.Patients)
-                            {
-                            var dob = item.DoB.ToShortDateString();
-                            <tr>
-                            <td>@Html.DisplayFor(model => item.Id)</td>
-                            <td>@Html.DisplayFor(model => item.FirstName)</td>
-                            <td>@Html.DisplayFor(model => item.LastName)</td>
-                            <td>@Html.DisplayFor(model => dob)</td>
-                            </tr>
-                            }*@
-
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card" style="height:100%">
-                <div class="card-header card-header-primary">
-                    <h4 class="card-title">Schedule</h4>
-                    <p class="card-category">Doctor Schedule</p>
-                </div>
-                <div class="card-body">
-                    <div id="calendar"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</body>
