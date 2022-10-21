@@ -92,7 +92,7 @@ namespace iTut.Controllers
                 return RedirectToAction(nameof(Error));
             }
             return View("Access Denied");
-        }
+
        
         public IActionResult Feedback()
         {
@@ -125,7 +125,7 @@ namespace iTut.Controllers
             return View(model);
         }
 
-        public IActionResult Subject()
+        public IActionResult Subject(string Id)
         {
 
             return View(_context.Subjects.ToList());
@@ -271,12 +271,6 @@ namespace iTut.Controllers
         public IActionResult AssignedSubjects()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
