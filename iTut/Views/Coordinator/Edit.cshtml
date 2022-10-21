@@ -1,9 +1,4 @@
 ﻿@model iTut.Models.Coordinator.Subject
-@{
-    ViewData["Title"] = "Edit";
-}
-
-
 
 <div id="collapseOffCanvas" class="bg-body offcanvas-collapse open w-100">
     <main class="main-expanded vh-100 w-100">
@@ -22,63 +17,60 @@
                                 </svg>
                             </a>
                         </div>
+                    </div>
+                   
+                    <br />
+                    <br />
 
+                    <div class="align-self-xl-center">
+                        <h2 class="mb-2 fs-2 lh-tight">Edit</h2>
+                    </div>
+                    <form asp-action="Edit" class="col-12 flex-grow-1">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group mb-3">  
+                            <label asp-for="SubjectName" class="control-label"></label>
+                            <input asp-for="SubjectName" class="form-control" />
+                            <span asp-validation-for="SubjectName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="SubjectDescr" class="control-label"></label>
+                            <input asp-for="SubjectDescr" class="form-control" />
+                            <span asp-validation-for="SubjectDescr" class="text-danger"></span>
+                        </div>
+                        <br/>
+                        <div class="form-group">
+                            <label asp-for="Grade" class="form-label mb-1"></label>
+                            <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grade>()" class="form-control"></select>
+                        </div>
+                        <br/>
+                        <div>
+                            <label asp-for="Status" class="form-label mb-1"></label>
+                            <select asp-for="Status" asp-items="Html.GetEnumSelectList<Status>()" class="form-control"></select>
+                        </div>
+                       
+                        <br />
+                        <div class="form-group mb-3">
+                            <label asp-for="Created_at" class="control-label"></label>
+                            <input asp-for="Created_at" class="form-control" />
+                            <span asp-validation-for="Created_at" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Updated_at" class="control-label"></label>
+                            <input asp-for="Updated_at" class="form-control" />
+                            <span asp-validation-for="Updated_at" class="text-danger"></span>
+                        </div>
+
+                        <br />
+                        <div class="form-group">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                            <a asp-action="Subject" class="btn btn-primary">Back</a>
+                        </div>
+
+                    </form>
                 </div>
             </div>
-   
-                        <h4>Subject</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" class="col-12 flex-grow-1">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="SubjectName" class="control-label"></label>
-                <input asp-for="SubjectName" class="form-control" />
-                <span asp-validation-for="SubjectName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SubjectDescr" class="control-label"></label>
-                <input asp-for="SubjectDescr" class="form-control" />
-                <span asp-validation-for="SubjectDescr" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Grade" class="control-label"></label>
-                <input asp-for="Grade" class="form-control" />
-                <span asp-validation-for="Grade" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Created_at" class="control-label"></label>
-                <input asp-for="Created_at" class="form-control" />
-                <span asp-validation-for="Created_at" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Updated_at" class="control-label"></label>
-                <input asp-for="Updated_at" class="form-control" />
-                <span asp-validation-for="Updated_at" class="text-danger"></span>
-            </div>
-           <!-- <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>-->
-            <br/>
-
-                            <div class="form-group">
-                                <input type="submit" value="Save" class="btn btn-primary" />
-                            </div>
-                       @*
-                            <div class="text-left">
-                                <a href="/Coordinator/Subject" class="btn btn-sm btn-primary mr-1">Save</a>
-                                <a href="/Coordinator/Subject" class="btn btn-sm btn-primary">Back</a>
-                            </div>*@
-        </form>
-    </div>
+        </div>
+    </main>
 </div>
-
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-            </div>
-    </div>
-    </div>

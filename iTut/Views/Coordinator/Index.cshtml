@@ -12,6 +12,8 @@
                     <h2 class="mb-2 fs-1 lh-tight">Hi, @Model.SubjectCoordinator.FirstName</h2>
                     <p class="lh-tight">Dashboard</p>
                 </div>
+                <br />
+                <br />
                 <ul class="list-unstyled d-flex align-items-center">
                     <li class="d-lg-none mr-sm-5">
                         <button class="btn link-body p-0 offcanvas-button" type="button">
@@ -20,58 +22,28 @@
                             </svg>
                         </button>
                     </li>
-                </ul>
-                
+                </ul>              
             </div>
-
+           <div>
+               <div>
+                   <div>
+                       <br/>
+                        <br />
+                        <br />
+                   </div>
+               </div>
+           </div>
             <div class="invisible-scrollbar position-relative wh-main">
-                  <div class="m-4">
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="mr-auto">
-@*<<<<<<< HEAD*@
-                                <section class="bg-gray-50">
-                              <div class="max-w-screen-xl px-4 py-32 mx-auto lg:h-screen lg:items-center lg:flex">
-                                <div class="max-w-xl mx-auto text-center">
-                                  <h1 class="text-3xl font-extrabold sm:text-5xl">
-                                    Understand Your Work Better.
-                                    <strong class="font-extrabold text-red-700 sm:block">
-                                      Increase Conversion.
-                                    </strong>
-                                  </h1>
-
-                                  <p class="mt-4 sm:leading-relaxed sm:text-xl">
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt illo tenetur fuga ducimus numquam ea!
-                                  </p>
-
-                                  <div class="flex flex-wrap justify-center gap-4 mt-8">
-                                    <a class="block w-full px-12 py-3 text-sm font-medium text-white bg-red-600 rounded shadow sm:w-auto active:bg-red-500 hover:bg-red-700 focus:outline-none focus:ring" href="/get-started">
-                                      Get Started
-                                    </a>
-
-                                    <a class="block w-full px-12 py-3 text-sm font-medium text-red-600 rounded shadow sm:w-auto hover:text-red-700 active:text-red-500 focus:outline-none focus:ring" href="/about">
-                                      Learn More
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-                            </section>
-                            </div>
-                        </div>
-                      </div>
-                      <hr/>
-                      
-                      <!--asdfvgbnhmjk-->
                         <div class="card-group">
                         <div class="overflow-scroll">
                             <div class="row m-1 justify-content-around">
                                 <div class="card h-100 col-md-4" style="width:250px">
                                     <img class="card-img-top w-100" src="~/img/undraw_education_f8ru.svg" alt="Card image cap">
                                     <div class="card-body">
-                                        <h5 class="card-title py-2"></h5>
+                                    <h5 class="card-title py-2"></h5>
+                                       
                                             <p class="card-text pt-0 pb-2">Click to view subject records...</p>
-                                            <a href="/Coordinator/Subject" class="btn btn-sm btn-primary">Manage Subjects</a>
+                                    <a asp-controller="Coordinator" asp-action="Subject"  class="btn btn-sm btn-primary">Manage Subjects</a>
                                     </div>
                                 </div>                                                                  
                                     <div class="card h-100 col-md-4" style="width:250px">
@@ -79,10 +51,10 @@
                                         <div class="card-body">
                                             <h5 class="card-title py-2"></h5>
                                             <p class="card-text py-3">Click to view all feedbacks..</p>
-                                            <a href="/Coordinator/ViewFeedback" class="btn btn-sm btn-primary"> Manage Feedbacks</a>
+                                            <a href="/Coordinator/Feedback" class="btn btn-sm btn-primary"> Manage Feedbacks</a>
                                         </div>
                                     </div>
-                                    <div class="card h-100 col-md-4" style="width:250px">
+                                <div class="card h-100 col-md-4" style="width:250px">
                                     <img class="card-img-top w-100" src="~/img/undraw_posts_re_ormv.svg" alt="Card image cap">
                                     <div class="card-body">
                                         <h5 class="card-title py-2"></h5>
@@ -91,11 +63,11 @@
                                     </div>
                                 </div>
                                     <div class="card h-100 col-md-4" style="width:250px">
-                                        <img class="card-img-top w-100" src="~/img/undraw_books_re_8gea.svg" alt="Card image cap">
+                                        <img class="card-img-top w-100" src="~/img/undraw_teacher_re_sico.svg" alt="Card image cap">
                                         <div class="card-body">
                                             <h5 class="card-title py-2"></h5>
-                                            <p class="card-text py-3">Click to view students report...</p>
-                                            <a href="/Coordinator/Reports" class="btn btn-sm btn-primary"> Manage Students</a>
+                                            <p class="card-text py-3">Click to assign subjects...</p>
+                                            <a href="/Coordinator/AssignSubjects" class="btn btn-sm btn-primary"> Manage Educators</a>
                                         </div>
                                     </div>
                                     <div class="card h-100 col-md-4" style="width:250px">
@@ -105,36 +77,9 @@
                                             <p class="card-text py-3">Click to view student report...</p>
                                             <a href="/Coordinator/Reports" class="btn btn-sm btn-primary"> Manage Reports</a>
                                         </div>
-                                    </div>
-                                @*<div class="row m-1 ">
-                                    <div class="card h-100 col-md-4" style="width:250px">
-                                            <img class="card-img-top w-100" src="~/img/undraw_books_re_8gea.svg" alt="Card image cap">
-                                            <div class="card-body">
-                                                <h5 class="card-title py-2">Lorem ipsum</h5>
-                                                <p class="card-text py-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                                <a href="/Coordinator/ViewFeedback" class="btn btn-sm btn-primary"> Manage Feedback</a>
-                                            </div>
-                                        </div>
-                                    <div class="card h-100 col-md-4" style="width:250px">
-                                        <img class="card-img-top w-100" src="~/img/undraw_books_re_8gea.svg" alt="Card image cap">
-                                        <div class="card-body">
-                                            <h5 class="card-title py-2">Lorem ipsum</h5>
-                                            <p class="card-text py-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                            <a href="/Coordinator/ViewFeedback" class="btn btn-sm btn-primary"> Manage Feedback</a>
-                                        </div>
-                                    </div>
-                                        <div class="card h-100 col-md-4" style="width:250px">
-                                            <img class="card-img-top w-100" src="~/img/upload.svg" alt="Card image cap">
-                                            <div class="card-body">
-                                                <h5 class="card-title py-2">Lorem ipsum</h5>
-                                                <p class="card-text py-2"> Upload study material and docunents here (eg. pdf,docx) .</p>
-                                                <a href="/Coordinator/Complaint" class="btn btn-sm btn-primary"> Manage Complaint</a>
-                                            </div>
-                                        </div>
-                                    </div>*@
-                            </div>
-                            
-                    </div>
+                                     </div>
+                        </div>
+                 </div>
             </div>
     </main>
 </div>

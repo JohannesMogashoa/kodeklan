@@ -10,7 +10,7 @@ using iTut.Models.Marks;
 using iTut.Models.UploadFiles;
 using static iTut.Models.ViewModels.HOD.HODIndexViewModel;
 using iTut.Models.Shared;
-
+using iTut.Constants;
 namespace iTut.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -61,5 +61,7 @@ namespace iTut.Data
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<SubjectEducator> SubjectEducators { get; set; }
+        public DbSet<FeedbackEducator> FeedbackEducator { get; set; }
     }
 }

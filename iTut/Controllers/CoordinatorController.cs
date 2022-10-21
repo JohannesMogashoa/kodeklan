@@ -3,6 +3,7 @@ using iTut.Data;
 using iTut.Models.Users;
 using iTut.Models.Coordinator;
 using iTut.Models.Parent;
+using iTut.Models.Edu;
 using iTut.Models.ViewModels.Coordinator;
 using iTut.Models.ViewModels.Educator;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace iTut.Controllers
 {
@@ -24,7 +26,6 @@ namespace iTut.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<CoordinatorController> _logger;
-
 
         public CoordinatorController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ILogger<CoordinatorController> logger)
         {
@@ -42,20 +43,50 @@ namespace iTut.Controllers
             };
             return View(viewModel);
         }
-        //adding search functionality
-        public IActionResult Subject(/*string sortOrder,*/ string searchString)
+
+       
+        public IActionResult Feedback()
         {
-           
-            var subjects = from s in _context.Subjects select s;
-            if (!String.IsNullOrEmpty(searchString))
+
+            return View(_context.Feedbacks.ToList());
+        }
+
+        [HttpGet]
+        public IActionResult CreateFeedback()
+        {
+           // ViewBag.Educator = new SelectList(_context.Educator, "Id", "EmailAddress");
+          //  ViewBag.Educator = new SelectList(_context.Educator, "Id", "EmailAddress");
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateFeedback(Feedback model)
+        {
+            if (ModelState.IsValid)
             {
-                subjects = subjects.Where( e => e.SubjectName.Contains(searchString));
+                var SubjectCoordinator = _context.SubjectCoordinator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+                var feedback = new Feedback
+                {
+                    Id = model.Id,
+                  //  EducatorId = model.EducatorId,
+                    FeedbackContent = model.FeedbackContent,
+                    CreateAt = DateTime.Now,
+                };
+                _context.Add(feedback);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("Feedback was created!");
+                return RedirectToAction("Feedback");
             }
+           // ViewBag.Educator = new SelectList(_context.Educator, "Id", "EmailAddress", "Id");
+            return View(model);
+        }
+
+        public IActionResult Subject(string Id)
+        {
+            ViewBag.Subjects = _context.Subjects.Count();
             return View(_context.Subjects.ToList());
         }
        
-
-
         //complaint
         public IActionResult Complaint()
         {
@@ -82,6 +113,7 @@ namespace iTut.Controllers
                     Id = model.Id,
                     SubjectName = model.SubjectName,
                     SubjectDescr = model.SubjectDescr,
+                    Grade = model.Grade,    
                     Created_at = DateTime.Now,
                     Updated_at = DateTime.Now,
 
@@ -96,56 +128,92 @@ namespace iTut.Controllers
 
 
 
-        //edit 
+        //GET-Update
+
         public IActionResult Edit(string Id)
         {
-            var subject = _context.Subjects.Where(s => s.Id == Id).FirstOrDefault();
-            return RedirectToAction("Edit");
-
-            //return View(subject);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(Subject model)
-        {
-            var Id = model.Id;
-            var SubjectName = model.SubjectName;
-            var SubjectDescr = model.SubjectDescr;
-
-           return RedirectToAction("Subject");
-        }
-
-
-
-        //DELETE 
-        public IActionResult Delete(string Id)
-        {
-            Subject subject = _context.Subjects.FirstOrDefault(s => s.Id == Id);
-            if (subject != null)
+            if (Id == null)
             {
-                _context.Remove(subject);
-                _context.SaveChanges();
-                return RedirectToAction("Subject");
+                return NotFound();
             }
-            return View();
+
+            var subject = _context.Subjects.Find(Id);
+            if (subject == null)
+            {
+                return NotFound();
+            }
+
+            return View(subject);
         }
+
+        //POST-Update updating the current data we have 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string Id)
+        public IActionResult Edit(Subject subject)
         {
-            try
-            {
-                Subject studentToDelete = new Subject() { Id = Id };
-                _context.Entry(studentToDelete).State = EntityState.Deleted;
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            catch (DbUpdateException /* ex */)
-            {
-                //Log the error (uncomment ex variable name and write a log.)
-                return RedirectToAction(nameof(Delete), new { Id = Id, saveChangesError = true });
-            }
+            _context.Subjects.Update(subject);
+            _context.SaveChanges();
+            return RedirectToAction("Subject");
         }
+
+
+        //DELETE
+        public IActionResult Delete(string Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var subject = _context.Subjects.Find(Id);
+            if (subject == null)
+            {
+                return NotFound();
+            }
+
+            return View(subject);
+        }
+
+        //POST-Update updating the current data we have 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(Subject subject)
+        {
+            _context.Subjects.Remove(subject);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
+        //public IActionResult Delete(string Id)
+        //{
+        //    if (Id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var subject = _context.Subjects.Find(Id);
+        //    if(subject == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(subject);
+        //}
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult DeleteConfirmed(string Id)
+        //{
+        //    var subject = _context.Subjects.Find(Id);
+        //    //if(subject == null)
+        //    //{
+        //    //    return NotFound();
+        //    //}
+
+        //    _context.Subjects.Remove(subject);
+        //    _context.SaveChanges();
+        //    return RedirectToAction(nameof(subject));
+        //   // return View(subject);
+        //}
 
         //details
         public IActionResult Details(string Id)
@@ -160,50 +228,15 @@ namespace iTut.Controllers
                 return NotFound();
             }
             return View(subject);
-           // return RedirectToAction("Details");
-          // return View(Details);
         }
        
 
-        //complaint details
-        public IActionResult ComplaintDetails(string Id)
-        {
-            if(Id == null)
-            {
-                return NotFound();
-            }
-            var complaint = _context.Complaints.AsNoTracking().FirstOrDefault(c => c.Id == Id);
-            if(complaint == null)
-            {
-                return NotFound();
-            }
-            return View(complaint);
-         
-        }
-        //return here after 
         public IActionResult Reports()
         {
             return View();
 
         }
-        //Create the feedback
-        [HttpPost]
-        public IActionResult Reports(Report model)
-        {
-            if (ModelState.IsValid)
-            {
-                var SubjectCoordinator = _context.SubjectCoordinator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
-                var report = new Report
-                {
-
-                };
-                _context.Add(report);
-
-                _logger.LogInformation("Subject was created!");
-                return RedirectToAction(nameof(Subject));
-            }
-            return View(model);
-        }
+        
         /*//GET FEEDBACK
         
         [HttpPost]
@@ -226,42 +259,65 @@ namespace iTut.Controllers
             }
             return View(model);
         }*/
-        //GET FEEDBACK
-        public IActionResult ViewFeedback()
-        {
-           return View(_context.Feedbacks.ToList());
-            //     return View();
-        }
 
-        public IActionResult Feedback()
+
+        ////GET FEEDBACK
+        //public IActionResult ViewFeedback()
+        //{
+        //   return View(_context.Feedbacks.ToList());            
+        //}
+
+    
+        //Assign Subjects
+        //getting the subjects 
+        public IActionResult AssignSubjects()
         {
+            ViewBag.Subject = new SelectList(_context.Subjects, "Id", "SubjectName");
+            ViewBag.Educator = new SelectList(_context.Educator, "Id", "EmailAddress");
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Feedback(Feedback model)
+        public async Task<ActionResult> AssignSubjects(SubjectEducator subjectEducator)
         {
+
             if (ModelState.IsValid)
             {
-                var SubjectCoordinator = _context.SubjectCoordinator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
-                var feedback = new Feedback
-                {
-                    Id = model.Id,
-                    //UserId=model.UserId,
-                    FeedbackContent = model.FeedbackContent
-                };
-                _context.Add(feedback);
+              
+                _context.Add(subjectEducator);
                 await _context.SaveChangesAsync();
-                _logger.LogInformation("Feedback was created!");
-                return RedirectToAction("ViewFeedback");
+                _logger.LogInformation("Subject was created!");
+                return RedirectToAction("AssignedSubjects");
             }
-            return View(model);
+            ViewBag.Subject = new SelectList(_context.Subjects, "Id", "SubjectName", "Id");
+            ViewBag.Educator = new SelectList(_context.Educator, "Id", "EmailAddress", "Id");
+            return View(subjectEducator);
         }
-        public IActionResult Educator()
+        //This is where I can view who's assigned to what
+        public IActionResult AssignedSubjects()
         {
-            return View();
+            var x = _context.SubjectEducators
+                .Include(x => x.Educator)
+                .Include(x => x.Subject);
+                ////.Include(x => x.Grade);
+            return View(x.ToList());
         }
-       
+
+
+        ////Archived / Recover deleted subjects
+        //public IActionResult DeletedRecords( )
+        //{
+        //    var deletedRecords = _context.Subjects.Where(s => s.RecStatus == 'D').ToList();
+        //    return View(deletedRecords);
+        //}
+        //public async Task<IActionResult> Recover(string Id)
+        //{
+        //    var deletedRecord = _context.Subjects.FirstOrDefault(s=> s.Id==Id);
+        //    deletedRecord.RecStatus = 'A';
+
+        //    _context.Subjects.Update(deletedRecord);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(deletedRecord));
+        //}
     }
 }
