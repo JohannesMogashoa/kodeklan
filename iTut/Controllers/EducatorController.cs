@@ -46,10 +46,12 @@ namespace iTut.Controllers
         public ActionResult Index()
         {
             var educator = _context.Educator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+            var posts = _context.Posts.Where(p => p.Archived == false).Include(p => p.Comments).ToList();
 
             var viewModel = new EducatorIndexViewModel
             {
                 Educator = educator,
+                Posts = posts
             };
 
             return View(viewModel);

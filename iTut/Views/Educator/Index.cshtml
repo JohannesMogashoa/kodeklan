@@ -25,15 +25,7 @@
             </div>
             <div class="invisible-scrollbar position-relative wh-main">
                 <div class="row mt-3">
-                    <div class="col-12">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="mr-auto">
-                                <h2 class="mb-2 fs-2 lh-tight">Timeline</h2>
-                                <p>What is happening?</p>
-                            </div>
-                        </div>
-                    </div>
-                   @* @if (Model.Posts.Count > 0 && Model.Posts != null)
+                    @if (Model.Posts.Count > 0 && Model.Posts != null)
                     {
                         @foreach (var post in Model.Posts)
                         {
@@ -56,16 +48,8 @@
                                                         </svg>
                                                         @post.Comments.Count
                                                     </p>
-                                                    <form asp-controller="Educator" asp-action="LikePost" asp-route-id="@post.Id">
-                                                        <button type="submit" class="btn">
-                                                            <svg class="gi gi-heart-outline fs-3" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M11.06 5l.938.938.94-.938a5.31 5.31 0 0 1 7.506 0 5.31 5.31 0 0 1 0 7.506l-7.737 7.737a1 1 0 0 1-1.414 0l-7.737-7.737a5.31 5.31 0 0 1 0-7.506 5.31 5.31 0 0 1 7.506 0zM4.97 6.424a3.31 3.31 0 0 0-.138 4.531l.138.147L12 18.13l7.03-7.03a3.31 3.31 0 0 0 .138-4.531l-.138-.147a3.31 3.31 0 0 0-4.532-.138l-.147.138-.94.938a2 2 0 0 1-2.701.116l-.127-.117-.937-.938a3.31 3.31 0 0 0-4.678 0z" />
-                                                            </svg>
-                                                            @post.Likes
-                                                        </button>
-                                                    </form>
                                                 </div>
-                                                <a href="//Post/@post.Id" class="btn btn-primary btn-sm">Comment</a>
+                                                <a asp-controller="Educator" asp-action="Post" asp-route-id="@post.Id" class="btn btn-primary btn-sm">Comment</a>
                                             </div>
                                         </div>
                                     </div>
@@ -81,7 +65,7 @@
                             </div>
                         </div>
                     }
-                    </div>*@
+                    </div>
                 </div>
             </div>
         </div>

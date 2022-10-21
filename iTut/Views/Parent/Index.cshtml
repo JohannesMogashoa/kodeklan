@@ -56,7 +56,7 @@
                                                         @post.Comments.Count
                                                     </p>
                                                 </div>
-                                                <a href="/Parent/Post/@post.Id" class="btn btn-primary btn-sm">View</a>
+                                                <a asp-controller="Parent" asp-action="Post" asp-route-id="@post.Id" class="btn btn-primary btn-sm">View</a>
                                             </div>
                                         </div>
                                     </div>
