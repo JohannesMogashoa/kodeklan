@@ -480,28 +480,6 @@ namespace iTut.Controllers
 
         #region Post
 
-
-        [Route("/Educator/LikePost/{id}")]
-        [HttpPost("{id}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LikePost([FromRoute] string id)
-        {
-            if (ModelState.IsValid)
-            {
-                var _post = _context.Posts.Where(p => p.Id == id).FirstOrDefault();
-                if (_post != null)
-                {
-                    _post.Likes = _post.Likes++;
-                    _post.UpdatedAt = DateTime.Now;
-                    _context.Update(_post);
-                    await _context.SaveChangesAsync();
-                    _logger.LogInformation($"Post, id: {_post.Id}, updated");
-                    return RedirectToAction(nameof(Index));
-                }
-            }
-            return View("Error");
-        }
-
         // GET: Timeline Post
         [HttpGet("/Educator/Post/{id}")]
         public IActionResult Post([FromRoute] string id)

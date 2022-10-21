@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace iTut.Data.Migrations
+namespace iTut.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitialStableMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,11 +39,50 @@ namespace iTut.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Feedbacks",
+                name: "Educator",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: false),
+                    Race = table.Column<int>(type: "int", nullable: false),
+                    PhysicalAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PrimarySubject = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecondarySubject = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Archived = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Educator", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    End = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Feedbacks",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EducatorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FeedbackContent = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -53,19 +92,7 @@ namespace iTut.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Grades",
-                columns: table => new
-                {
-                    GradeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    GradeName = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Grades", x => x.GradeId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "HODs",
+                name: "HOD",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -82,7 +109,7 @@ namespace iTut.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HODs", x => x.Id);
+                    table.PrimaryKey("PK_HOD", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -139,7 +166,24 @@ namespace iTut.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Question",
+                name: "Posts",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PostTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostContent = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Likes = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Archived = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Posts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Questions",
                 columns: table => new
                 {
                     QuestionID = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -148,7 +192,7 @@ namespace iTut.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Question", x => x.QuestionID);
+                    table.PrimaryKey("PK_Questions", x => x.QuestionID);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,10 +200,13 @@ namespace iTut.Data.Migrations
                 columns: table => new
                 {
                     QuizId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    QuizTittle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuizDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EducatorID = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TopicId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    QuizDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    status = table.Column<int>(type: "int", nullable: false),
+                    Grade = table.Column<int>(type: "int", nullable: false),
+                    SubjectID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -167,25 +214,6 @@ namespace iTut.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Quizzes", x => x.QuizId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RegisterStudentViewModel",
-                columns: table => new
-                {
-                    FirstName = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Grade = table.Column<int>(type: "int", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false),
-                    Race = table.Column<int>(type: "int", nullable: false),
-                    PhysicalAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ConfirmPassword = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
                 });
 
             migrationBuilder.CreateTable(
@@ -274,60 +302,19 @@ namespace iTut.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubjectEducators",
-                columns: table => new
-                {
-                    SubjectEducatorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EducatorId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubjectId = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubjectEducators", x => x.SubjectEducatorId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SubjectGrades",
-                columns: table => new
-                {
-                    SubjectGradeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SubjectId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GradeId = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubjectGrades", x => x.SubjectGradeId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Subjects",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SubjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SubjectDescr = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    SubjectName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    SubjectDescr = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Grade = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated_at = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Subjects", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Topics",
-                columns: table => new
-                {
-                    TopicId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EducatorID = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TopicName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Topics", x => x.TopicId);
                 });
 
             migrationBuilder.CreateTable(
@@ -355,6 +342,50 @@ namespace iTut.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Topics",
+                columns: table => new
+                {
+                    TopicId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EducatorID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TopicName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Topics", x => x.TopicId);
+                    table.ForeignKey(
+                        name: "FK_Topics_Educator_EducatorID",
+                        column: x => x.EducatorID,
+                        principalTable: "Educator",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PostComments",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CommentContent = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Archived = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostComments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PostComments_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -403,30 +434,32 @@ namespace iTut.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Educator",
+                name: "Marks",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false),
-                    Race = table.Column<int>(type: "int", nullable: false),
-                    PhysicalAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PrimarySubject = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecondarySubject = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Archived = table.Column<bool>(type: "bit", nullable: false),
-                    SubjectId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    StudentID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    SubjID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Term1 = table.Column<int>(type: "int", nullable: false),
+                    Term2 = table.Column<int>(type: "int", nullable: false),
+                    Term3 = table.Column<int>(type: "int", nullable: false),
+                    Term4 = table.Column<int>(type: "int", nullable: false),
+                    Total = table.Column<int>(type: "int", nullable: false),
+                    avg = table.Column<int>(type: "int", nullable: false),
+                    outcome = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Educator", x => x.Id);
+                    table.PrimaryKey("PK_Marks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Educator_Subjects_SubjectId",
-                        column: x => x.SubjectId,
+                        name: "FK_Marks_Students_StudentID",
+                        column: x => x.StudentID,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Marks_Subjects_SubjID",
+                        column: x => x.SubjID,
                         principalTable: "Subjects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -517,15 +550,79 @@ namespace iTut.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "FilesOnDatabase",
+                columns: table => new
+                {
+                    ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Data = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Extension = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UploadedBy = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Grade = table.Column<int>(type: "int", nullable: false),
+                    SubjectID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TopicID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FilesOnDatabase", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_FilesOnDatabase_Educator_UploadedBy",
+                        column: x => x.UploadedBy,
+                        principalTable: "Educator",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FilesOnDatabase_Subjects_SubjectID",
+                        column: x => x.SubjectID,
+                        principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FilesOnDatabase_Topics_TopicID",
+                        column: x => x.TopicID,
+                        principalTable: "Topics",
+                        principalColumn: "TopicId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Educator_SubjectId",
-                table: "Educator",
-                column: "SubjectId");
+                name: "IX_FilesOnDatabase_SubjectID",
+                table: "FilesOnDatabase",
+                column: "SubjectID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FilesOnDatabase_TopicID",
+                table: "FilesOnDatabase",
+                column: "TopicID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FilesOnDatabase_UploadedBy",
+                table: "FilesOnDatabase",
+                column: "UploadedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Marks_StudentID",
+                table: "Marks",
+                column: "StudentID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Marks_SubjID",
+                table: "Marks",
+                column: "SubjID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ParentUserStudentUser_ParentsId",
                 table: "ParentUserStudentUser",
                 column: "ParentsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostComments_PostId",
+                table: "PostComments",
+                column: "PostId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
@@ -538,6 +635,11 @@ namespace iTut.Data.Migrations
                 column: "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Topics_EducatorID",
+                table: "Topics",
+                column: "EducatorID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",
@@ -576,16 +678,19 @@ namespace iTut.Data.Migrations
                 name: "Complaints");
 
             migrationBuilder.DropTable(
-                name: "Educator");
+                name: "Events");
 
             migrationBuilder.DropTable(
                 name: "Feedbacks");
 
             migrationBuilder.DropTable(
-                name: "Grades");
+                name: "FilesOnDatabase");
 
             migrationBuilder.DropTable(
-                name: "HODs");
+                name: "HOD");
+
+            migrationBuilder.DropTable(
+                name: "Marks");
 
             migrationBuilder.DropTable(
                 name: "MeetingRequest");
@@ -597,13 +702,13 @@ namespace iTut.Data.Migrations
                 name: "ParentUserStudentUser");
 
             migrationBuilder.DropTable(
-                name: "Question");
+                name: "PostComments");
+
+            migrationBuilder.DropTable(
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Quizzes");
-
-            migrationBuilder.DropTable(
-                name: "RegisterStudentViewModel");
 
             migrationBuilder.DropTable(
                 name: "Reports");
@@ -618,15 +723,6 @@ namespace iTut.Data.Migrations
                 name: "SubjectCoordinator");
 
             migrationBuilder.DropTable(
-                name: "SubjectEducators");
-
-            migrationBuilder.DropTable(
-                name: "SubjectGrades");
-
-            migrationBuilder.DropTable(
-                name: "Topics");
-
-            migrationBuilder.DropTable(
                 name: "UserClaims");
 
             migrationBuilder.DropTable(
@@ -639,6 +735,9 @@ namespace iTut.Data.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
+                name: "Topics");
+
+            migrationBuilder.DropTable(
                 name: "Subjects");
 
             migrationBuilder.DropTable(
@@ -648,10 +747,16 @@ namespace iTut.Data.Migrations
                 name: "Students");
 
             migrationBuilder.DropTable(
+                name: "Posts");
+
+            migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Educator");
         }
     }
 }

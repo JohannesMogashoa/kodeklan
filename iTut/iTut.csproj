@@ -9,14 +9,17 @@
   <ItemGroup>
     <Compile Remove="Areas\NewFolder\**" />
     <Compile Remove="Controllers\HOD\**" />
+    <Compile Remove="Migrations\**" />
     <Compile Remove="Models\Educator\**" />
     <Compile Remove="wwwroot\UploadedFiles\**" />
     <Content Remove="Areas\NewFolder\**" />
     <Content Remove="Controllers\HOD\**" />
+    <Content Remove="Migrations\**" />
     <Content Remove="Models\Educator\**" />
     <Content Remove="wwwroot\UploadedFiles\**" />
     <EmbeddedResource Remove="Areas\NewFolder\**" />
     <EmbeddedResource Remove="Controllers\HOD\**" />
+    <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="Models\Educator\**" />
     <Compile Remove="Controllers\HOD\**" />
     <Compile Remove="Models\Educator\**" />
@@ -27,6 +30,7 @@
     <EmbeddedResource Remove="wwwroot\UploadedFiles\**" />
     <None Remove="Areas\NewFolder\**" />
     <None Remove="Controllers\HOD\**" />
+    <None Remove="Migrations\**" />
     <None Remove="Models\Educator\**" />
     <Compile Remove="Models\Student\**" />
     <Content Remove="Models\Student\**" />
