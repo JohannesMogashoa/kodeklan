@@ -33,11 +33,11 @@ namespace iTut.Constants
 
     public enum Grade
     {
-        Eight=8,
-        Nine=9,
-        Ten=10,
-        Eleven=11,
-        Twelve=12
+        Eight,
+        Nine,
+        Ten,
+        Eleven,
+        Twelve
     }
     public enum MaritalStatus
     {
@@ -62,10 +62,10 @@ namespace iTut.Constants
     }
     public enum Religion
     {
-        Islam = 1,
-        Hinduism = 2,
-        Christianity = 3,
-        Buddhism = 4,
-        Others = 5
+        Islam,
+        Hinduism,
+        Christianity,
+        Buddhism,
+        Others
     }
 }
