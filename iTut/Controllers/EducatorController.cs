@@ -393,7 +393,7 @@ namespace iTut.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 marks= marks.Where(s => s.students.FirstName.Contains(searchString)
-                                       || s.students.LastName.Contains(searchString) || s.outcome.Contains(searchString) );
+                                       || s.students.LastName.Contains(searchString) || s.outcome.Contains(searchString)||s.subject.SubjectName.Contains(searchString ));
             }
             switch (sortOrder)
             {
