@@ -6,20 +6,20 @@ namespace iTut.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Status",
-                table: "Subjects",
-                type: "nvarchar(max)",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int");
+            //migrationBuilder.AlterColumn<string>(
+            //    name: "Status",
+            //    table: "Subjects",
+            //    type: "nvarchar(max)",
+            //    nullable: true,
+            //    oldClrType: typeof(int),
+            //    oldType: "int");
 
-            migrationBuilder.AddColumn<string>(
-                name: "RecStatus",
-                table: "Subjects",
-                type: "nvarchar(1)",
-                nullable: false,
-                defaultValue: "");
+            //migrationBuilder.AddColumn<string>(
+            //    name: "RecStatus",
+            //    table: "Subjects",
+            //    type: "nvarchar(1)",
+            //    nullable: false,
+            //    defaultValue: "");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

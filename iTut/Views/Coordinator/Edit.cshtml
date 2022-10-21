@@ -49,13 +49,7 @@
                             <label asp-for="Status" class="form-label mb-1"></label>
                             <select asp-for="Status" asp-items="Html.GetEnumSelectList<Status>()" class="form-control"></select>
                         </div>
-                        @*<div class="form-group mb-3">
-                            <label asp-for="Status" class="control-label">Educator Name</label>
-                            <select asp-for="Status" class="form-control" asp-items="ViewBag.Subject">
-                                <option value="">--Change Status--</option>
-                            </select>
-                            <span asp-validation-for="Status" class="text-danger"></span>
-                        </div>*@
+                       
                         <br />
                         <div class="form-group mb-3">
                             <label asp-for="Created_at" class="control-label"></label>

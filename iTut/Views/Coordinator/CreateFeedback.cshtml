@@ -33,9 +33,15 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
              <div class="mb-3">
                     <label asp-for="FeedbackContent" class="control-label"></label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" asp-for="FeedbackContent"></textarea>
                 </div>
-                
+                                <div class="col-md-6">
+                                    <label asp-for="EducatorId">Educator Name</label>
+                                    <select asp-for="EducatorId" class="form-control" asp-items="ViewBag.Educator">
+                                        <option value="">--select subject--</option>
+                                    </select>
+                                    <span asp-validation-for="EducatorId" class="text-danger"></span>
+                                </div>
                <div class="form-group mb-3">
                     <label asp-for="CreateAt" class="control-label"></label>
                     <input asp-for="CreateAt" class="form-control" />

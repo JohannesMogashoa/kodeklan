@@ -7,73 +7,73 @@ namespace iTut.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Educator_Subjects_SubjectId",
-                table: "Educator");
+            //migrationBuilder.DropForeignKey(
+            //    name: "FK_Educator_Subjects_SubjectId",
+            //    table: "Educator");
 
-            migrationBuilder.DropTable(
-                name: "Answers");
+            //migrationBuilder.DropTable(
+            //    name: "Answers");
 
-            migrationBuilder.DropTable(
-                name: "Grades");
+            //migrationBuilder.DropTable(
+            //    name: "Grades");
 
-            migrationBuilder.DropTable(
-                name: "Options");
+            //migrationBuilder.DropTable(
+            //    name: "Options");
 
-            migrationBuilder.DropTable(
-                name: "Question");
+            //migrationBuilder.DropTable(
+            //    name: "Question");
 
-            migrationBuilder.DropTable(
-                name: "Quizzes");
+            //migrationBuilder.DropTable(
+            //    name: "Quizzes");
 
-            migrationBuilder.DropTable(
-                name: "RegisterStudentViewModel");
+            //migrationBuilder.DropTable(
+            //    name: "RegisterStudentViewModel");
 
-            migrationBuilder.DropTable(
-                name: "Results");
+            //migrationBuilder.DropTable(
+            //    name: "Results");
 
-            migrationBuilder.DropTable(
-                name: "SubjectEducators");
+            //migrationBuilder.DropTable(
+            //    name: "SubjectEducators");
 
-            migrationBuilder.DropTable(
-                name: "SubjectGrades");
+            //migrationBuilder.DropTable(
+            //    name: "SubjectGrades");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Educator_SubjectId",
-                table: "Educator");
+            //migrationBuilder.DropIndex(
+            //    name: "IX_Educator_SubjectId",
+            //    table: "Educator");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_HODs",
-                table: "HODs");
+            //migrationBuilder.DropPrimaryKey(
+            //    name: "PK_HODs",
+            //    table: "HODs");
 
-            migrationBuilder.DropColumn(
-                name: "SubjectId",
-                table: "Educator");
+            //migrationBuilder.DropColumn(
+            //    name: "SubjectId",
+            //    table: "Educator");
 
-            migrationBuilder.RenameTable(
-                name: "HODs",
-                newName: "HOD");
+            //migrationBuilder.RenameTable(
+            //    name: "HODs",
+            //    newName: "HOD");
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_HOD",
-                table: "HOD",
-                column: "Id");
+            //migrationBuilder.AddPrimaryKey(
+            //    name: "PK_HOD",
+            //    table: "HOD",
+            //    column: "Id");
 
-            migrationBuilder.CreateTable(
-                name: "Events",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    End = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Events", x => x.Id);
-                });
+            //migrationBuilder.CreateTable(
+            //    name: "Events",
+            //    columns: table => new
+            //    {
+            //        Id = table.Column<int>(type: "int", nullable: false)
+            //            .Annotation("SqlServer:Identity", "1, 1"),
+            //        Start = table.Column<DateTime>(type: "datetime2", nullable: false),
+            //        End = table.Column<DateTime>(type: "datetime2", nullable: false),
+            //        Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+            //        Color = table.Column<string>(type: "nvarchar(max)", nullable: false)
+            //    },
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PK_Events", x => x.Id);
+            //    });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

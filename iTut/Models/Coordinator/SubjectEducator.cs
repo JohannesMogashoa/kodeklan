@@ -2,13 +2,16 @@
 using System;
 using iTut.Models.Users;
 using iTut.Constants;
+using System.ComponentModel.DataAnnotations;
 
 namespace iTut.Models.Coordinator
 {
+    [Table("SubjectEducators")]
     public class SubjectEducator
     {
-      //  [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string SubjectEducatorId { get; set; }
+        //  [DatabaseGenerated(DatabaseGeneratedOption.None)].
+        [Key]
+        public int Id { get; set; }
 
         // [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [ForeignKey("Subject")]
@@ -17,6 +20,7 @@ namespace iTut.Models.Coordinator
         // [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [ForeignKey("Educator")]
         public string EducatorId { get; set; }
+
         [ForeignKey("Grades")]
         public string GradeId { get; set; }
 

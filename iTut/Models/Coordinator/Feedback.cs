@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iTut.Models.Users;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,6 +19,6 @@ namespace iTut.Models.Coordinator
         [Display(Name = "Feedback")]
         public string FeedbackContent { get; set; }
         public DateTime CreateAt { get; set; }
-
+        public virtual EducatorUser Educator { get; set; }
     }
 }

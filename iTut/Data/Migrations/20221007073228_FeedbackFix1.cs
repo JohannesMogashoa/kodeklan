@@ -6,10 +6,10 @@ namespace iTut.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "UserId",
-                table: "Feedbacks",
-                newName: "EducatorName");
+            //migrationBuilder.RenameColumn(
+            //    name: "UserId",
+            //    table: "Feedbacks",
+            //    newName: "EducatorName");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

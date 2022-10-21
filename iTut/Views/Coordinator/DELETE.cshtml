@@ -6,14 +6,11 @@
     <main class="main-expanded vh-100 w-100">
         <div class="container-fluid px-lg-5">
             <div class="d-flex py-5 border-bottom">
-                @*<span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem">@Model.SubjectCoordinator.FirstName.ToCharArray()[0]</span>
-              *@ 
-                <div>
+               <div>
                     <h3 class=""></h3>
                 </div>
 
             </div>
-
             <div class="invisible-scrollbar position-relative wh-main">
                 <div class="m-4">
                     <div class="row mt-3">
@@ -23,7 +20,7 @@
 
                 </div>
                 <br/>
-                <h3 class="">Are you sure you want to delete this?</h3>
+               @* <h3 class="">Are you sure you want to delete this?</h3>*@
                 <br/>
                 <br/>
                 <div class="">
@@ -75,8 +72,8 @@
                     <br />
                     <form asp-action="DELETE">
                         <input type="hidden" asp-for="Id" />
-                        <input type="submit" value="Delete" class="btn btn-sm btn-danger" /> 
-                        <a asp-action="Subject" class="btn btn-sm btn-primary">Back to List</a>
+@*                        <input type="submit" value="Delete" class="btn btn-sm btn-danger" /> 
+*@                        <a asp-action="Subject" class="btn btn-sm btn-primary">Back to List</a>
                     </form>
                 </div>
             </div>

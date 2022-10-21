@@ -6,29 +6,29 @@ namespace iTut.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "CreateAt",
-                table: "FeedbackEducator");
+            //migrationBuilder.DropColumn(
+            //    name: "CreateAt",
+            //    table: "FeedbackEducator");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "FeedbackContent",
-                table: "FeedbackEducator",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true);
+            //migrationBuilder.AlterColumn<string>(
+            //    name: "FeedbackContent",
+            //    table: "FeedbackEducator",
+            //    type: "nvarchar(max)",
+            //    nullable: false,
+            //    defaultValue: "",
+            //    oldClrType: typeof(string),
+            //    oldType: "nvarchar(max)",
+            //    oldNullable: true);
 
-            migrationBuilder.AlterColumn<string>(
-                name: "EducatorId",
-                table: "FeedbackEducator",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true);
+            //migrationBuilder.AlterColumn<string>(
+            //    name: "EducatorId",
+            //    table: "FeedbackEducator",
+            //    type: "nvarchar(max)",
+            //    nullable: false,
+            //    defaultValue: "",
+            //    oldClrType: typeof(string),
+            //    oldType: "nvarchar(max)",
+            //    oldNullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

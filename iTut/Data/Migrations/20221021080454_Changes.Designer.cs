@@ -10,8 +10,8 @@ using iTut.Data;
 namespace iTut.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221020132010_Subjectcs2.0")]
-    partial class Subjectcs20
+    [Migration("20221021080454_Changes")]
+    partial class Changes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -268,8 +268,10 @@ namespace iTut.Data.Migrations
 
             modelBuilder.Entity("iTut.Models.Coordinator.SubjectEducator", b =>
                 {
-                    b.Property<string>("SubjectEducatorId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("EducatorId")
                         .HasColumnType("nvarchar(450)");
@@ -283,7 +285,7 @@ namespace iTut.Data.Migrations
                     b.Property<string>("SubjectId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("SubjectEducatorId");
+                    b.HasKey("Id");
 
                     b.HasIndex("EducatorId");
 
