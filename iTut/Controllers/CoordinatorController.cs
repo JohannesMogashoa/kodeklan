@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using iTut.Models.Shared;
 
 namespace iTut.Controllers
 {
@@ -37,14 +38,64 @@ namespace iTut.Controllers
         public ActionResult Index()
         {
             var SubjectCoordinator = _context.SubjectCoordinator.Where(c => c.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+            var posts = _context.Posts.Where(p => p.Archived == false).Include(p => p.Comments).ToList();
+            
             var viewModel = new CoordinatorIndexViewModel
             {
                 SubjectCoordinator = SubjectCoordinator,
+                Posts = posts
             };
             return View(viewModel);
         }
 
-       
+        #region Timeline Posts
+        // GET: Timeline Post
+        [HttpGet("/Coordinator/Post/{id}")]
+        public IActionResult Post([FromRoute] string id)
+        {
+            var post = _context.Posts.Where(p => p.Id.Equals(id)).Include(p => p.Comments).FirstOrDefault();
+
+            ViewBag.Post = post;
+
+            return View();
+        }
+
+        // POST: Comment on Timeline Post
+        [HttpPost("/Coordinator/Post/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CommentOnPost([FromRoute] string id, PostComment model)
+        {
+            var post = _context.Posts.Where(p => p.Id.Equals(id)).Include(p => p.Comments).FirstOrDefault();
+            var userId = _context.Users.Where(u => u.Id == _userManager.GetUserId(User)).FirstOrDefault().Id;
+            if (post != null && !post.Archived)
+            {
+                if (ModelState.IsValid)
+                {
+                    var comment = new PostComment
+                    {
+                        UserId = userId,
+                        CommentContent = model.CommentContent,
+                        Post = post,
+                        CreatedAt = DateTime.Now,
+                    };
+                    _context.Add(comment);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation($"Comment, id: {comment.Id}, created on post: {post.Id}");
+                    return Redirect($"/Coordinator/Post/{id}");
+                }
+                return View("Error");
+            }
+            return NotFound();
+        }
+
+        #endregion
+
+        public ActionResult Board()
+        {
+            return View();
+        }
+
+
         public IActionResult Feedback()
         {
 
@@ -184,37 +235,6 @@ namespace iTut.Controllers
             return RedirectToAction("Index");
         }
 
-
-        //public IActionResult Delete(string Id)
-        //{
-        //    if (Id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var subject = _context.Subjects.Find(Id);
-        //    if(subject == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(subject);
-        //}
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult DeleteConfirmed(string Id)
-        //{
-        //    var subject = _context.Subjects.Find(Id);
-        //    //if(subject == null)
-        //    //{
-        //    //    return NotFound();
-        //    //}
-
-        //    _context.Subjects.Remove(subject);
-        //    _context.SaveChanges();
-        //    return RedirectToAction(nameof(subject));
-        //   // return View(subject);
-        //}
-
         //details
         public IActionResult Details(string Id)
         {
@@ -233,41 +253,10 @@ namespace iTut.Controllers
 
         public IActionResult Reports()
         {
-            return View();
+            return View(_context.Subjects.ToList());
 
         }
-        
-        /*//GET FEEDBACK
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Feedback(Feedback model)
-        {
-            if (ModelState.IsValid)
-            {
-                var SubjectCoordinator = _context.SubjectCoordinator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
-                var feedback = new Feedback
-                {
-                    Id=model.Id,
-                    //UserId=model.UserId,
-                    FeedbackContent = model.FeedbackContent
-                };
-                _context.Add(model);
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Feedback was created!");
-                return RedirectToAction("ViewFeedback");
-            }
-            return View(model);
-        }*/
 
-
-        ////GET FEEDBACK
-        //public IActionResult ViewFeedback()
-        //{
-        //   return View(_context.Feedbacks.ToList());            
-        //}
-
-    
         //Assign Subjects
         //getting the subjects 
         public IActionResult AssignSubjects()
@@ -302,22 +291,5 @@ namespace iTut.Controllers
                 ////.Include(x => x.Grade);
             return View(x.ToList());
         }
-
-
-        ////Archived / Recover deleted subjects
-        //public IActionResult DeletedRecords( )
-        //{
-        //    var deletedRecords = _context.Subjects.Where(s => s.RecStatus == 'D').ToList();
-        //    return View(deletedRecords);
-        //}
-        //public async Task<IActionResult> Recover(string Id)
-        //{
-        //    var deletedRecord = _context.Subjects.FirstOrDefault(s=> s.Id==Id);
-        //    deletedRecord.RecStatus = 'A';
-
-        //    _context.Subjects.Update(deletedRecord);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(deletedRecord));
-        //}
     }
 }

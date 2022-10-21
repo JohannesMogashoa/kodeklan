@@ -36,53 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20220511205624_InitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20220511205624_InitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220523093501_AddedComplaint.cs" />
-    <Compile Remove="Data\Migrations\20220523093501_AddedComplaint.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220528123125_AddEducatorIndex.cs" />
-    <Compile Remove="Data\Migrations\20220528123125_AddEducatorIndex.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220529164841_StudentInitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20220529164841_StudentInitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220530151611_InitialSubjectCoordinator.cs" />
-    <Compile Remove="Data\Migrations\20220530151611_InitialSubjectCoordinator.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220710172046_AddedMeetingRequest.cs" />
-    <Compile Remove="Data\Migrations\20220710172046_AddedMeetingRequest.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220718092510_datas.cs" />
-    <Compile Remove="Data\Migrations\20220718092510_datas.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220718191944_yeas.cs" />
-    <Compile Remove="Data\Migrations\20220718191944_yeas.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220719081650_na.cs" />
-    <Compile Remove="Data\Migrations\20220719081650_na.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220729093355_addTaskEdu.cs" />
-    <Compile Remove="Data\Migrations\20220729093355_addTaskEdu.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220804103309_Category.cs" />
-    <Compile Remove="Data\Migrations\20220804103309_Category.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220804105446_addCategory.cs" />
-    <Compile Remove="Data\Migrations\20220804105446_addCategory.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220804110123_anotherMiigrationCategory.cs" />
-    <Compile Remove="Data\Migrations\20220804110123_anotherMiigrationCategory.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220804114208_AddMigrationCategory.cs" />
-    <Compile Remove="Data\Migrations\20220804114208_AddMigrationCategory.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220804135339_testIt.cs" />
-    <Compile Remove="Data\Migrations\20220804135339_testIt.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220809153102_AddedTasks.cs" />
-    <Compile Remove="Data\Migrations\20220809153102_AddedTasks.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220818093838_subjectModel.cs" />
-    <Compile Remove="Data\Migrations\20220818093838_subjectModel.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220818114331_CoordinatorReportModel.cs" />
-    <Compile Remove="Data\Migrations\20220818114331_CoordinatorReportModel.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220819104603_SubjectCoordinator.cs" />
-    <Compile Remove="Data\Migrations\20220819104603_SubjectCoordinator.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220825100916_fixModelSubj.cs" />
-    <Compile Remove="Data\Migrations\20220825100916_fixModelSubj.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220825112948_deleteSubjModel.cs" />
-    <Compile Remove="Data\Migrations\20220825112948_deleteSubjModel.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220825113417_deleteSubjModelII.cs" />
-    <Compile Remove="Data\Migrations\20220825113417_deleteSubjModelII.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="wwwroot\img\undraw_add_files_re_v09g.svg" />
   </ItemGroup>
 

@@ -1,0 +1,78 @@
+﻿@inject UserManager<ApplicationUser> _userManger
+@{
+    TimelinePost post = ViewBag.Post;
+    ViewData["Title"] = post.PostTitle;
+    string id = _userManger.GetUserId(User);
+}
+@model PostComment;
+
+<div id="collapseOffCanvas" class="bg-body offcanvas-collapse open w-100">
+    <main class="main-expanded vh-100 w-100">
+        <div class="container-fluid px-lg-5 position-relative">
+            <div class="d-flex align-items-center py-4">
+                <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem">@post.PostTitle.ToCharArray()[0]</span>
+                <div class="mr-auto">
+                    <h2 class="fs-1 lh-tight">@post.PostTitle</h2>
+                </div>
+                <ul class="list-unstyled d-flex align-items-center">
+                    <li class="d-lg-none mr-sm-5">
+                        <button class="btn link-body p-0 offcanvas-button" type="button">
+                            <svg class="gi gi-arrow-circle-left fs-4" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm-.293 6.293a1 1 0 0 0-1.414 0h0l-3 3-.083.094a1 1 0 0 0 .083 1.32h0l3 3 .094.083a1 1 0 0 0 1.32-.083h0l.083-.094a1 1 0 0 0-.083-1.32h0L10.416 13H16l.117-.007A1 1 0 0 0 16 11h0-5.586l1.293-1.293.083-.094a1 1 0 0 0-.083-1.32z"></path>
+                            </svg>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="invisible-scrollbar position-relative wh-main">
+                <div class="row">
+                    <p>@post.PostContent</p>
+                    <h2 class="fs-2 mt-3">Comments</h2>
+                </div>
+                <div class="row mt-2">
+                    @if (post.Comments.Count > 0)
+                    {
+                        foreach (var comment in post.Comments)
+                        {
+                            <div class="col-12 mb-3 border-bottom">
+                               <div class="p-1">
+                                    <div class="d-flex align-items-center">
+                                        <div class="mr-auto w-75">
+                                            @comment.CommentContent
+                                        </div>
+                                        <span class="text-right">
+                                            <svg class="gi gi-clock" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 5a1 1 0 0 0-1 1h0v4l.007.117A1 1 0 0 0 12 13h4l.117-.007A1 1 0 0 0 17 12h0l-.007-.117A1 1 0 0 0 16 11h0-3V8l-.007-.117A1 1 0 0 0 12 7z" />
+                                            </svg>
+                                            @comment.CreatedAt.ToShortTimeString()
+                                        </span>
+                                    </div>
+                               </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <p>No comments as yet. Go ahead and be the first to add one....</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="position-absolute bottom-0 right-0 left-0 px-5">
+                <form class="w-100" style="max-width: 100%" method="post" asp-controller="Coordinator" asp-action="CommentOnPost" asp-route-id="@post.Id">
+                    <div class="input-group">
+                        <input asp-for="CommentContent" type="search" placeholder="Comment on post..." aria-label="Search Complaints" class="form-control form-control-lg">
+                        <button type="submit" class="input-group-item btn-dark btn btn-sm mb-0">
+                            <svg class="gi gi-arrow-circle-right-up fs-4" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm2.828 6.172h-4.243l-.125.008a1 1 0 0 0-.875.992h0l.008.125a1 1 0 0 0 .992.875h0l1.827.001-3.948 3.948-.078.087a1 1 0 0 0 1.492 1.327h0l3.95-3.95v1.83l.008.125a1 1 0 0 0 1.992-.125h0V9.172l-.008-.125a1 1 0 0 0-.992-.875h0z" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>

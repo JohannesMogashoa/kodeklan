@@ -97,22 +97,6 @@
                         View Students
                     </a>
                 </li>
-                @*  <li class="nav-item flex-lg-grow-1">
-            <a class="nav-link" href="#">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1.6em" height="1.6em" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
-            </svg>
-            </a>
-            </li>*@
-            @*    <li class="nav-item">
-                    <a class="nav-link" href="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 24 24">
-                            <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z" />
-                            <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-                        </svg> <br>
-                        Calender
-                    </a>
-                </li>*@
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-toggle="modal" data-target="#inviteParentModal">
                         <svg class="gi gi-user-plus-outline fs-3" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -200,7 +184,7 @@
         else if (User.IsInRole(RoleConstants.SubjectCoordinator))
         {
             <!--Home icon-->
-            <a href="/" class="link-body d-none d-lg-inline text-primary">
+            <a asp-controller="Coordinator" asp-action="Index" class="link-body d-none d-lg-inline text-primary">
                 <svg class="gi gi-grayshift fs-4" width="2rem" height="2rem" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.336 11.253l-.08.08C1.685 11.956 2.12 13 3 13h1.116l.892 7.124A1 1 0 0 0 6 21h4a1 1 0 0 0 1-1v-4.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5V20a1 1 0 0 0 1 1h4l.115-.007a1 1 0 0 0 .877-.869l.89-7.124H21c.92 0 1.352-1.137.664-1.747l-9-8a1 1 0 0 0-1.329 0l-9 8z" />
                 </svg>
@@ -211,7 +195,7 @@
             <br />
              <!--Subject Coordinator -->
             <li class="nav-item d-flx">
-                <a asp-controller="Coordinator" asp-action="Index" class="nav-link" >
+                <a asp-controller="Coordinator" asp-action="Board" class="nav-link" >
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
                         <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
                         <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z" />
@@ -250,7 +234,7 @@
                 </li>
                 <!--Feedback new new-->
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Feedbacks">
-                    <a class="nav-link" asp-controller="Coordinator" asp-action="Feedback">
+                    <a class="nav-link" asp-controller="Coordinator" asp-action="Complaint">
                         <svg class="gi gi-file-plus-outline fs-3" width="1.1em" height="1.1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path d="M14.4 2a1 1 0 0 1 .607.206l.1.087 4.6 4.58a1 1 0 0 1 .285.576l.01.132V19a3 3 0 0 1-2.824 2.995L17 22H7a3 3 0 0 1-2.995-2.824L4 19V5a3 3 0 0 1 2.824-2.995L7 2h7.4zM12 4H7a1 1 0 0 0-.993.883L6 5v14a1 1 0 0 0 .883.993L7 20h10a1 1 0 0 0 .993-.883L18 19v-9h-3a3 3 0 0 1-2.995-2.824L12 7V4zm2 .003V7a1 1 0 0 0 .883.993L15 8h3v-.005l-4-3.992zM12 12a1 1 0 0 1 .993.883L13 13v1h1a1 1 0 0 1 .117 1.993L14 16h-1v1a1 1 0 0 1-1.993.117L11 17v-1h-1a1 1 0 0 1-.117-1.993L10 14h1v-1a1 1 0 0 1 1-1z" />
                         </svg>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<iTut.Models.Parent.Complaint>
+﻿@model List<iTut.Models.Parent.Complaint>
 @{
     ViewData["Title"] = "Complaint";
 }
@@ -27,7 +27,7 @@
                         <div class="col-sm-4">
                             <div class="card " style=" width: 18rem;">
                                 <div class="card-body">
-                                    <h5>No. of Complaints : @ViewBag.Complaints </h5>
+                                    <h5>No. of Complaints : @Model.Count </h5>
                                     <h5></h5>
                                 </div>
                             </div>

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iTut.Data;
 
-namespace iTut.Migrations
+namespace iTut.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -177,9 +177,9 @@ namespace iTut.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EducatorName")
+                    b.Property<string>("EducatorId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FeedbackContent")
                         .IsRequired()
@@ -188,7 +188,27 @@ namespace iTut.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EducatorId");
+
                     b.ToTable("Feedbacks");
+                });
+
+            modelBuilder.Entity("iTut.Models.Coordinator.FeedbackEducator", b =>
+                {
+                    b.Property<string>("FeedbackEducatorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("EducatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FeedbackContent")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FeedbackEducatorId");
+
+                    b.ToTable("FeedbackEducator");
                 });
 
             modelBuilder.Entity("iTut.Models.Coordinator.Report", b =>
@@ -219,8 +239,14 @@ namespace iTut.Migrations
                     b.Property<DateTime>("Created_at")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Grade")
+                    b.Property<string>("EducatorID")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("SubjectDescr")
                         .IsRequired()
@@ -238,6 +264,34 @@ namespace iTut.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("iTut.Models.Coordinator.SubjectEducator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("EducatorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GradeId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubjectId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EducatorId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("SubjectEducators");
                 });
 
             modelBuilder.Entity("iTut.Models.Edu.Topic", b =>
@@ -982,6 +1036,32 @@ namespace iTut.Migrations
                         .HasForeignKey("ParentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("iTut.Models.Coordinator.Feedback", b =>
+                {
+                    b.HasOne("iTut.Models.Users.EducatorUser", "Educator")
+                        .WithMany()
+                        .HasForeignKey("EducatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Educator");
+                });
+
+            modelBuilder.Entity("iTut.Models.Coordinator.SubjectEducator", b =>
+                {
+                    b.HasOne("iTut.Models.Users.EducatorUser", "Educator")
+                        .WithMany()
+                        .HasForeignKey("EducatorId");
+
+                    b.HasOne("iTut.Models.Coordinator.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId");
+
+                    b.Navigation("Educator");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("iTut.Models.Edu.Topic", b =>
