@@ -12,15 +12,13 @@
                     <h2 class="mb-2 fs-1 lh-tight">Hi, @Model.Student.FirstName</h2>
                     <p class="lh-tight">Dashboard</p>
                 </div>
-                 <div class="form-group form-group-lg has-feedback"  >
-                 <form asp-controller = "Student" asp-action ="Search"  method = "get" >
-                    <input type="text" style="position:absolute; right:105px; top:32.5px; width:300px" class="form-control  "  placeholder="Search Subject" name="searchSubject"  value = "@ViewData["CreateSubject"]" >
+                 <div class="form-group form-group-lg has-feedback">
+                    <input type="text" class="form-control" name="q" id="search" placeholder="Search">
                       <span class="glyphicons glyphicons-xl glyphicons-group form-control-feedback"></span>
-                    <button type="submit" class="btn btn-success" >
+                        </div>
+                    <button type="submit" class="btn btn-success">
               <img src="https://img.icons8.com/material-outlined/24/000000/search--v1.png"/>
                 </button>
-                </form> 
-                 </div>
                 <ul class="list-unstyled d-flex align-items-center">
                     <li class="d-lg-none mr-sm-5">
                         <button class="btn link-body p-0 offcanvas-button" type="button">
