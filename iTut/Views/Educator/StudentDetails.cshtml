@@ -1,0 +1,69 @@
+﻿@model iTut.Models.ViewModels.Educator.StudentViewModel
+@{
+    ViewData["Title"] = "StudentDetails";
+}
+
+<div class="Container-fluid py-2 px-lg-2 w-100">
+
+    <div class="Head_Container px-2 py-2 d-flex">
+        <h1> Student Marks </h1>
+
+        <div class="back_button ml-auto pr-3 py-0">
+            <a asp-controller="Educator" asp-action="Students" class="btn btn-outline-danger"> Back </a>
+
+
+        </div>
+    </div>
+
+    <hr />
+
+@foreach(var detail in Model.students)
+{
+        <div class="container py-3 bg-white">
+
+      <div class="row">
+
+          <div class="col-6">
+
+             <p class="fs-5 text-dark">First Name: @detail.FirstName</p>
+
+          </div>
+
+          <div class="col-6">
+                <p class="fs-5 text-dark"> Last Name: @detail.LastName </p>
+
+          </div>
+      </div>
+     <hr/>
+
+      <div class="row">
+             <div class="col-6">
+
+                    <p class=" text-dark"> Grade:  @detail.Grade</p>
+
+          </div>
+          <div class="col-6">
+
+                    <p class=" text-dark"> E-mail Address: @detail.EmailAddress</p>
+
+          </div>
+
+       </div>
+       <div class="row py-2">
+             <div class="col-6">
+
+                    <p class="  text-dark"> Physcical Address : @detail.PhysicalAddress</p>
+
+          </div>
+          <div class="col-6">
+
+                    <p class=" text-dark"> Phone Number: @detail.PhoneNumber</p>
+
+          </div>
+
+       </div>
+
+       <hr/>
+  </div>
+}
+</div>

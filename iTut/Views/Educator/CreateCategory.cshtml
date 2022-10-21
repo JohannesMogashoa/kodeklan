@@ -6,7 +6,7 @@
     ViewData["Title"] = "CreateCategory";
 }
 
-<div class="Container py-3 m-2 w-100">
+<div class="Container-fluid py-3 m-2 w-100">
     
    <div class="Category-container d-flex py-2 mx-2">
 
@@ -22,7 +22,7 @@
     </div>
     </div>
      <!--The Form-->
-  <form asp-controller="Educator" asp-action="CreateCategory" method="post" class="container">
+  <form asp-controller="Educator" asp-action="CreateCategory" method="post" class="container-fluid">
 
     <div asp-validation-summary="ModelOnly" class="text-danger list-unstyled mb-2"></div>
     <div class="form-group">
@@ -39,7 +39,7 @@
 
      
     <button type="submit" class="btn btn-primary">Add Topic</button>
-    <a href="/Educator/Categories" class="btn btn-danger"> View Categories/Topic</a>
+    <a asp-controller="Educator" asp-action="Categories" class="btn btn-danger"> View Categories/Topic</a>
 
 
 

@@ -1,0 +1,62 @@
+﻿@model iTut.Models.ViewModels.Educator.FeedbackViewModel
+@{
+    ViewData["Title"] = "Feedbacks";
+}
+
+
+
+<div class="Container-fluid py-2 px-lg-2 w-100">
+
+    <div class="Head_Container py-2 d-flex px-2">
+        <h1> Feedbacks</h1>
+
+        <div class="back_button ml-auto pr-3 py-0">
+
+            <a asp-controller="Educator" asp-action="CreateTask" class="btn btn-outline-danger"> Back </a>
+
+
+        </div>
+    </div>
+
+    <hr/>
+
+<div class="py-lg-2 px-2">
+ @if (Model.feedbacks.Count > 0 && Model != null)
+    {
+        @foreach (var feedback in Model.feedbacks)
+        {
+             <div class="col-lg-6 mb-4">
+
+                    <div class="d-flex align-items-start flex-column w-100">
+
+                        <div class="mb-auto w-100">
+                            <div>
+                                <h2 class="mb-2 fs-1 lh-tight">@feedback.EducatorName</h2>
+
+
+                                <p class="badge bg-success text-white">
+                                    @feedback.FeedbackContent
+                                </p>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+              </div>
+           
+            
+        }
+
+    }
+    else{
+        <div class="col-12">
+            <div class="alert alert-info">
+                <p>No Feedbacks Found</p>
+            </div>
+        </div>
+    }
+
+  </div>
+</div>
+      

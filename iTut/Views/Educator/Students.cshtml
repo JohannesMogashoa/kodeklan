@@ -1,10 +1,8 @@
-﻿
-@using PagedList.Mvc;
-@using PagedList;
-@model PagedList.IPagedList<iTut.Models.Users.StudentUser>
+﻿@model PaginatedList<iTut.Models.Users.StudentUser>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Students";
-    Layout = "~/Views/Educator/Students.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
@@ -48,78 +46,106 @@
 
 
 
-<div class="Student Header"> 
+<div class="Student Header py-2 px-2"> 
     <h1>Students</h1>
 
 
 </div>
+    <hr />
+<div class="class_wrapp mt-2 py-2 px2"
+    <div class="py-2 px-2">
+        <form asp-controller="Educator" asp-action="Students" method="get">
+            <div class="d-flex form-actions no-color justify-content-between px-3">
+                <p class="flex-column text-uppercase">
+                       Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                         <input type="submit" value="Search" class="btn btn-default" /> |
+                        
+                </p>
 
-  
- 
+                <p class="flex-column"><a asp-controller="Educator" asp-action="Students">Back to Full List</a></p>
+             </div>
+         </form>
+    </div> 
 
+   
 <div class="table py-2">
 
-@using (Html.BeginForm())
-{
-<table class="table">
-    <thead>
-        <tr>
-                    
-            <th>
-                @Html.ActionLink("First Name", "Students", new {sortOrder="FirstName",currentSort=ViewBag.currentSort})
-            </th>
-            <th>
-                Last Name
-            </th>
-            <th>
-                 E-Mail Address
-            </th>
-         
-            <th>
-                 @Html.ActionLink("Grades", "Students", new {sortOrder="Grade",currentSort=ViewBag.currentSort})
-            </th>
-            <td>
 
-            </td>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model) {
-        <tr>
+        <table class="table">
+              <thead>
+                 <tr>
+                    
+                   <th>
+                      First Name
+                  </th>
+                  <th>
+                      <a asp-controller="Educator" asp-action="Students" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Last Name <i class="bi bi-sort-alpha-down"></i></a>
+                  </th>
+                  <th>
+                       E-Mail Address
+                  </th>
+         
+                   <th>
+                 <a asp-controller="Educator" asp-action="Students" asp-route-sortOrder="@ViewData["GradeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Grade <i class="bi bi-funnel"></i></a>
+                  </th>
+                  <td>
+    
+                   </td>
+                </tr>
+         </thead>
+             <tbody>
+    @foreach (var item in Model)
+          {
+              <tr>
        
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailAddress)
-            </td>
-             <td>
-                @Html.DisplayFor(modelItem => item.Grade)
-            </td>
+                   <td>
+                       @Html.DisplayFor(modelItem => item.FirstName)
+                   </td>
+                   <td>
+                         @Html.DisplayFor(modelItem => item.LastName)
+                   </td>
+                    <td>
+                         @Html.DisplayFor(modelItem => item.EmailAddress)
+                    </td>
+                    <td>
+                         @Html.DisplayFor(modelItem => item.Grade)
+                    </td>
             
-            <td>
+                    <td>
                 
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) 
-               
-            </td>
-        </tr>
-   }
-    </tbody>
+                             <a asp-controller="Educator" asp-action="StudentDetails" asp-route-id="@item.Id">Student Details</a>
+                
+                      </td>
+             </tr>
+         }
+                 </tbody>
 
               
-  </table>
+         </table>
 
-
-            <div id='Paging' style="text-align:center">
-                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
-                  of @Model.PageCount
-                  @* @Html.PagedListPager(Model, page => Url.Action("Students", new { page, }))*@
-
-            </div>
-}
     </div>
+
+
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+
+    <a asp-controller="Educator" asp-action="Students"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        <i class="bi bi-arrow-left-circle"></i> Previous
+    </a>
+    <a asp-controller="Educator" asp-action="Students"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Next <i class="bi bi-arrow-right-circle"></i>
+    </a>
+</div>
+<hr />
 
 </div>

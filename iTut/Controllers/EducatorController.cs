@@ -1,5 +1,4 @@
-﻿
-using iTut.Constants;
+﻿using iTut.Constants;
 using iTut.Data;
 using iTut.Models.Coordinator;
 using iTut.Models.Users;
@@ -25,8 +24,8 @@ using System.Runtime.Intrinsics.X86;
 using System.Net.WebSockets;
 using iTut.Models.Shared;
 using PagedList;
-
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace iTut.Controllers
 {
@@ -37,7 +36,6 @@ namespace iTut.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<EducatorController> _logger;
-       
 
         public EducatorController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ILogger<EducatorController> logger)
         {
@@ -64,10 +62,13 @@ namespace iTut.Controllers
 
         #region Categories
         //Categories are renamed to topics 
-        public IActionResult Categories()
+        public async Task <IActionResult> Categories()
         {
-            //return View(await _context.Categories.Where(c => c.EducatorID == _userManager.GetUserId(User)).ToListAsync());
-            return View(_context.Topics.ToList());
+            var educator = _context.Educator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+            
+            var categories = await _context.Topics.Where(tE=>tE.EducatorID==educator.Id).Include(t => t.Educator).ToListAsync();
+
+            return View(categories);
 
         }
 
@@ -145,13 +146,13 @@ namespace iTut.Controllers
             QuizViewModel quizViewModel = new QuizViewModel();
 
             quizViewModel.ListOfQuizzes=( from quiz in _context.Quizzes 
-                               select new SelectListItem()
-                               {
-                                   Value= quiz.QuizId.ToString(),
-                                   Text=quiz.QuizTittle
-                               }
-                               
-                               ).ToList();
+            select new SelectListItem()
+            {
+                Value= quiz.QuizId.ToString(),
+                Text=quiz.QuizTittle
+            }
+            
+            ).ToList();
 
             return View(quizViewModel);
 
@@ -191,32 +192,33 @@ namespace iTut.Controllers
             return Json(data: new { mesage = "Data is Successfully Loaded", success=true}, new Newtonsoft.Json.JsonSerializerSettings());
         }
 
-#endregion
+        #endregion
+
 
         #region UploadedFiles
-        private async Task<FileUploadViewModel> LoadAllFiles()
-           {
-
-           
+         private async Task<FileUploadViewModel> LoadAllFiles()
+         {
+            var educator = _context.Educator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
 
             var viewModel = new FileUploadViewModel();
-                viewModel.FilesOnDatabase = await _context.FilesOnDatabase.ToListAsync();
-                viewModel.subjects=  _context.Subjects.ToList();
-                viewModel.topics= await _context.Topics.ToListAsync();
+               viewModel.FilesOnDatabase = await _context.FilesOnDatabase.Where(f=>f.UploadedBy==educator.Id).Include(f=>f.Educator).ToListAsync();
+               viewModel.subjects=  _context.Subjects.ToList();
+               viewModel.topics= await _context.Topics.ToListAsync();
             
             
         
 
             return viewModel;
-           }
-            public async Task<IActionResult> UploadFile()
-           {
+         }
+        public async Task<IActionResult> UploadFile()
+        {
            
               var fileuploadViewModel = await LoadAllFiles();
                ViewBag.topics = _context.Topics.ToList();
                ViewBag.Message = TempData["Message"];
+
               return View(fileuploadViewModel);
-           }
+        }
 
         [HttpPost]
         public async Task<IActionResult> UploadFile(List<IFormFile> files, string description,Grade grade)
@@ -265,68 +267,136 @@ namespace iTut.Controllers
             var file = await _context.FilesOnDatabase.Where(x => x.ID == id).FirstOrDefaultAsync();
             _context.FilesOnDatabase.Remove(file);
             _context.SaveChanges();
-            TempData["Message"] = $"Removed {file.Name + file.Extension} successfully from the Files.";
+            TempData["Message"] = $"Removed {file.Description + file.Name} successfully from the Files.";
             return RedirectToAction("UploadFile");
         }
         #endregion
 
-
-        public ActionResult Students(string sortOrder, string currentSort,int? page)
+        #region students
+        public async Task<IActionResult> Students(string sortOrder, string currentFilter,int? pageNumber, string searchString)
         {
-            int pageSize = 10;
-            int pageIndex = 1;
-            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            ViewBag.currentSort = sortOrder;
-            sortOrder = String.IsNullOrEmpty(sortOrder) ? "FirstName" : sortOrder;
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["GradeSortParm"] = sortOrder == "Grade" ? "Grade" : "Grade_desc";
 
-            IPagedList<StudentUser> students = null;
-
-            switch (sortOrder)
+            if (searchString != null)
             {
-                case "FirstName":
-                    if (sortOrder.Equals(currentSort))
-                        students = _context.Students.OrderByDescending(s => s.FirstName).ToPagedList(pageIndex, pageSize);
-                    else
-                        students = _context.Students.OrderBy(s => s.FirstName).ToPagedList(pageIndex, pageSize);
-                    break;
-                case "LastName":
-                    if (sortOrder.Equals(currentSort))
-                        students = _context.Students.OrderByDescending(s => s.LastName).ToPagedList(pageIndex, pageSize);
-                    else
-                        students=_context.Students.OrderBy(s=>s.LastName).ToPagedList(pageIndex,pageSize);
-                    break;
-                case "Grade":
-                    if (sortOrder.Equals(currentSort))
-                        students = _context.Students.OrderByDescending(s => s.Grade).ToPagedList(pageIndex, pageSize);
-                    else
-                        students = _context.Students.OrderBy(s => s.Grade).ToPagedList(pageIndex, pageSize);
-                    break ;
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
             }
 
+            ViewData["CurrentFilter"] = searchString;
 
-          
-            return View(students);
+            var students = from s in _context.Students
+                           select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s => s.LastName.Contains(searchString)
+                                       || s.FirstName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    students = students.OrderByDescending(s => s.LastName);
+                    break;
+                case "Grade":
+                    students = students.OrderBy(s => s.Grade);
+                    break;
+                case "Grade_desc":
+                    students = students.OrderByDescending(s => s.Grade);
+                    break;
+                default:
+                    students = students.OrderBy(s => s.LastName);
+                    break;
+            }
+
+            int pageSize = 3;
+            return View(await PaginatedList<StudentUser>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
+
+        }
+        public IActionResult StudentDetails(string Id)
+        {
+            
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var student = _context.Students.Where(s => s.Id == Id).ToList();
+
+            StudentViewModel model = new StudentViewModel()
+            {
+                students = student
+
+
+            };
+
+            return View(model);
         }
 
+        #endregion
+
         #region Marks
-        public async Task<ActionResult> LoadMarks()
+        public async Task<ActionResult> LoadMarks(string sortOrder, string currentFilter, int? pageNumber, string searchString)
         {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["GradeSortParm"] = sortOrder == "Grade" ? "Grade" : "Grade_desc";
+            ViewData["AverageSortParm"] = sortOrder == "Average" ? "Average" : "Average_desc";
 
-            var student = await _context.Students.FirstOrDefaultAsync();
-            var subject = await _context.Subjects.FirstOrDefaultAsync();
-            var getmark = await _context.Marks.FirstOrDefaultAsync();
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
 
-            var marks = await _context.Marks.Include(m=>m.subject).Include(ms=>ms.students).ToListAsync();
+            ViewData["CurrentFilter"] = searchString;
 
-           // var subjMarks = await  _context.Subjects.Where(st =>st.Id == getmark.SubjID ).ToListAsync();
-           // var students = await _context.Students.Where(s => s.Id == getmark.StudentID).ToListAsync();
-    
-         
+            var marks = from m in _context.Marks
+                           select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                marks= marks.Where(s => s.students.FirstName.Contains(searchString)
+                                       || s.students.LastName.Contains(searchString) || s.outcome.Contains(searchString)||s.subject.SubjectName.Contains(searchString ));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    marks = marks.OrderByDescending(s => s.students.LastName);
+                    break;
+                case "Grade":
+                     marks = marks.OrderBy(s => s.students.Grade);
+                    break;
+                case "Grade_desc":
+                     marks = marks.OrderByDescending(s => s.students.Grade);
+                    break;
+                case "Average":
+                    marks = marks.OrderBy(s => s.avg);
+                    break;
+                case "Average_desc":
+                    marks = marks.OrderByDescending(s => s.avg);
+                    break;
+              
+                default:
+                    marks = marks.OrderBy(s => s.students.LastName);
+                    break;
+            }
 
-            return View(marks);
+            int pageSize = 3;
+            //var marks = await _context.Marks.Include(m=>m.subject).Include(ms=>ms.students).ToListAsync();
 
+
+
+
+            return View(await PaginatedList<Mark>.CreateAsync(marks.Include(m => m.subject).Include(ms => ms.students).AsNoTracking(), pageNumber ?? 1, pageSize));
        
-         }
+        }
 
         public ActionResult EditMarks(string Id)
         {   
@@ -385,7 +455,7 @@ namespace iTut.Controllers
                 return NotFound();
             }
 
-            var marks = _context.Marks.Where(m => m.Id == Id).Include(m => m.students).Include(s => s.subject).FirstOrDefault();
+            var marks = await _context.Marks.Where(m => m.Id == Id).Include(m => m.students).Include(s => s.subject).FirstOrDefaultAsync();
 
             if (marks==null)
             {
@@ -396,12 +466,12 @@ namespace iTut.Controllers
         // POST: /Movies/Delete/5
         [HttpPost, ActionName("DeleteMark")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string Id)
+        public async Task<IActionResult> DeleteConfirmed(string Id)
         {
-            Mark mark = _context.Marks.Find(Id);
+            Mark mark = await _context.Marks.FindAsync(Id);
             _context.Marks.Remove(mark);
             _context.SaveChanges();
-            return RedirectToAction("LoadMark");
+            return RedirectToAction(nameof(LoadMarks));
         }
 
         public async Task <IActionResult> StudentMarks()
@@ -476,6 +546,11 @@ namespace iTut.Controllers
 
             return View(model);
         }
+
+        private bool MarksExists(string Id)
+        {
+            return _context.Marks.Any(m => m.Id == Id);
+        }
         #endregion
 
         #region Post
@@ -519,6 +594,21 @@ namespace iTut.Controllers
             return NotFound();
         }
         #endregion
+
+       public IActionResult Feedbacks()
+       {
+
+
+            var feedback = _context.Feedbacks.ToList();
+
+            FeedbackViewModel feedbackView = new FeedbackViewModel()
+            {
+                feedbacks = feedback
+            };
+
+            return View(feedbackView);
+
+       }
     }    
 
 }
