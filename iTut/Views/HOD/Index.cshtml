@@ -1,15 +1,11 @@
 ﻿@model iTut.Models.ViewModels.HOD.HODIndexViewModel
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "DASHBOARD";
 
 }
 
-<style>
-    .backimg {
-        background-image: url(~/Admission.png);
-        background-repeat: no-repeat;
-    }
-</style>
+
+
 <script src="~/lib/daypilot/daypilot-all.min.js" asp-append-version="true"></script>
 <div id="collapseOffCanvas" class="bg-body offcanvas-collapse open w-100">
     <main class="main-expanded vh-100 w-100">
@@ -35,119 +31,58 @@
                     <div class="col-12">
                         <div class="mr-auto">
 
-                            <img src="~/welcome.png" alt="Sample Photo" hight="300px" width="800px" />
+                            <img src="~/img/HOD/welcome.png" alt="Sample Photo" hight="300px" width="800px" />
                             </div>
                         <hr />
                         <div class="d-flex align-items-center mb-3">
-                            <div class="mr-auto">
-                               
-                                <img src="~/Admission.png" alt="Sample Photo" hight="100px" width="100px" />
-                                 <p><a asp-action="Admissions">Admissions Management</a></p>
+                            <hr />
+                            <div class="col-md-3" align="Center">
+                                <div class="card grow-sm mb-4 animated fadeInDown">
+                                    <div class="card-body" align="Center">
+                                        <img src="~/img/HOD/employee34.png" alt="Sample Photo" hight="120px" width="100px" />
+                                        <p><a asp-controller="HOD" asp-action="AboutEnrollment">About Enrollment</a></p>
+                                    </div>
+                                </div>
                             </div>
-                            <body>
-                            <div class="backimg">
-
-                                    <img src="~/ClassFees.png" alt="Sample Photo" hight="100px" width="100px" />
-                                <p><a asp-action="ClassFees">Class Fees Management</a></p>
+                            <div>
+                                <p>|</p>
                             </div>
-                            </body>
-                            <div class="mr-auto">
-                                <img src="~/school.png" alt="Sample Photo" hight="100px" width="100px" />
-                                <p><a asp-action="Schools">School Management</a></p>
+                            <div class="col-md-3" align="Center">
+                                <div class="card grow-sm mb-4 animated fadeInDown">
+                                    <div class="card-body" align="Center">
+                                        <img src="~/img/HOD/jobinfors.png" alt="Sample Photo" hight="100px" width="100px" />
+                                        <p><a asp-controller="HOD" asp-action="CoordinatorsIndex">Coordinators</a></p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mr-auto">
-                                <img src="~/employees.png" alt="Sample Photo" hight="100px" width="100px" />
-                                <p><a asp-action="Employees">Employees Management</a></p>
+                            <div>
+                                <p>|</p>
                             </div>
-                            <div class="mr-auto">
-                                <img src="~/leave.png" alt="Sample Photo" hight="100px" width="100px" />
-                                <p><a asp-action="AdminLeaveRequestViewVMs">Admin Leave Request View</a></p>
+                            <div class="col-md-3" align="Center">
+                                <div class="card grow-sm mb-4 animated fadeInDown">
+                                    <div class="card-body" align="Center">
+                                        <img src="~/img/HOD/Session.png" alt="Sample Photo" hight="110px" width="100px" />
+                                        <p><a asp-controller="HOD" asp-action="DepartmentsIndex">Departments</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <p>|</p>
+                            </div>
+                            <div class="col-md-3" align="Center">
+                                <div class="card grow-sm mb-4 animated fadeInDown">
+                                    <div class="card-body" align="Center">
+                                        <img src="~/img/HOD/Session.png" alt="Sample Photo" hight="110px" width="100" />
+                                        <p><a asp-controller="HOD" asp-action="SubjectIndex">SubjectS</a></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="mr-auto">
                         </div>
                         <hr />
-                        <div class="mr-auto">
-                                <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="ClassNames">Class Names</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                                <p><a asp-action="Courses">Grades (Courses)</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="EducationLevels">Education Levels</a></p>
-                            </div>
-                            <div class="mr-auto">
-                                <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="EmployeeEducations">Employee Educations</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="Employment Histories">EmploymentHistories</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="ExamTitles">Exam Titles</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="FeeTypes">Fee Types</a></p>
-                            </div>
-                            <div class="mr-auto">
-                                <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="Grades">Grades</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="Groups">Groups</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="Guardians">Guardians</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="GuardianTypes">GuardianTypes</a></p>
-                            </div>
-                        <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="JobInfoes">JobInfoes</a></p>
-                        </div>
-                        <div class="mr-auto">
-                                <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="LeaveAllocationVMs">Leave Allocation</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="LeaveRequestVMs">Leave Request</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="LeaveTypeVMs">Leave Type</a></p>
-                            </div>
-                            
-                            <div class="mr-auto">
-                                <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                                <p><a asp-action="Sections">Sections</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="Sessions">Sessions</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="Shifts">Shifts</a></p>
-                            </div>
-                            <div class="mr-auto">
-                            <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="StudentClasses">Student Classes Management</a></p>
-                            </div>
-                            <div class="mr-auto">
-                                <img src="~/knowledge.png" alt="Sample Photo" hight="100px" width="100px" />
-                            <p><a asp-action="Students">Students</a></p>
-                            </div>
+
+                           
                         <hr />
                     </div>
                     <div class="col-12">
