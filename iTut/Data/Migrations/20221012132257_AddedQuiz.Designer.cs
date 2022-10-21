@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iTut.Data;
 
 namespace iTut.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221012132257_AddedQuiz")]
+    partial class AddedQuiz
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,7 +251,7 @@ namespace iTut.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EducatorID")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -263,50 +265,7 @@ namespace iTut.Data.Migrations
 
                     b.HasKey("TopicId");
 
-                    b.HasIndex("EducatorID");
-
                     b.ToTable("Topics");
-                });
-
-            modelBuilder.Entity("iTut.Models.Marks.Mark", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StudentID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SubjID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Term1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Term2")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Term3")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Term4")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Total")
-                        .HasColumnType("int");
-
-                    b.Property<int>("avg")
-                        .HasColumnType("int");
-
-                    b.Property<string>("outcome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentID");
-
-                    b.HasIndex("SubjID");
-
-                    b.ToTable("Marks");
                 });
 
             modelBuilder.Entity("iTut.Models.Parent.Complaint", b =>
@@ -444,11 +403,9 @@ namespace iTut.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("QuizDescription")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QuizTittle")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDate")
@@ -569,21 +526,15 @@ namespace iTut.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SubjectID")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TopicID")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UploadedBy")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("SubjectID");
-
-                    b.HasIndex("TopicID");
-
-                    b.HasIndex("UploadedBy");
 
                     b.ToTable("FilesOnDatabase");
                 });
@@ -984,30 +935,6 @@ namespace iTut.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("iTut.Models.Edu.Topic", b =>
-                {
-                    b.HasOne("iTut.Models.Users.EducatorUser", "Educator")
-                        .WithMany()
-                        .HasForeignKey("EducatorID");
-
-                    b.Navigation("Educator");
-                });
-
-            modelBuilder.Entity("iTut.Models.Marks.Mark", b =>
-                {
-                    b.HasOne("iTut.Models.Users.StudentUser", "students")
-                        .WithMany()
-                        .HasForeignKey("StudentID");
-
-                    b.HasOne("iTut.Models.Coordinator.Subject", "subject")
-                        .WithMany()
-                        .HasForeignKey("SubjID");
-
-                    b.Navigation("students");
-
-                    b.Navigation("subject");
-                });
-
             modelBuilder.Entity("iTut.Models.Shared.PostComment", b =>
                 {
                     b.HasOne("iTut.Models.Shared.TimelinePost", "Post")
@@ -1015,27 +942,6 @@ namespace iTut.Data.Migrations
                         .HasForeignKey("PostId");
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("iTut.Models.UploadFiles.FileOnDatabase", b =>
-                {
-                    b.HasOne("iTut.Models.Coordinator.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectID");
-
-                    b.HasOne("iTut.Models.Edu.Topic", "Topic")
-                        .WithMany()
-                        .HasForeignKey("TopicID");
-
-                    b.HasOne("iTut.Models.Users.EducatorUser", "Educator")
-                        .WithMany()
-                        .HasForeignKey("UploadedBy");
-
-                    b.Navigation("Educator");
-
-                    b.Navigation("Subject");
-
-                    b.Navigation("Topic");
                 });
 
             modelBuilder.Entity("iTut.Models.Shared.TimelinePost", b =>

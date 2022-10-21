@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iTut.Data;
 
 namespace iTut.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221020051104_HODUSER")]
+    partial class HODUSER
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,7 +251,7 @@ namespace iTut.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EducatorID")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -263,50 +265,150 @@ namespace iTut.Data.Migrations
 
                     b.HasKey("TopicId");
 
-                    b.HasIndex("EducatorID");
-
                     b.ToTable("Topics");
                 });
 
-            modelBuilder.Entity("iTut.Models.Marks.Mark", b =>
+            modelBuilder.Entity("iTut.Models.HOD.Course", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Credits")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DepartmentID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("CourseID");
+
+                    b.HasIndex("DepartmentID");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("iTut.Models.HOD.CourseAssignment", b =>
+                {
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InstructorID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CourseID", "InstructorID");
+
+                    b.HasIndex("InstructorID");
+
+                    b.ToTable("CourseAssignments");
+                });
+
+            modelBuilder.Entity("iTut.Models.HOD.Department", b =>
+                {
+                    b.Property<int>("DepartmentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Budget")
+                        .HasColumnType("money");
+
+                    b.Property<int?>("InstructorID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("DepartmentID");
+
+                    b.HasIndex("InstructorID");
+
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("iTut.Models.HOD.Enrollment", b =>
+                {
+                    b.Property<int>("EnrollmentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("StudentID")
+                    b.HasKey("EnrollmentID");
+
+                    b.HasIndex("CourseID");
+
+                    b.HasIndex("StudentUserId");
+
+                    b.ToTable("Enrollments");
+                });
+
+            modelBuilder.Entity("iTut.Models.HOD.Instructor", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CoordinatorUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SubjID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("FirstMidName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("FirstName");
 
-                    b.Property<int>("Term1")
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("UserID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Term2")
+                    b.HasKey("ID");
+
+                    b.HasIndex("CoordinatorUserId");
+
+                    b.ToTable("Instructors");
+                });
+
+            modelBuilder.Entity("iTut.Models.HOD.OfficeAssignment", b =>
+                {
+                    b.Property<int>("InstructorID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Term3")
-                        .HasColumnType("int");
+                    b.Property<string>("Location")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("Term4")
-                        .HasColumnType("int");
+                    b.HasKey("InstructorID");
 
-                    b.Property<int>("Total")
-                        .HasColumnType("int");
-
-                    b.Property<int>("avg")
-                        .HasColumnType("int");
-
-                    b.Property<string>("outcome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentID");
-
-                    b.HasIndex("SubjID");
-
-                    b.ToTable("Marks");
+                    b.ToTable("OfficeAssignments");
                 });
 
             modelBuilder.Entity("iTut.Models.Parent.Complaint", b =>
@@ -376,115 +478,6 @@ namespace iTut.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MeetingRequest");
-                });
-
-            modelBuilder.Entity("iTut.Models.Quiz.Answer", b =>
-                {
-                    b.Property<string>("AnswerID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AnswerText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QuestionID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AnswerID");
-
-                    b.ToTable("Answers");
-                });
-
-            modelBuilder.Entity("iTut.Models.Quiz.Option", b =>
-                {
-                    b.Property<string>("OptionID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("OptionName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QuestionID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("OptionID");
-
-                    b.ToTable("Options");
-                });
-
-            modelBuilder.Entity("iTut.Models.Quiz.Question", b =>
-                {
-                    b.Property<string>("QuestionID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("QuestionName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QuizID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("QuestionID");
-
-                    b.ToTable("Questions");
-                });
-
-            modelBuilder.Entity("iTut.Models.Quiz.Quiz", b =>
-                {
-                    b.Property<string>("QuizId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EducatorID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("int");
-
-                    b.Property<string>("QuizDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QuizTittle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SubjectID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TopicId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("QuizId");
-
-                    b.ToTable("Quizzes");
-                });
-
-            modelBuilder.Entity("iTut.Models.Quiz.Result", b =>
-                {
-                    b.Property<string>("ResultID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AnswerText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QuestionID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StudentID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ResultID");
-
-                    b.ToTable("Results");
                 });
 
             modelBuilder.Entity("iTut.Models.Shared.PostComment", b =>
@@ -569,21 +562,15 @@ namespace iTut.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SubjectID")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TopicID")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UploadedBy")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("SubjectID");
-
-                    b.HasIndex("TopicID");
-
-                    b.HasIndex("UploadedBy");
 
                     b.ToTable("FilesOnDatabase");
                 });
@@ -984,28 +971,80 @@ namespace iTut.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("iTut.Models.Edu.Topic", b =>
+            modelBuilder.Entity("iTut.Models.HOD.Course", b =>
                 {
-                    b.HasOne("iTut.Models.Users.EducatorUser", "Educator")
-                        .WithMany()
-                        .HasForeignKey("EducatorID");
+                    b.HasOne("iTut.Models.HOD.Department", "Department")
+                        .WithMany("Courses")
+                        .HasForeignKey("DepartmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Educator");
+                    b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("iTut.Models.Marks.Mark", b =>
+            modelBuilder.Entity("iTut.Models.HOD.CourseAssignment", b =>
                 {
-                    b.HasOne("iTut.Models.Users.StudentUser", "students")
+                    b.HasOne("iTut.Models.HOD.Course", "Course")
+                        .WithMany("CourseAssignments")
+                        .HasForeignKey("CourseID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("iTut.Models.HOD.Instructor", "Instructor")
+                        .WithMany("CourseAssignments")
+                        .HasForeignKey("InstructorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("iTut.Models.HOD.Department", b =>
+                {
+                    b.HasOne("iTut.Models.HOD.Instructor", "Administrator")
                         .WithMany()
-                        .HasForeignKey("StudentID");
+                        .HasForeignKey("InstructorID");
 
-                    b.HasOne("iTut.Models.Coordinator.Subject", "subject")
+                    b.Navigation("Administrator");
+                });
+
+            modelBuilder.Entity("iTut.Models.HOD.Enrollment", b =>
+                {
+                    b.HasOne("iTut.Models.HOD.Course", "Course")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("CourseID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("iTut.Models.Users.StudentUser", "StudentUser")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("StudentUserId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("StudentUser");
+                });
+
+            modelBuilder.Entity("iTut.Models.HOD.Instructor", b =>
+                {
+                    b.HasOne("iTut.Models.Users.CoordinatorUser", "CoordinatorUser")
                         .WithMany()
-                        .HasForeignKey("SubjID");
+                        .HasForeignKey("CoordinatorUserId");
 
-                    b.Navigation("students");
+                    b.Navigation("CoordinatorUser");
+                });
 
-                    b.Navigation("subject");
+            modelBuilder.Entity("iTut.Models.HOD.OfficeAssignment", b =>
+                {
+                    b.HasOne("iTut.Models.HOD.Instructor", "Instructor")
+                        .WithOne("OfficeAssignment")
+                        .HasForeignKey("iTut.Models.HOD.OfficeAssignment", "InstructorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Instructor");
                 });
 
             modelBuilder.Entity("iTut.Models.Shared.PostComment", b =>
@@ -1017,30 +1056,33 @@ namespace iTut.Data.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("iTut.Models.UploadFiles.FileOnDatabase", b =>
+            modelBuilder.Entity("iTut.Models.HOD.Course", b =>
                 {
-                    b.HasOne("iTut.Models.Coordinator.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectID");
+                    b.Navigation("CourseAssignments");
 
-                    b.HasOne("iTut.Models.Edu.Topic", "Topic")
-                        .WithMany()
-                        .HasForeignKey("TopicID");
+                    b.Navigation("Enrollments");
+                });
 
-                    b.HasOne("iTut.Models.Users.EducatorUser", "Educator")
-                        .WithMany()
-                        .HasForeignKey("UploadedBy");
+            modelBuilder.Entity("iTut.Models.HOD.Department", b =>
+                {
+                    b.Navigation("Courses");
+                });
 
-                    b.Navigation("Educator");
+            modelBuilder.Entity("iTut.Models.HOD.Instructor", b =>
+                {
+                    b.Navigation("CourseAssignments");
 
-                    b.Navigation("Subject");
-
-                    b.Navigation("Topic");
+                    b.Navigation("OfficeAssignment");
                 });
 
             modelBuilder.Entity("iTut.Models.Shared.TimelinePost", b =>
                 {
                     b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("iTut.Models.Users.StudentUser", b =>
+                {
+                    b.Navigation("Enrollments");
                 });
 #pragma warning restore 612, 618
         }
