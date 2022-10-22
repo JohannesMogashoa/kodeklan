@@ -10,7 +10,10 @@ using iTut.Models.Marks;
 using iTut.Models.UploadFiles;
 using static iTut.Models.ViewModels.HOD.HODIndexViewModel;
 using iTut.Models.Shared;
+using iTut.Models.HOD;
+using System.Reflection.Emit;
 using iTut.Constants;
+
 namespace iTut.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -30,6 +33,10 @@ namespace iTut.Data
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
+
+            //HOD 
+            builder.Entity<CourseAssignment>()
+                .HasKey(c => new { c.CourseID, c.InstructorID });
         }
 
         // USERS
@@ -61,6 +68,14 @@ namespace iTut.Data
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Report> Reports { get; set; }
+
+        //HOD Table
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Instructor> Instructors { get; set; }
+        public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
+        public DbSet<CourseAssignment> CourseAssignments { get; set; }
         public DbSet<SubjectEducator> SubjectEducators { get; set; }
         public DbSet<FeedbackEducator> FeedbackEducator { get; set; }
     }
