@@ -17,9 +17,10 @@ namespace iTut.Models.ViewModels.Parent
         public string Title { get; set; }
 
         [Required]
-        [StringLength(250)]
         [Display(Name = "Complaint Body")]
         public string ComplaintBody { get; set; }
+
+        public string Feedback { get; set; }
 
         public ComplaintStatus Status { get; set; }
 

@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,8 +58,21 @@ namespace iTut.Controllers
         public async Task<ActionResult> Complaints()
         {
             var parent = _context.Parents.Where(p => p.UserId == _userManager.GetUserId(User)).FirstOrDefault();
-            var complaints = await _context.Complaints.Where(c => c.ParentId == parent.Id && c.Archived == false).ToListAsync();
+            var complaints = await _context.Complaints
+                            .Where(c => c.ParentId == parent.Id && c.Archived == false)
+                            .OrderByDescending(c => c.CreateAt)
+                            .ToListAsync();
             return View(complaints);
+        }
+
+        public async Task<IActionResult> Complaint([FromRoute] string id)
+        {
+            var complaint = await _context.Complaints.Where(c => c.Id.Equals(id)).FirstOrDefaultAsync();
+            if (complaint is not null)
+            {
+                return View(complaint);
+            }
+            return NotFound();
         }
 
         [HttpPost]
@@ -92,7 +106,7 @@ namespace iTut.Controllers
         public async Task<IActionResult> EditComplaint(EditComplaintViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
-            if (await _userManager.IsInRoleAsync(user, RoleConstants.Parent.ToString()) || await _userManager.IsInRoleAsync(user, RoleConstants.HOD.ToString()))
+            if (await _userManager.IsInRoleAsync(user, RoleConstants.Parent.ToString()))
             {
                 if (ModelState.IsValid)
                 {
@@ -148,7 +162,8 @@ namespace iTut.Controllers
             DateTime currentDate = DateTime.Now;
             ViewBag.Parent = parent.Id;
             ViewBag.Teachers = _context.Educator.Where(e => e.Archived == false).ToList();
-            ViewBag.Requests = _context.MeetingRequest.Where(mR => mR.ParentId.Equals(parent.Id) && currentDate < mR.MeetingDate).ToList();
+            ViewBag.Requests = _context.MeetingRequest.Where(mR => mR.ParentId.Equals(parent.Id) && currentDate < mR.MeetingDate)
+                                .OrderBy(mR => mR.MeetingDate).ToList();
             return View();
         }
 
@@ -226,6 +241,29 @@ namespace iTut.Controllers
             return View(invite);
         }
 
+        [HttpGet("/Parent/Invitation/{id}")]
+        public async Task<IActionResult> Invitation([FromRoute] string id)
+        {
+            var currentUser = await _context.Parents.Where(p => p.UserId == _userManager.GetUserId(User))
+                            .Include(p => p.Children).FirstOrDefaultAsync();
+
+            var exists = await _context.Parents.Where(p => p.Id.Equals(id))
+                        .Include(p => p.Children).FirstOrDefaultAsync();
+
+            if (exists is not null && exists.Archived is false)
+            {
+                foreach (var child in exists.Children)
+                {
+                    currentUser.Children.Add(child);
+                }
+                _context.Update(currentUser);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"Invitation Accepted and parent updated {currentUser.Id}");
+                return RedirectToAction(nameof(Index));
+            }
+            return NotFound();
+        }
+
         #endregion
 
         #region Children
@@ -279,6 +317,7 @@ namespace iTut.Controllers
 
         #endregion
 
+        #region Reports
         public IActionResult UserReport()
         {
             var parent = _context.Parents.Where(p => p.UserId == _userManager.GetUserId(User)).Include(p => p.Children).FirstOrDefault();
@@ -293,6 +332,7 @@ namespace iTut.Controllers
             };
             return View(model);
         }
+        #endregion
 
         #region Timeline Posts
         // GET: Timeline Post
@@ -300,6 +340,9 @@ namespace iTut.Controllers
         public IActionResult Post([FromRoute] string id)
         {
             var post = _context.Posts.Where(p => p.Id.Equals(id)).Include(p => p.Comments).FirstOrDefault();
+            var comments = post.Comments.OrderByDescending(c => c.CreatedAt).ToList();
+
+            post.Comments = comments;
 
             ViewBag.Post = post;
 
