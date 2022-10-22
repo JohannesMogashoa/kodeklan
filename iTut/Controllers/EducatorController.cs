@@ -3,6 +3,8 @@ using iTut.Data;
 using iTut.Models.Coordinator;
 using iTut.Models.Users;
 using iTut.Models.UploadFiles;
+using iTut.Models.Quiz;
+using iTut.Models.Marks;
 using iTut.Models.ViewModels.Educator;
 using iTut.Models.Edu;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +18,14 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using iTut.Models.Parent;
+using System.Runtime.Intrinsics.X86;
+using System.Net.WebSockets;
+using iTut.Models.Shared;
+using PagedList;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace iTut.Controllers
 {
@@ -36,10 +46,12 @@ namespace iTut.Controllers
         public ActionResult Index()
         {
             var educator = _context.Educator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+            var posts = _context.Posts.Where(p => p.Archived == false).Include(p => p.Comments).ToList();
 
             var viewModel = new EducatorIndexViewModel
             {
                 Educator = educator,
+                Posts = posts
             };
 
             return View(viewModel);
@@ -52,10 +64,13 @@ namespace iTut.Controllers
 
         #region Categories
         //Categories are renamed to topics 
-        public IActionResult Categories()
+        public async Task <IActionResult> Categories()
         {
-            //return View(await _context.Categories.Where(c => c.EducatorID == _userManager.GetUserId(User)).ToListAsync());
-            return View(_context.Topics.ToList());
+            var educator = _context.Educator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+            
+            var categories = await _context.Topics.Where(tE=>tE.EducatorID==educator.Id).Include(t => t.Educator).ToListAsync();
+
+            return View(categories);
 
         }
 
@@ -87,38 +102,124 @@ namespace iTut.Controllers
             }
             return View(model);
         }
-#endregion
+        #endregion
+
+
+        #region CreatQuiz
         public IActionResult CreateQuiz()
         {
+            ViewBag.topics = _context.Topics.ToList();
+            ViewBag.subjects= _context.Subjects.ToList();
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateQuiz(Quiz model)
+        {
+            if (ModelState.IsValid)
+            {
+                var educator = _context.Educator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+
+                var quiz = new Quiz
+                {
+                    EducatorID = educator.Id,
+                    TopicId = model.TopicId,
+                    SubjectID = model.SubjectID,
+                    QuizTittle= model.QuizTittle,
+                    QuizDescription = model.QuizDescription,
+                    Status = Quiz.quizStatus.Active,
+                    CreatedAt = DateTime.Now,
+                    StartDate = model.StartDate,
+                    EndDate = model.EndDate,
+                    Grade=model.Grade,
+                };
+                _context.Add(quiz);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"Quiz id= {quiz.QuizId}, has beeen created!");
+                return RedirectToAction(nameof(Questions));
+
+            }
+
+            return View(model);
+
+        }
+        public IActionResult Questions()
+        {
+            QuizViewModel quizViewModel = new QuizViewModel();
+
+            quizViewModel.ListOfQuizzes=( from quiz in _context.Quizzes 
+            select new SelectListItem()
+            {
+                Value= quiz.QuizId.ToString(),
+                Text=quiz.QuizTittle
+            }
+            
+            ).ToList();
+
+            return View(quizViewModel);
+
+        }
+
+        [HttpPost]
+        public JsonResult Questions(QuestionOptionViewModel questionOption)
+        {
+
+            Question question = new Question(); 
+            question.QuestionName= questionOption.QuestionName;
+            question.QuizID = questionOption.QuizId;
+
+            _context.Questions.Add(question);
+            _context.SaveChanges();
+
+            string questionID= question.QuestionID;
+
+            foreach(var item in questionOption.ListOfOptions)
+            {
+                Option option= new Option();
+
+                option.OptionName= item;
+                option.QuestionID= questionID;
+                
+                _context.Options.Add(option);
+                _context.SaveChanges();
+                    
+            }
+
+            Answer answer = new Answer();
+            answer.AnswerText= questionOption.AnswerText;
+            answer.QuestionID = questionID;
+            _context.Answers.Add(answer);
+            _context.SaveChanges();
+
+            return Json(data: new { mesage = "Data is Successfully Loaded", success=true}, new Newtonsoft.Json.JsonSerializerSettings());
+        }
+
+        #endregion
+
 
         #region UploadedFiles
-        private async Task<FileUploadViewModel> LoadAllFiles()
-        {
-            
-          
-            var viewModel = new FileUploadViewModel();
-            viewModel.FilesOnDatabase = await _context.FilesOnDatabase.ToListAsync();
-            viewModel.subjects=  _context.Subjects.ToList();
-            viewModel.topics= await _context.Topics.ToListAsync();
-            
-            
-            //  string grades = new List<Grade>;
+         private async Task<FileUploadViewModel> LoadAllFiles()
+         {
+            var educator = _context.Educator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
 
-            // model.Jobs.Add(new SelectListItem() { Text = "Email", Value = "1", Selected = false });
-            //viewModel.subjects= new List<Subject>();
-            //viewModel.subjects.Add(new Subject());
+            var viewModel = new FileUploadViewModel();
+               viewModel.FilesOnDatabase = await _context.FilesOnDatabase.Where(f=>f.UploadedBy==educator.Id).Include(f=>f.Educator).ToListAsync();
+               viewModel.subjects=  _context.Subjects.ToList();
+               viewModel.topics= await _context.Topics.ToListAsync();
+            
+            
+        
 
             return viewModel;
-        }
+         }
         public async Task<IActionResult> UploadFile()
         {
            
-            var fileuploadViewModel = await LoadAllFiles();
-            ViewBag.topics = _context.Topics.ToList();
-            ViewBag.Message = TempData["Message"];
-            return View(fileuploadViewModel);
+              var fileuploadViewModel = await LoadAllFiles();
+               ViewBag.topics = _context.Topics.ToList();
+               ViewBag.Message = TempData["Message"];
+
+              return View(fileuploadViewModel);
         }
 
         [HttpPost]
@@ -131,7 +232,7 @@ namespace iTut.Controllers
                 var subject = _context.Subjects.FirstOrDefault();
                 var topic = _context.Topics.Where(t => t.Status == Topic.TopicStatus.Active).FirstOrDefault();
                 var extension = Path.GetExtension(file.FileName);
-
+                var educator = _context.Educator.Where(e => e.UserId == _userManager.GetUserId(User)).FirstOrDefault();
 
                 var fileModel = new FileOnDatabase
                 {
@@ -143,6 +244,7 @@ namespace iTut.Controllers
                     SubjectID =subject.Id,
                     TopicID = topic.TopicId,
                     Grade= grade,
+                    UploadedBy=educator.Id,
                     
                 };
                 using (var dataStream = new MemoryStream())
@@ -167,9 +269,349 @@ namespace iTut.Controllers
             var file = await _context.FilesOnDatabase.Where(x => x.ID == id).FirstOrDefaultAsync();
             _context.FilesOnDatabase.Remove(file);
             _context.SaveChanges();
-            TempData["Message"] = $"Removed {file.Name + file.Extension} successfully from the Files.";
+            TempData["Message"] = $"Removed {file.Description + file.Name} successfully from the Files.";
             return RedirectToAction("UploadFile");
         }
         #endregion
-    }
+
+        #region students
+        public async Task<IActionResult> Students(string sortOrder, string currentFilter,int? pageNumber, string searchString)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["GradeSortParm"] = sortOrder == "Grade" ? "Grade" : "Grade_desc";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var students = from s in _context.Students
+                           select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s => s.LastName.Contains(searchString)
+                                       || s.FirstName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    students = students.OrderByDescending(s => s.LastName);
+                    break;
+                case "Grade":
+                    students = students.OrderBy(s => s.Grade);
+                    break;
+                case "Grade_desc":
+                    students = students.OrderByDescending(s => s.Grade);
+                    break;
+                default:
+                    students = students.OrderBy(s => s.LastName);
+                    break;
+            }
+
+            int pageSize = 3;
+            return View(await PaginatedList<StudentUser>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
+
+        }
+        public IActionResult StudentDetails(string Id)
+        {
+            
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var student = _context.Students.Where(s => s.Id == Id).ToList();
+
+            StudentViewModel model = new StudentViewModel()
+            {
+                students = student
+
+
+            };
+
+            return View(model);
+        }
+
+        #endregion
+
+        #region Marks
+        public async Task<ActionResult> LoadMarks(string sortOrder, string currentFilter, int? pageNumber, string searchString)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["GradeSortParm"] = sortOrder == "Grade" ? "Grade" : "Grade_desc";
+            ViewData["AverageSortParm"] = sortOrder == "Average" ? "Average" : "Average_desc";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var marks = from m in _context.Marks
+                           select m;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                marks= marks.Where(s => s.students.FirstName.Contains(searchString)
+                                       || s.students.LastName.Contains(searchString) || s.outcome.Contains(searchString)||s.subject.SubjectName.Contains(searchString ));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    marks = marks.OrderByDescending(s => s.students.LastName);
+                    break;
+                case "Grade":
+                     marks = marks.OrderBy(s => s.students.Grade);
+                    break;
+                case "Grade_desc":
+                     marks = marks.OrderByDescending(s => s.students.Grade);
+                    break;
+                case "Average":
+                    marks = marks.OrderBy(s => s.avg);
+                    break;
+                case "Average_desc":
+                    marks = marks.OrderByDescending(s => s.avg);
+                    break;
+              
+                default:
+                    marks = marks.OrderBy(s => s.students.LastName);
+                    break;
+            }
+
+            int pageSize = 3;
+            //var marks = await _context.Marks.Include(m=>m.subject).Include(ms=>ms.students).ToListAsync();
+
+
+
+
+            return View(await PaginatedList<Mark>.CreateAsync(marks.Include(m => m.subject).Include(ms => ms.students).AsNoTracking(), pageNumber ?? 1, pageSize));
+       
+        }
+
+        public ActionResult EditMarks(string Id)
+        {   
+            var mark= _context.Marks.Where(m=>m.Id == Id).Include(m=>m.students).Include(s=>s.subject).FirstOrDefault();
+           
+            return View(mark);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult>UpdateMarks(Mark model)
+        {
+             model.Total = model.Term1 + model.Term2 + model.Term3 + model.Term4;
+
+            model.avg = model.Total / 4;
+
+            if (model.avg >= 50 && model.avg < 80)
+            {
+
+                model.outcome = "pass";
+            }
+            else if (model.avg >= 80)
+            {
+                model.outcome = "Pass with Distinction";
+            }
+            else if (model.avg < 50)
+            {
+                model.outcome = "Fail";
+            }
+
+            var marks = _context.Marks.Where(m => m.Id == model.Id).FirstOrDefault();
+
+                if (marks != null)
+                {
+                    marks.Term1 = model.Term1;
+                    marks.Term2 = model.Term2;
+                    marks.Term3 = model.Term3;
+                    marks.Term4 = model.Term4;
+                    marks.avg = model.avg;
+                    marks.Total = model.Total;
+                    marks.outcome = model.outcome;
+                   
+                    _context.Marks.Update(marks);
+                    await _context.SaveChangesAsync();
+                }
+            return RedirectToAction(nameof(LoadMarks));
+
+            
+        }
+
+        public async Task<IActionResult> DeleteMark(string? Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var marks = await _context.Marks.Where(m => m.Id == Id).Include(m => m.students).Include(s => s.subject).FirstOrDefaultAsync();
+
+            if (marks==null)
+            {
+                return NotFound();
+            }
+            return View(marks);
+        }
+        // POST: /Movies/Delete/5
+        [HttpPost, ActionName("DeleteMark")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string Id)
+        {
+            Mark mark = await _context.Marks.FindAsync(Id);
+            _context.Marks.Remove(mark);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(LoadMarks));
+        }
+
+        public async Task <IActionResult> StudentMarks()
+        {
+
+            ViewBag.Students= _context.Students.ToList();
+            
+            ViewBag.subjects = _context.Subjects.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddMarks(Mark model)
+        {
+            
+            model.Total= model.Term1 + model.Term2 + model.Term3 + model.Term4;
+
+            model.avg = model.Total / 4;
+
+            if (model.avg >= 50 && model.avg <80)
+            {
+
+                model.outcome = "pass";
+            }
+           else if (model.avg >= 80)
+            {
+                model.outcome = "Pass with Distinction";
+            }
+            else if (model.avg < 50)
+            {
+                model.outcome = "Fail";
+            }
+
+            if (ModelState.IsValid)
+            {
+                var mark = new Mark
+                {
+                    StudentID = model.StudentID,
+                    SubjID=model.SubjID,
+                    Term1=model.Term1,
+                    Term2=model.Term2,
+                    Term3=model.Term3,
+                    Term4=model.Term4,
+                    avg=model.avg,
+                    Total=model.Total,
+                    outcome=model.outcome,
+                };
+                _context.Add(mark);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(StudentMarks));
+            }
+            return View(model);
+        }
+
+
+        public IActionResult MarksDetails(string Id)
+        {
+            var mark = _context.Marks.Where(m => m.Id == Id).Include(m => m.students).Include(s => s.subject).FirstOrDefault();
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var markList = _context.Marks.Where(m => m.Id == Id).ToList();
+
+             studentMarksViewModel model =new studentMarksViewModel()
+            {
+               marks=markList
+
+
+            };
+
+            return View(model);
+        }
+
+        private bool MarksExists(string Id)
+        {
+            return _context.Marks.Any(m => m.Id == Id);
+        }
+        #endregion
+
+        #region Post
+
+        // GET: Timeline Post
+        [HttpGet("/Educator/Post/{id}")]
+        public IActionResult Post([FromRoute] string id)
+        {
+            var post = _context.Posts.Where(p => p.Id.Equals(id)).Include(p => p.Comments).FirstOrDefault();
+
+            ViewBag.Post = post;
+
+            return View();
+        }
+
+        // POST: Comment on Timeline Post
+        [HttpPost("/Educator/Post/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CommentOnPost([FromRoute] string id, PostComment model)
+        {
+            var post = _context.Posts.Where(p => p.Id.Equals(id)).Include(p => p.Comments).FirstOrDefault();
+            var userId = _context.Users.Where(u => u.Id == _userManager.GetUserId(User)).FirstOrDefault().Id;
+            if (post != null && !post.Archived)
+            {
+                if (ModelState.IsValid)
+                {
+                    var comment = new PostComment
+                    {
+                        UserId = userId,
+                        CommentContent = model.CommentContent,
+                        Post = post,
+                        CreatedAt = DateTime.Now,
+                    };
+                    _context.Add(comment);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation($"Comment, id: {comment.Id}, created on post: {post.Id}");
+                    return Redirect($"/Educator/Post/{id}");
+                }
+                return View("Error");
+            }
+            return NotFound();
+        }
+        #endregion
+
+       public IActionResult Feedbacks()
+       {
+
+
+            var feedback = _context.Feedbacks.ToList();
+
+            FeedbackViewModel feedbackView = new FeedbackViewModel()
+            {
+                feedbacks = feedback
+            };
+
+            return View(feedbackView);
+
+       }
+    }    
+
 }
+

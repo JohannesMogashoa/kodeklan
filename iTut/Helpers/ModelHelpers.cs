@@ -14,6 +14,7 @@ namespace iTut.Helpers
                 Title = complaint.Title,
                 ComplaintBody = complaint.ComplaintBody,
                 Status = complaint.Status,
+                Feedback = complaint.Feedback,
                 CreateAt = complaint.CreateAt,
                 UpdateAt = complaint.UpdateAt,
                 Archived = complaint.Archived

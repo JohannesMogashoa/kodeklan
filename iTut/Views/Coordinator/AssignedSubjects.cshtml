@@ -1,0 +1,73 @@
+﻿@model IEnumerable<iTut.Models.Coordinator.SubjectEducator>
+
+
+
+<head>
+    <div id="collapseOffCanvas" class="bg-body offcanvas-collapse open w-100">
+        <main class="main-expanded vh-100 w-100">
+            <div class="container-fluid px-lg-5">
+
+                <div class="d-flex py-5 border-bottom">
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <ul class="list-unstyled d-flex align-items-center">
+                        <h2 class="text-center"> Show Assigned Subjects</h2>
+                        <li class="d-lg-none mr-sm-5">
+                        </li>
+                    </ul>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="text-right">
+                            <a class="btn  btn-primary" href="javascript:window.print()" href="javascript:window.print()">
+                                <span class="tf-icons bx bx-printer me-2">  </span>print
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+</head>
+<body>
+    <div>
+        <br/>
+        <br/>
+    </div>
+    <section>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="auto">
+                        @Html.DisplayNameFor(model => model.SubjectId)
+                    </th>
+
+                    <th scope="auto">
+                        @Html.DisplayNameFor(model => model.EducatorId)
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td width="15%">
+                            @Html.DisplayFor(modelItem => item.Subject.SubjectName)
+                        </td>
+                     
+                        <td width="10%">
+                            @Html.DisplayFor(modelItem => item.Educator.EmailAddress)
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </section>
+</body>

@@ -7,8 +7,41 @@
     //List<iTut.Models.Edu.Topic> topics = ViewBag.topics;
 }
     
+<style>  
+    table {  
+        width: 100%;  
+    }  
+    table tr td{  
+        border-top: 1px solid black;  
+        text-align: center;  
+        word-wrap: break-word;  
+        padding:2px 2px;
+    }  
+  
+    table tr:hover {  
+        background-color:rgba(0,0,0,0.7);  
+        color:#fff;  
+    }  
+    table tr th {  
+        
+        border-bottom: 2px solid black;
+        text-align: center;  
+        background-color: #344e41;  
+        color: #ffff;  
+        padding: 15px 2px;
 
-<div class="Container py-3 m-2 w-100">
+    }  
+    table tr:nth-of-type(even) {
+    background-color: #6a994e;
+    color:#ffff;
+    }
+    table tr:nth-of-type(even):hover{
+    background-color: #31572c;
+    color:#ffff;
+    }
+    
+</style> 
+<div class="Container py-3 m-2 w-100 px-2">
     
    <div class="Category-container d-flex py-2 mx-2">
 
@@ -79,23 +112,31 @@
         </form>
     </div>
         <hr />
-        <h4>Files on File System</h4>
+        <h4 class="pb-2">Files on File System</h4>
 
             @if (Model.FilesOnDatabase.Count == 0)
             {
-                <caption>No Records Found</caption>
+                 <div class="col-12 py-3">
+                   <div class="alert alert-info">
+                      <p>No Files On Database</p>
+                  </div>
+                 </div>
             }
             else
             {
-                <caption>List of Files on File System</caption>
-                <table class="table table-striped">
+                <caption class="pb-2">List of Files on File System</caption>
+
+                <table class="table table-bordered table-sm pt-2" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                           <!--  <th>#</th> -->
                             <th>Name</th>
                             <th>Description</th>
                             <th>File Type</th>
-                            <th>Created On</th>
+                            <th>Subject</th>
+                            <th>Topic</th>
+                            <th>Grade</th>
+                            <th>Uploaded By</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -107,7 +148,10 @@
                                 <td>@file.Name</td>
                                 <td>@file.Description</td>
                                 <td>@file.FileType</td>
-                                <td>@file.CreatedOn</td>
+                                <td>@file.Subject.SubjectName</td>
+                                <td>@file.Topic.TopicName</td>
+                                <td>@file.Grade</td>
+                                <td>@file.Educator.FirstName @file.Educator.LastName</td>
                                 <td>
                                     <a type="button" class="btn btn-primary" asp-controller="Educator" asp-action="DownloadFileFromDatabase" asp-route-id="@file.ID">Download</a>
                                     <a type="button" class="btn btn-danger" asp-controller="Educator" asp-action="DeleteFileFromDatabase" asp-route-id="@file.ID">Delete</a>

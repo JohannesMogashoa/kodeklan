@@ -2,6 +2,7 @@
 using iTut.Models.Edu;
 using iTut.Models.Coordinator;
 using System.Collections.Generic;
+using iTut.Models.Shared;
 
 namespace iTut.Models.ViewModels.Coordinator
 {
@@ -12,5 +13,6 @@ namespace iTut.Models.ViewModels.Coordinator
         public IEnumerable<EducatorUser> Educators { get; set; }
         public IEnumerable<ParentUser> Parents { get; set; }
         public List<Subject> Subjects { get; set; }
+        public List<TimelinePost> Posts { get; set; }
     }
 }

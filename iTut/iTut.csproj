@@ -9,14 +9,17 @@
   <ItemGroup>
     <Compile Remove="Areas\NewFolder\**" />
     <Compile Remove="Controllers\HOD\**" />
+    <Compile Remove="Migrations\**" />
     <Compile Remove="Models\Educator\**" />
     <Compile Remove="wwwroot\UploadedFiles\**" />
     <Content Remove="Areas\NewFolder\**" />
     <Content Remove="Controllers\HOD\**" />
+    <Content Remove="Migrations\**" />
     <Content Remove="Models\Educator\**" />
     <Content Remove="wwwroot\UploadedFiles\**" />
     <EmbeddedResource Remove="Areas\NewFolder\**" />
     <EmbeddedResource Remove="Controllers\HOD\**" />
+    <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="Models\Educator\**" />
     <Compile Remove="Controllers\HOD\**" />
     <Compile Remove="Models\Educator\**" />
@@ -27,59 +30,9 @@
     <EmbeddedResource Remove="wwwroot\UploadedFiles\**" />
     <None Remove="Areas\NewFolder\**" />
     <None Remove="Controllers\HOD\**" />
+    <None Remove="Migrations\**" />
     <None Remove="Models\Educator\**" />
-    <Compile Remove="Models\Student\**" />
-    <Content Remove="Models\Student\**" />
-    <EmbeddedResource Remove="Models\Student\**" />
-    <None Remove="Models\Student\**" />
     <None Remove="wwwroot\UploadedFiles\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Data\Migrations\20220511205624_InitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20220511205624_InitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220523093501_AddedComplaint.cs" />
-    <Compile Remove="Data\Migrations\20220523093501_AddedComplaint.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220528123125_AddEducatorIndex.cs" />
-    <Compile Remove="Data\Migrations\20220528123125_AddEducatorIndex.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220529164841_StudentInitialMigration.cs" />
-    <Compile Remove="Data\Migrations\20220529164841_StudentInitialMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220530151611_InitialSubjectCoordinator.cs" />
-    <Compile Remove="Data\Migrations\20220530151611_InitialSubjectCoordinator.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220710172046_AddedMeetingRequest.cs" />
-    <Compile Remove="Data\Migrations\20220710172046_AddedMeetingRequest.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220718092510_datas.cs" />
-    <Compile Remove="Data\Migrations\20220718092510_datas.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220718191944_yeas.cs" />
-    <Compile Remove="Data\Migrations\20220718191944_yeas.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220719081650_na.cs" />
-    <Compile Remove="Data\Migrations\20220719081650_na.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220729093355_addTaskEdu.cs" />
-    <Compile Remove="Data\Migrations\20220729093355_addTaskEdu.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220804103309_Category.cs" />
-    <Compile Remove="Data\Migrations\20220804103309_Category.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220804105446_addCategory.cs" />
-    <Compile Remove="Data\Migrations\20220804105446_addCategory.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220804110123_anotherMiigrationCategory.cs" />
-    <Compile Remove="Data\Migrations\20220804110123_anotherMiigrationCategory.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220804114208_AddMigrationCategory.cs" />
-    <Compile Remove="Data\Migrations\20220804114208_AddMigrationCategory.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220804135339_testIt.cs" />
-    <Compile Remove="Data\Migrations\20220804135339_testIt.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220809153102_AddedTasks.cs" />
-    <Compile Remove="Data\Migrations\20220809153102_AddedTasks.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220818093838_subjectModel.cs" />
-    <Compile Remove="Data\Migrations\20220818093838_subjectModel.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220818114331_CoordinatorReportModel.cs" />
-    <Compile Remove="Data\Migrations\20220818114331_CoordinatorReportModel.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220819104603_SubjectCoordinator.cs" />
-    <Compile Remove="Data\Migrations\20220819104603_SubjectCoordinator.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220825100916_fixModelSubj.cs" />
-    <Compile Remove="Data\Migrations\20220825100916_fixModelSubj.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220825112948_deleteSubjModel.cs" />
-    <Compile Remove="Data\Migrations\20220825112948_deleteSubjModel.Designer.cs" />
-    <Compile Remove="Data\Migrations\20220825113417_deleteSubjModelII.cs" />
-    <Compile Remove="Data\Migrations\20220825113417_deleteSubjModelII.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -95,6 +48,7 @@
     <PackageReference Include="Coravel" Version="4.1.2" />
     <PackageReference Include="DinkToPdfIncludesDependencies" Version="1.0.8" />
     <PackageReference Include="MailKit" Version="3.3.0" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.16" />
@@ -111,6 +65,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="MimeKit" Version="3.3.0" />
+    <PackageReference Include="PagedList" Version="1.17.0" />
+    <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
+    <PackageReference Include="PagedList.Net" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>

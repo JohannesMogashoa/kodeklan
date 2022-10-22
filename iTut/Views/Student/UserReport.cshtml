@@ -1,0 +1,129 @@
+﻿@model StudentUserReportViewModel
+   
+@{
+    ViewBag.Title = "User Report";
+}
+
+<div class="bg-body offcanvas-collapse open w-100" id="user-report">
+    <main class="main-expanded vh-100 w-100">
+        <div class="container-fluid px-lg-5">
+            <div class="d-flex py-5 align-items-center border-bottom d-print-none">
+                <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem">@Model.Student.FirstName.ToCharArray()[0]</span>
+                <div class="mr-auto">
+                    <h2 class="fs-1 lh-tight">Hi, @Model.Student.FirstName</h2>
+                </div>
+                <div>
+                    <button data-toggle="tooltop" title="Print" onclick="window.print()" class="btn btn-auto d-inline-flex flex-shrink-0 align-items-center justify-content-center p-0 rounded-circle wh-2-5rem">
+                        <svg class="gi gi-printer fs-3" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 3a2 2 0 0 1 2 2v2h1a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2H5a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3h1V5a2 2 0 0 1 2-2h8zm0 12H8v4h8v-4zm0-10H8v2h8V5z" />
+                        </svg>
+                    </button>
+                    <button data-toggle="tooltop" title="Email" class="btn btn-auto d-inline-flex flex-shrink-0 align-items-center justify-content-center p-0 rounded-circle wh-2-5rem">
+                        <svg class="gi gi-envelope fs-3" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 4a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h14zm-1 2H6c-.99 0-1.378 1.283-.555 1.832l6 4a1 1 0 0 0 1.109 0l6-4C19.378 7.283 18.99 6 18 6z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="invisible-scrollbar position-relative wh-main">
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h2 class="mb-2 fs-2 lh-tight">Main Information</h2>
+                        <table class="table table-striped table-bordered w-100">
+                            <tr>
+                                <td class="w-25"><b>Name</b></td>
+                                <td>@Model.Student.FirstName</td>
+                            </tr>
+                            <tr>
+                                <td class="w-25"><b>Surname</b></td>
+                                <td>@Model.Student.LastName</td>
+                            </tr>
+                            <tr>
+                                <td class="w-25"><b>Email Address</b></td>
+                                <td>@Model.Student.EmailAddress</td>
+                            </tr>
+                            <tr>
+                                  <td class="w-25"><b>Grade</b></td>
+                                  <td>@Model.Student.Grade</td>
+                            </tr>
+                            <tr>
+                                <td class="w-25"><b>Phone Number</b></td>
+                                <td>@Model.Student.PhoneNumber</td>
+                            </tr>
+                            <tr>
+                                <td class="w-25"><b>Gender</b></td>
+                                <td>@Model.Student.Gender</td>
+                            </tr>
+                            <tr>
+                                <td class="w-25"><b>Race</b></td>
+                                <td>@Model.Student.Race</td>
+                            </tr>
+                        </table>
+                        <br/>
+                        </div>
+                        
+                        <p>
+                            You joined the iTut platform on <b>@Model.Student.CreatedOn.Date.ToShortDateString()</b> at <b>@Model.Student.CreatedOn.ToShortTimeString().</b>
+                            Please be aware that on the system we have your Physical Address as the following: <b><em>@Model.Student.PhysicalAddress</em></b>.
+                        </p>
+                    </div>
+                    <hr role="presentation" />
+                    <div class="mb-3 col-12">
+                        <h2 class="mb-2 fs-2 lh-tight">Parent Information</h2>
+                        @if (Model.Student.Parents.Count < 1)
+                        {
+                            <p>Unfortunately, you have not been linked by any parent to the platform.</p>
+                        }
+                        else
+                        {
+                            <table class="table table-striped table-bordered w-100">
+                                @foreach (var parent in Model.Student.Parents)
+                                {
+                                    <tr>
+                                        <td class="w-25"><b>Name</b></td>
+                                        <td>@parent.FirstName</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="w-25"><b>Surname</b></td>
+                                        <td>@parent.LastName</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="w-25"><b>Email Address</b></td>
+                                        <td>@parent.EmailAddress</td>
+                                    </tr>
+                                    <tr>
+                                         <td class="w-25"><b>Phone Number</b></td>
+                                         <td>@parent.PhoneNumber</td>
+                                    </tr>
+                                    <tr>
+                                         <td class="w-25"><b>Gender</b></td>
+                                         <td>@parent.Gender</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="w-25"><b>Race</b></td>
+                                        <td>@parent.Race</td>
+                                    </tr>
+                                }
+                            </table>
+                           }
+                        </div>
+                                    <!--      <hr role="presentation" />
+                                  <div class="mb-3 col-12">
+                                         <h2 class="mb-2 fs-2 lh-tight">Subjects</h2>
+                        if (Model.Subjects.Count < 1)
+                        {
+                            <p>Unfortunately, you are not enrolled in any subjects.</p>
+                        }
+                        else
+                        {
+                            <table class="table table-striped w-100">
+                              foreach (var complaint in Model.Subjects)
+                                {
+
+                                }
+                            </table>
+                        }-->
+              </div> 
+          </div>     
+    </main>
+</div>

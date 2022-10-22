@@ -24,6 +24,23 @@
                 <hr class="mt-1" role="presentation">
             </div>
         }
+        else if (User.IsInRole(RoleConstants.Student))
+        {
+            <div class="w-100 cusror-pointer">
+                <div class="d-flex">
+                    <a asp-controller="Student" asp-action="UserReport">
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h2 class="fs-1">User Report</h2>
+                            </div>
+                            <p class="text-body fs-1">See All Your Data as a Student</p>
+                        </div>
+                    </a>
+                </div>
+                <hr class="mt-1" role="presentation">
+            </div>
+        }
+
         <div class="w-100 cusror-pointer">
             <div class="d-flex">
                 <a asp-area="Identity" asp-page="/Account/Manage/PersonalData">

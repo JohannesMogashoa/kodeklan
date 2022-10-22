@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using iTut.Models.Edu;
+using iTut.Models.Quiz;
+using iTut.Models.Marks;
 using iTut.Models.UploadFiles;
 using static iTut.Models.ViewModels.HOD.HODIndexViewModel;
 using iTut.Models.Shared;
 using iTut.Models.HOD;
 using System.Reflection.Emit;
+using iTut.Constants;
 
 namespace iTut.Data
 {
@@ -54,7 +57,14 @@ namespace iTut.Data
         // Educator Tables
         public DbSet<Topic> Topics { get; set; }
         public DbSet<FileOnDatabase> FilesOnDatabase { get; set; }
+        public DbSet<Quiz> Quizzes { get;set; }
+        public DbSet<Option> Options { get; set; }
+        public DbSet<Question> Questions{ get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<Result> Results { get; set; }
 
+
+        public DbSet<Mark> Marks { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Report> Reports { get; set; }
@@ -66,5 +76,7 @@ namespace iTut.Data
         public DbSet<Instructor> Instructors { get; set; }
         public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
         public DbSet<CourseAssignment> CourseAssignments { get; set; }
+        public DbSet<SubjectEducator> SubjectEducators { get; set; }
+        public DbSet<FeedbackEducator> FeedbackEducator { get; set; }
     }
 }

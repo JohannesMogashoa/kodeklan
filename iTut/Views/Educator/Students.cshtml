@@ -1,0 +1,151 @@
+﻿@model PaginatedList<iTut.Models.Users.StudentUser>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Students";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>  
+    table {  
+        width: 100%;  
+    }  
+    table tr td{  
+        border-top: 1px solid black;  
+        text-align: center;  
+        word-wrap: break-word;  
+        padding:2px 2px;
+    }  
+  
+    table tr:hover {  
+        background-color:rgba(0,0,0,0.7);  
+        color:#fff;  
+    }  
+    table tr th {  
+        
+        border-bottom: 2px solid black;
+        text-align: center;  
+        background-color: #344e41;  
+        color: #ffff;  
+        padding: 5px 2px;
+
+    }  
+    table tr:nth-of-type(even) {
+    background-color: #6a994e;
+    color:#ffff;
+    }
+    table tr:nth-of-type(even):hover{
+    background-color: #31572c;
+    color:#ffff;
+    }
+    
+</style> 
+
+
+<div class="container-fluid py-2 px-2">
+
+
+
+<div class="Student Header py-2 px-2"> 
+    <h1>Students</h1>
+
+
+</div>
+    <hr />
+<div class="class_wrapp mt-2 py-2 px2"
+    <div class="py-2 px-2">
+        <form asp-controller="Educator" asp-action="Students" method="get">
+            <div class="d-flex form-actions no-color justify-content-between px-3">
+                <p class="flex-column text-uppercase">
+                       Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                         <input type="submit" value="Search" class="btn btn-default" /> |
+                        
+                </p>
+
+                <p class="flex-column"><a asp-controller="Educator" asp-action="Students">Back to Full List</a></p>
+             </div>
+         </form>
+    </div> 
+
+   
+<div class="table py-2">
+
+
+        <table class="table">
+              <thead>
+                 <tr>
+                    
+                   <th>
+                      First Name
+                  </th>
+                  <th>
+                      <a asp-controller="Educator" asp-action="Students" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Last Name <i class="bi bi-sort-alpha-down"></i></a>
+                  </th>
+                  <th>
+                       E-Mail Address
+                  </th>
+         
+                   <th>
+                 <a asp-controller="Educator" asp-action="Students" asp-route-sortOrder="@ViewData["GradeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Grade <i class="bi bi-funnel"></i></a>
+                  </th>
+                  <td>
+    
+                   </td>
+                </tr>
+         </thead>
+             <tbody>
+    @foreach (var item in Model)
+          {
+              <tr>
+       
+                   <td>
+                       @Html.DisplayFor(modelItem => item.FirstName)
+                   </td>
+                   <td>
+                         @Html.DisplayFor(modelItem => item.LastName)
+                   </td>
+                    <td>
+                         @Html.DisplayFor(modelItem => item.EmailAddress)
+                    </td>
+                    <td>
+                         @Html.DisplayFor(modelItem => item.Grade)
+                    </td>
+            
+                    <td>
+                
+                             <a asp-controller="Educator" asp-action="StudentDetails" asp-route-id="@item.Id">Student Details</a>
+                
+                      </td>
+             </tr>
+         }
+                 </tbody>
+
+              
+         </table>
+
+    </div>
+
+
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+
+    <a asp-controller="Educator" asp-action="Students"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        <i class="bi bi-arrow-left-circle"></i> Previous
+    </a>
+    <a asp-controller="Educator" asp-action="Students"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Next <i class="bi bi-arrow-right-circle"></i>
+    </a>
+</div>
+<hr />
+
+</div>

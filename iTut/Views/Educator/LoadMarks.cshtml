@@ -1,0 +1,181 @@
+@model PaginatedList<iTut.Models.Marks.Mark>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "LoadMarks";
+}
+<style>  
+    table {  
+        width: 100%;  
+    }  
+    table tr td{  
+        border-top: 1px solid black;  
+        text-align: center;  
+        word-wrap: break-word;  
+        padding:2px 2px;
+    }  
+  
+    table tr:hover {  
+        background-color:rgba(0,0,0,0.7);  
+        color:#fff;  
+    }  
+    table tr th {  
+        
+        border-bottom: 2px solid black;
+        text-align: center;  
+        background-color: #344e41;  
+        color: #ffff;  
+        padding: 5px 2px;
+
+    }  
+    table tr:nth-of-type(even) {
+    background-color: #6a994e;
+    color:#ffff;
+    }
+    table tr:nth-of-type(even):hover{
+    background-color: #31572c;
+    color:#ffff;
+    }
+    
+</style> 
+
+<div class="Container-fluid py-2 px-lg-2 w-100" > 
+
+           <div class="Head_Container px-2 py-2 d-flex">
+           <h1> Student Marks </h1>
+
+          <div class="back_button ml-auto pr-3 py-0">
+                <a asp-controller="Educator" asp-action="CreateTask" class="btn btn-outline-danger"> Back </a> 
+
+     
+            </div>
+        </div>
+
+    <hr />
+
+<div class="Container-fluid py-3 px-1">
+
+        <div class="py-2 px-2">
+            <form asp-controller="Educator" asp-action="LoadMarks" method="get">
+                <div class="d-flex form-actions no-color justify-content-between px-3">
+                    <p class="flex-column text-uppercase">
+                        Find by Name, Result & by Subject: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                        <input type="submit" value="Search" class="btn btn-default" />|
+
+                    </p>
+
+                    <p class="flex-column"><a asp-controller="Educator" asp-action="LoadMarks">Back to Full List</a></p>
+                </div>
+            </form>
+        </div>
+       
+  <div class="container-fluid py-1 px-2">
+   <table class="table w-100">     
+          <thead>
+        <tr>
+                    
+            <th>
+                First Name
+            </th>
+            <th>
+                  <a asp-controller="Educator" asp-action="LoadMarks" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Last Name <i class="bi bi-sort-alpha-down"></i></a>
+            </th>
+            <th>
+                 Subject
+            </th>
+         
+            <th>
+                <a asp-controller="Educator" asp-action="LoadMarks" asp-route-sortOrder="@ViewData["GradeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Grade <i class="bi bi-funnel"></i></a>
+            </th>
+             <th>
+                Term 1
+            </th>
+            <th>
+                Term 2
+            </th>
+            <th>
+                Term 3
+            </th>
+            <th>
+                Term 4
+            </th>
+            <th>
+                            <a asp-controller="Educator" asp-action="LoadMarks" asp-route-sortOrder="@ViewData["AverageSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Average <i class="bi bi-sort-numeric-down"></i></a>
+            </th>
+              <th>
+                Result
+            </th>
+            <td>
+
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+       
+            <td>
+                @Html.DisplayFor(modelItem => item.students.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.students.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.subject.SubjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.students.Grade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Term1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Term2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Term3)
+            </td>
+                  <td>
+                @Html.DisplayFor(modelItem => item.Term4)
+            </td>
+             <td>
+               
+                @Html.DisplayFor(modelItem => item.avg)%
+            </td>
+              <td>
+               
+                @Html.DisplayFor(modelItem => item.outcome)
+            </td>
+            
+            <td>
+                <a asp-controller="Educator" asp-action="EditMarks" asp-route-id="@item.Id"><i class="bi bi-pen"></i> Edit | </a>
+                <a asp-controller="Educator" asp-action="MarksDetails" asp-route-id="@item.Id"><i class="bi bi-eye"> </i>Details |</a>
+                <a asp-controller="Educator" asp-action="DeleteMark" asp-route-id="@item.Id"> Delete </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table> 
+      </div>
+      @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+
+    <a asp-controller="Educator" asp-action="LoadMarks"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+       <i class="bi bi-arrow-left-circle"></i> Previous
+    </a>
+    <a asp-controller="Educator" asp-action="LoadMarks"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+       Next  <i class="bi bi-arrow-right-circle"></i>
+    </a>
+      </div>
+ 
+   </div>
+</div>

@@ -8,6 +8,14 @@ namespace iTut.Constants
         Male,
         Other
     }
+   
+    public enum Status
+    {
+        [Display(Name = "Active")]
+        Active,
+        [Display(Name = "Inactive")]
+        Inactive,
+    }
 
     public enum Race
     {
@@ -55,10 +63,10 @@ namespace iTut.Constants
     }
     public enum Religion
     {
-        Islam = 1,
-        Hinduism = 2,
-        Christianity = 3,
-        Buddhism = 4,
-        Others = 5
+        Islam,
+        Hinduism,
+        Christianity,
+        Buddhism,
+        Others
     }
 }

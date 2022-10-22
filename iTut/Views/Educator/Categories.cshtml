@@ -4,18 +4,55 @@
     ViewData["Title"] = "Categories/Topics";
 }
 
+<style>  
+    table {  
+        width: 100%;  
+    }  
+    table tr td{  
+        border-top: 1px solid black;  
+        text-align: center;  
+        word-wrap: break-word;  
+        padding:2px 2px;
+    }  
+  
+    table tr:hover {  
+        background-color:rgba(0,0,0,0.7);  
+        color:#fff;  
+    }  
+    table tr th {  
+        
+        border-bottom: 2px solid black;
+        text-align: center;  
+        background-color: #344e41;  
+        color: #ffff;  
+        padding: 5px 2px;
+
+    }  
+    table tr:nth-of-type(even) {
+    background-color: #6a994e;
+    color:#ffff;
+    }
+    table tr:nth-of-type(even):hover{
+    background-color: #31572c;
+    color:#ffff;
+    }
+    
+</style> 
+
+
 <div class="Container-fluid py-2 px-lg-2 w-100" > 
 
-           <div class="Head_Container py-2 d-flex">s
-           <h1>Categories and Topics</h1>
+           <div class="Head_Container py-2 d-flex px-2">
+           <h1> Topics And Categories</h1>
 
           <div class="back_button ml-auto pr-3 py-0">
-                <a href="/Educator/CreateCategory" class="btn btn-outline-danger"> Back </a> 
+                
+              <a asp-controller="Educator" asp-action="CreateCategory" class="btn btn-outline-danger"> Back </a> 
 
      
             </div>
         </div>
- 
+ <div class="py-3 px-3">
         <table class="table table-striped">
             <thead class="thead-dark">
                 <tr>
@@ -26,11 +63,9 @@
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
                     <th scope="col" >
-                        @Html.DisplayNameFor(model => model.CreateAt)
+                        Uploaded By
                     </th>
-                    <th scope="col" >
-                        @Html.DisplayNameFor(model => model.UpdateAt)
-                    </th>
+                   
                     <th></th>
                 </tr>
             </thead>
@@ -45,19 +80,14 @@
                         @Html.DisplayFor(modelItem => item.Status)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CreateAt)
-                    </td >
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UpdateAt)
+                        @Html.DisplayFor(modelItem => item.Educator.FirstName)  @Html.DisplayFor(modelItem => item.Educator.LastName)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.TopicId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.TopicId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.TopicId">Delete</a>
+                        <a asp-action="DeleteCategory" asp-route-id="@item.TopicId">Delete</a>
                     </td>
                 </tr>
                 }
             </tbody>
         </table>
-  
+  </div>
 </div>
