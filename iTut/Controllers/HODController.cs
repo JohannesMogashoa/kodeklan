@@ -3,6 +3,7 @@ using ClosedXML.Excel;
 using iTut.Constants;
 using iTut.Data;
 using iTut.Helpers;
+using iTut.Models;
 using iTut.Models.HOD;
 using iTut.Models.Shared;
 using iTut.Models.Users;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -101,6 +103,7 @@ namespace iTut.Controllers
 
             var model = new HODIndexViewModel
             {
+                HodUser = hod,
                 CountStudent = _context.Students.Count(),
                 CountEducator = _context.Educator.Count(),
                 CountCoordinator = _context.SubjectCoordinator.Count(),
@@ -1133,6 +1136,47 @@ namespace iTut.Controllers
         private bool CourseExists(int id)
         {
             return _context.Courses.Any(e => e.CourseID == id);
+        }
+
+        //complaint
+        public async Task<IActionResult> Complaints()
+        {
+            var complaints = await _context.Complaints.Where(c => c.Archived == false).ToListAsync();
+            return View(complaints);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateComplaint(EditComplaintViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (await _userManager.IsInRoleAsync(user, RoleConstants.HOD.ToString()))
+            {
+                if (ModelState.IsValid)
+                {
+                    var dbComplaint = _context.Complaints.Where(c => c.Id == model.Id).FirstOrDefault();
+                    if (dbComplaint != null)
+                    {
+                        dbComplaint.Title = model.Title;
+                        dbComplaint.ComplaintBody = model.ComplaintBody;
+                        dbComplaint.Status = model.Status;
+                        dbComplaint.Feedback = model.Feedback;
+                        dbComplaint.UpdateAt = DateTime.Now;
+                        _context.Update(dbComplaint);
+                        await _context.SaveChangesAsync();
+                        _logger.LogInformation($"Complaint, id: {dbComplaint.Id}, updated");
+                        return RedirectToAction(nameof(Complaints));
+                    }
+                }
+                return RedirectToAction(nameof(Error));
+            }
+            return View("Access Denied");
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
