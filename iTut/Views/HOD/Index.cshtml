@@ -1,12 +1,8 @@
-﻿@model iTut.Models.ViewModels.HOD.HODIndexViewModel
+﻿@model HODIndexViewModel
 @{
-    ViewData["Title"] = "DASHBOARD";
-
+    ViewData["Title"] = "Home";
 }
 
-
-
-<script src="~/lib/daypilot/daypilot-all.min.js" asp-append-version="true"></script>
 <div id="collapseOffCanvas" class="bg-body offcanvas-collapse open w-100">
     <main class="main-expanded vh-100 w-100">
         <div class="container-fluid px-lg-5">
@@ -29,94 +25,53 @@
             <div class="invisible-scrollbar position-relative wh-main">
                 <div class="row mt-3">
                     <div class="col-12">
-                        <div class="mr-auto">
-
-                            <img src="~/img/HOD/welcome.png" alt="Sample Photo" hight="300px" width="1200px" />
-                            </div>
-                        <hr />
                         <div class="d-flex align-items-center mb-3">
-                            <hr />
-                            <div class="col-md-3" align="Center">
-                                <div class="card grow-sm mb-4 animated fadeInDown">
-                                    <div class="card-body" align="Center">
-                                        <img src="~/img/HOD/school.png" alt="Sample Photo" hight="120px" width="100px" />
-                                        <p><a asp-controller="HOD" asp-action="AboutEnrollment">About Enrollment</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <p>|</p>
-                            </div>
-                            <div class="col-md-3" align="Center">
-                                <div class="card grow-sm mb-4 animated fadeInDown">
-                                    <div class="card-body" align="Center">
-                                        <img src="~/img/HOD/employees.png" alt="Sample Photo" hight="100px" width="100px" />
-                                        <p><a asp-controller="HOD" asp-action="InstructorsIndex">Coordinators</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <p>|</p>
-                            </div>
-                            <div class="col-md-3" align="Center">
-                                <div class="card grow-sm mb-4 animated fadeInDown">
-                                    <div class="card-body" align="Center">
-                                        <img src="~/img/HOD/Admission.png" alt="Sample Photo" hight="110px" width="100px" />
-                                        <p><a asp-controller="HOD" asp-action="DepartmentsIndex">Departments</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <p>|</p>
-                            </div>
-                            <div class="col-md-3" align="Center">
-                                <div class="card grow-sm mb-4 animated fadeInDown">
-                                    <div class="card-body" align="Center">
-                                        <img src="~/img/HOD/jobinfors.png" alt="Sample Photo" hight="110px" width="100" />
-                                        <p><a asp-controller="HOD" asp-action="SubjectsIndex">SubjectS</a></p>
-                                    </div>
-                                </div>
+                            <div class="mr-auto">
+                                <h2 class="mb-2 fs-2 lh-tight">Timeline</h2>
+                                <p>What is happening?</p>
                             </div>
                         </div>
-                        <div class="row text-center">
-                                    <div class="col-md-3" align="Center">
-                                        <div class="card grow-sm mb-4 animated fadeInDown">
-                                            <div class="card-body" align="Center">
-                                                TOTAL Coordinator: @Model.CountCoordinator
+                    </div>
+                    @if (Model.Posts.Count > 0 && Model.Posts != null)
+                    {
+                        @foreach (var post in Model.Posts)
+                        {
+                            <div class="col-12 mb-4">
+                                <div class="w-100 h-100 bg-body-light rounded d-flex p-3">
+                                    <span class="d-inline-flex flex-shrink-0 align-items-center justify-content-center mr-3 text-white text-uppercase bg-primary rounded-circle  wh-2-5rem">@post.PostTitle.ToCharArray()[0]</span>
+                                    <div class="d-flex align-items-start flex-column w-100">
+                                        <div class="mb-auto w-100">
+                                            <div>
+                                                <h2 class="mb-2 fs-1 lh-tight">
+                                                    @post.PostTitle
+                                                </h2>
+                                                <p>@post.PostContent</p>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3" align="Center">
-                                        <div class="card grow-sm mb-4 mt-5 animated fadeInUp">
-                                            <div class="card-body" align="Center">
-                                                TOTAL SUBJECT: @Model.CountSubject
+                                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                                <div class="d-flex align-items-center">
+                                                    <p class="mr-3">
+                                                        <svg class="gi gi-message-square-2-outline fs-3" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M19 2.435a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H8.303a1 1 0 0 0-.555.168L3.555 21.4A1 1 0 0 1 2 20.566V5.435a3 3 0 0 1 3-3h14zm0 2H5a1 1 0 0 0-.993.883L4 5.435v13.262l2.64-1.758a3 3 0 0 1 1.443-.496l.22-.008H19a1 1 0 0 0 .993-.883l.007-.117v-10a1 1 0 0 0-.883-.993L19 4.435zm-11 7a1 1 0 1 0 0-2 1 1 0 1 0 0 2zm4 0a1 1 0 1 0 0-2 1 1 0 1 0 0 2zm4 0a1 1 0 1 0 0-2 1 1 0 1 0 0 2z" />
+                                                        </svg>
+                                                        @post.Comments.Count
+                                                    </p>
+                                                </div>
+                                                <a asp-controller="HOD" asp-action="Post" asp-route-id="@post.Id" class="btn btn-primary btn-sm">View</a>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3" align="Center">
-                                        <div class="card grow-sm mb-4 animated fadeInDown">
-                                            <div class="card-body" align="Center">
-                                                TOTAL EDUCATOR: @Model.CountEducator
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3" align="Center">
-                                        <div class="card grow-sm mb-4 mt-5 animated fadeInUp" align="Center">
-                                            <div class="card-body">
-                                                TOTAL STUDENTS: @Model.CountStudent
-                                            </div>
-
                                         </div>
                                     </div>
                                 </div>
-                        <hr />
-                        
-                           
-                        <hr />
-                    </div>
-                    <div class="col-12">
-                        
-                    </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <p>Nothing happening yet...</p>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

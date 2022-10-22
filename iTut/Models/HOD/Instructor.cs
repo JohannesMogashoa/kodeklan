@@ -27,7 +27,7 @@ namespace iTut.Models.HOD
         [Display(Name = "Hire Date")]
         public DateTime HireDate { get; set; }
         public int? UserID { get; set; }
-        public virtual CoordinatorUser CoordinatorUser { get; set; }
+        public string CoordinatorId { get; set; }
 
         [Display(Name = "Full Name")]
         public string FullName

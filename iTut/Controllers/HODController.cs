@@ -1,7 +1,10 @@
-﻿using ClosedXML.Excel;
+﻿
+using ClosedXML.Excel;
 using iTut.Constants;
 using iTut.Data;
+using iTut.Helpers;
 using iTut.Models.HOD;
+using iTut.Models.Shared;
 using iTut.Models.Users;
 using iTut.Models.ViewModels.HOD;
 using iTut.Models.ViewModels.Parent;
@@ -33,24 +36,78 @@ namespace iTut.Controllers
             _userManager = userManager;
             _logger = logger;
         }
-        [HttpGet("{Index}")]
+
         public IActionResult Index()
         {
             var hod = _context.HOD.Where(h => h.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+            var posts = _context.Posts.Where(p => p.Archived == false).Include(p => p.Comments).ToList();
 
             var model = new HODIndexViewModel
             {
                 HodUser = hod,
-                CountStudent = _context.Students.Count(),
-                CountCoordinator = _context.SubjectCoordinator.Count(),
-                CountEducator = _context.Educator.Count(),
-                CountSubject = _context.Subjects.Count()
+                Posts = posts
             };
 
             return View(model);
         }
 
+        #region Timeline Posts
+        // GET: Timeline Post
+        [HttpGet("/HOD/Post/{id}")]
+        public IActionResult Post([FromRoute] string id)
+        {
+            var post = _context.Posts.Where(p => p.Id.Equals(id)).Include(p => p.Comments).FirstOrDefault();
+            var comments = post.Comments.OrderByDescending(c => c.CreatedAt).ToList();
 
+            post.Comments = comments;
+
+            ViewBag.Post = post;
+
+            return View();
+        }
+
+        // POST: Comment on Timeline Post
+        [HttpPost("/HOD/Post/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CommentOnPost([FromRoute] string id, PostComment model)
+        {
+            var post = _context.Posts.Where(p => p.Id.Equals(id)).Include(p => p.Comments).FirstOrDefault();
+            var userId = _context.Users.Where(u => u.Id == _userManager.GetUserId(User)).FirstOrDefault().Id;
+            if (post != null && !post.Archived)
+            {
+                if (ModelState.IsValid)
+                {
+                    var comment = new PostComment
+                    {
+                        UserId = userId,
+                        CommentContent = model.CommentContent,
+                        Post = post,
+                        CreatedAt = DateTime.Now,
+                    };
+                    _context.Add(comment);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation($"Comment, id: {comment.Id}, created on post: {post.Id}");
+                    return Redirect($"/HOD/Post/{id}");
+                }
+                return View("Error");
+            }
+            return NotFound();
+        }
+        #endregion
+
+        public IActionResult Board()
+        {
+            var hod = _context.HOD.Where(h => h.UserId == _userManager.GetUserId(User)).FirstOrDefault();
+
+            var model = new HODIndexViewModel
+            {
+                CountStudent = _context.Students.Count(),
+                CountEducator = _context.Educator.Count(),
+                CountCoordinator = _context.SubjectCoordinator.Count(),
+                CountSubject = _context.Subjects.Count()
+            };
+            return View(model);
+        }
         [HttpPost]
         public IActionResult ExportDepartments()
         {
@@ -63,7 +120,7 @@ namespace iTut.Controllers
                                         new DataColumn("Subjects"), });
 
             var departments = from s in this._context.Departments.Take(100000)
-                           select s;
+                              select s;
 
             foreach (var s in departments)
             {
@@ -517,11 +574,11 @@ namespace iTut.Controllers
                                         new DataColumn("Join On"), });
 
             var students = from s in this._context.Students.Take(100000)
-                            select s;
+                           select s;
 
             foreach (var s in students)
             {
-                dt.Rows.Add(s.FirstName, s.LastName, s.PhoneNumber, s.PhysicalAddress, s.Race,s.CreatedOn);
+                dt.Rows.Add(s.FirstName, s.LastName, s.PhoneNumber, s.PhysicalAddress, s.Race, s.CreatedOn);
             }
 
             using (XLWorkbook wb = new XLWorkbook())
@@ -602,7 +659,7 @@ namespace iTut.Controllers
 
             foreach (var s in instructors)
             {
-                dt.Rows.Add(s.ID,s.FullName, s.OfficeAssignment.Location, s.CoordinatorUser, s.HireDate, s.CourseAssignments);
+                dt.Rows.Add(s.ID, s.FullName, s.OfficeAssignment.Location, s.HireDate, s.CourseAssignments);
             }
 
             using (XLWorkbook wb = new XLWorkbook())
@@ -620,7 +677,7 @@ namespace iTut.Controllers
         public async Task<IActionResult> InstructorsIndex(int? id, int? courseID)
         {
             var viewModel = new InstructorIndexData();
-            viewModel.Instructors = await _context.Instructors.Include(i => i.CoordinatorUser)
+            viewModel.Instructors = await _context.Instructors
                   .Include(i => i.OfficeAssignment)
                   .Include(i => i.CourseAssignments)
                     .ThenInclude(i => i.Course)
@@ -873,7 +930,7 @@ namespace iTut.Controllers
                                         new DataColumn("Subject Assignments"), });
 
             var subjects = from s in this._context.Courses.Take(100000)
-                              select s;
+                           select s;
 
             foreach (var s in subjects)
             {

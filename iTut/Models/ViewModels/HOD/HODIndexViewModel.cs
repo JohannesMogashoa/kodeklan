@@ -5,12 +5,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using iTut.Models.HOD;
+using iTut.Models.Shared;
 
 namespace iTut.Models.ViewModels.HOD
 {
     public class HODIndexViewModel
     {
         public HODUser HodUser { get; set; }
+        public List<TimelinePost> Posts { get; set; }
 
         public int CountStudent { get; set; }
         public int CountEducator { get; set; }
