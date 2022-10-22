@@ -7,7 +7,7 @@
         <div class="container-fluid px-lg-5">
             <div class="d-flex py-4 border-bottom">
                 <div class="mr-auto w-100">
-                   
+                    <h2 class="mb-2 fs-2 lh-tight">Complaints</h2>
                 </div>
                 <ul class="list-unstyled d-flex align-items-center">
                     <li class="d-lg-none mr-sm-5">
@@ -21,13 +21,6 @@
             </div>
             <div class="invisible-scrollbar position-relative wh-main">
                 <div class="row mt-3">
-                    <div class="col-12">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="mr-auto">
-                                <h2 class="mb-2 fs-2 lh-tight">Complaints</h2>
-                            </div>
-                        </div>
-                    </div>
                     @if (Model.Count > 0 && Model != null)
                     {
                         @foreach (var complaint in Model)
