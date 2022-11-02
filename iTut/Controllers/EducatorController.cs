@@ -343,7 +343,7 @@ namespace iTut.Controllers
                     break;
             }
 
-            int pageSize = 3;
+            int pageSize = 6;
             return View(await PaginatedList<StudentUser>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
 
         }
@@ -418,7 +418,7 @@ namespace iTut.Controllers
                     break;
             }
 
-            int pageSize = 3;
+            int pageSize = 6;
             //var marks = await _context.Marks.Include(m=>m.subject).Include(ms=>ms.students).ToListAsync();
 
 
